@@ -9,7 +9,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
-import { App } from "../types";
+import { App, TesterToApp } from "../types";
 import { db } from "./config";
 
 export const addAppToDb = async (app: App) => {
@@ -26,6 +26,94 @@ export const addAppToDb = async (app: App) => {
     if (appDoc.exists()) {
       const appData = appDoc.data();
       return appData as App;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAllAppsFromDb = async () => {
+  const appCollectionRef = collection(db, "apps");
+
+  try {
+    const querySnapshot = await getDocs(appCollectionRef);
+
+    const apps: App[] = [];
+
+    querySnapshot.forEach((doc) => {
+      if (doc.exists()) {
+        const appData = doc.data();
+        apps.push(appData as App);
+      }
+    });
+    return apps;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAppsImTestingFromDb = async (accountId: string) => {
+  const testerToAppsCollectionRef = collection(db, "testerToApps");
+
+  try {
+    const q = query(
+      testerToAppsCollectionRef,
+      where("accountId", "==", accountId)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    const apps: App[] = [];
+
+    for (const doc of querySnapshot.docs) {
+      const testerToAppData = doc.data() as TesterToApp;
+
+      const app = await getAppByIdFromDb(testerToAppData.appId);
+
+      if (app) {
+        apps.push(app);
+      }
+    }
+
+    return apps;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getAppByIdFromDb = async (appId: string) => {
+  const appDocRef = doc(collection(db, "apps"), appId);
+
+  try {
+    const appDoc = await getDoc(appDocRef);
+
+    if (appDoc.exists()) {
+      const appData = appDoc.data();
+      return appData as App;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addTesterToAppToDb = async (testerToApp: TesterToApp) => {
+  const appCollectionRef = collection(db, "testerToApps");
+
+  try {
+    const docRef = await addDoc(appCollectionRef, {});
+
+    testerToApp.id = docRef.id;
+
+    await updateDoc(docRef, testerToApp as Partial<TesterToApp>);
+
+    const testerToAppDoc = await getDoc(docRef);
+    if (testerToAppDoc.exists()) {
+      const testerToAppData = testerToAppDoc.data();
+      return testerToAppData as TesterToApp;
     } else {
       return null;
     }

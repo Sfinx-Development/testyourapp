@@ -26,3 +26,9 @@ export interface UserCreate {
   email: string;
   password: string;
 }
+
+export interface TesterToApp {
+  id: string;
+  accountId: string;
+  appId: string;
+}

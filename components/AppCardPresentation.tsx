@@ -5,36 +5,25 @@ import { App } from "../types";
 
 interface AppCardProps {
   app: App;
+  onClick: (appId: string) => void;
+  appsImTesting: App[] | [];
 }
 
-const AppCard: React.FC<AppCardProps> = ({ app }) => {
-  const {
-    imageUrl,
-    linkToTest,
-    name,
-    description,
-    testersMin,
-    operatingSystem,
-  } = app;
-
+const AppCard: React.FC<AppCardProps> = ({ app, onClick, appsImTesting }) => {
+  const { imageUrl, name, testersMin, operatingSystem } = app;
+  const isTester = appsImTesting.some((testedApp) => testedApp.id === app.id);
   return (
     <Card style={styles.card}>
       <Card.Cover source={{ uri: imageUrl }} style={{ height: 100 }} />
       <Card.Content>
         <Title style={{ fontSize: 16, fontWeight: "bold" }}>{name}</Title>
-        {/* <Paragraph>{description}</Paragraph> */}
         <Paragraph>{testersMin} Testers Needed</Paragraph>
         <Paragraph>{operatingSystem}</Paragraph>
       </Card.Content>
       <Card.Actions>
         <View style={styles.linkContainer}>
-          <Paragraph
-            style={styles.link}
-            onPress={() =>
-              console.log("Sign up as tester då i db?? eller hur ??")
-            }
-          >
-            Test app
+          <Paragraph style={styles.link} onPress={() => onClick(app.id)}>
+            {isTester ? "You are a tester" : "Test app"}
           </Paragraph>
         </View>
       </Card.Actions>
