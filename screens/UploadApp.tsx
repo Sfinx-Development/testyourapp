@@ -35,7 +35,7 @@ export default function UploadApp() {
         imageUrl: imageUrl,
         operatingSystem: operatingSystem,
         accountId: activeAccount?.id,
-        testersMin: 5,
+        testersMin: testersMin,
       };
       dispatch(addAppAsync(appToSave));
     }

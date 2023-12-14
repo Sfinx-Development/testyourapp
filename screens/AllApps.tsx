@@ -1,15 +1,9 @@
 import React from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Card } from "react-native-paper";
+import { FlatList, StyleSheet, View } from "react-native";
+import AppCard from "../components/AppCardPresentation";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import { App } from "../types";
 
 type NavigationProps = RootNavigationScreenProps<"AllApps">;
 
@@ -20,37 +14,80 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     (state) => state.accountSlice.activeAccount
   );
 
+  const appList: App[] = [
+    {
+      id: "",
+      accountId: "",
+      imageUrl: "https://i.imgur.com/W0gF8eO.png",
+      linkToTest: "https://example.com/test1",
+      name: "App 1",
+      description: "An app for apofai jeeoj iewjflw wjefliwej ",
+      testersMin: 5,
+      operatingSystem: "iOS and Android",
+    },
+    {
+      id: "",
+      accountId: "",
+      imageUrl: "https://i.imgur.com/W0gF8eO.png",
+      linkToTest: "https://example.com/test2",
+      name: "App 2",
+      description: "An app for apofai jeeoj iewjflw wjefliwej ",
+      testersMin: 8,
+      operatingSystem: "Android",
+    },
+    {
+      id: "",
+      accountId: "",
+      imageUrl: "https://i.imgur.com/W0gF8eO.png",
+      linkToTest: "https://example.com/test1",
+      name: "Sugarappppp",
+      description: "An app for apofai jeeoj iewjflw wjefliwej ",
+      testersMin: 5,
+      operatingSystem: "iOS and Android",
+    },
+    {
+      id: "",
+      accountId: "",
+      imageUrl: "https://i.imgur.com/W0gF8eO.png",
+      linkToTest: "https://example.com/test2",
+      name: "Some app",
+      description: "An app for apofai jeeoj iewjflw wjefliwej ",
+      testersMin: 8,
+      operatingSystem: "Android",
+    },
+    {
+      id: "",
+      accountId: "",
+      imageUrl: "https://i.imgur.com/W0gF8eO.png",
+      linkToTest: "https://example.com/test1",
+      name: "ii3jwi3rw",
+      description: "An app for apofai jeeoj iewjflw wjefliwej ",
+      testersMin: 5,
+      operatingSystem: "iOS and Android",
+    },
+    {
+      id: "",
+      accountId: "",
+      imageUrl: "https://i.imgur.com/W0gF8eO.png",
+      linkToTest: "https://example.com/test2",
+      name: "Somejfklei we ",
+      description: "An app for apofai jeeoj iewjflw wjefliwej ",
+      testersMin: 8,
+      operatingSystem: "Android",
+    },
+  ];
+
+  const renderAppCard = ({ item }: { item: App }) => <AppCard app={item} />;
+
   return (
     <View style={styles.container}>
-      <View>
-        <TextInput
-          style={styles.input}
-          placeholder="Search for apps"
-          autoCapitalize="none"
-          onChangeText={(text) => console.log("SÖK PÅ: ", text)}
-        />
-      </View>
-      <View style={styles.content}>
-        <Card elevation={2}>
-          <Image
-            source={{ uri: "https://i.imgur.com/YZem2E2.png" }}
-            style={styles.cardImage}
-          />
-          <Text style={{ fontSize: 16 }}>GREENIFY</Text>
-          <Text>
-            An application that helps you to take care of the planet. Need 10
-            testers to deploy it.
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              console.log("HANTERA ANMÄLAN SOM TESTARE");
-            }}
-            style={{ padding: 20, backgroundColor: "white" }}
-          >
-            <Text>Sign up as tester</Text>
-          </TouchableOpacity>
-        </Card>
-      </View>
+      <FlatList
+        data={appList}
+        renderItem={renderAppCard}
+        keyExtractor={(item) => item.name}
+        numColumns={2} // Här anger du att du vill ha två kolumner
+        contentContainerStyle={styles.flatListContainer} // Stilar för FlatList
+      />
     </View>
   );
 }
@@ -59,7 +96,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    top: 100,
+    paddingTop: 50,
+  },
+  flatListContainer: {
+    justifyContent: "space-between",
   },
   header: {
     padding: 20,
@@ -98,8 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   cardImage: {
-    width: 50,
-    height: 50,
+    flex: 1,
   },
   input: {
     height: 40,

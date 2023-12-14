@@ -9,6 +9,7 @@ import { auth } from "../api/config";
 import AllApps from "../screens/AllApps";
 import CreateAccount from "../screens/CreateAccount";
 import Menu from "../screens/Menu";
+import MyApps from "../screens/MyApps";
 import SignIn from "../screens/SignIn";
 import SplashScreen from "../screens/SplashScreen";
 import UploadApp from "../screens/UploadApp";
@@ -23,6 +24,7 @@ export type RootStackParamList = {
   SplashScreen: undefined;
   AllApps: undefined;
   UploadApp: undefined;
+  MyApps: undefined;
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -73,6 +75,11 @@ export default function RootNavigator() {
             <Stack.Screen
               name="UploadApp"
               component={UploadApp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MyApps"
+              component={MyApps}
               options={{ headerShown: false }}
             />
           </>
