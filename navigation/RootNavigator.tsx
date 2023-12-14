@@ -1,12 +1,18 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { auth } from "../api/config";
+import AllApps from "../screens/AllApps";
 import CreateAccount from "../screens/CreateAccount";
 import Menu from "../screens/Menu";
+import MyApps from "../screens/MyApps";
 import SignIn from "../screens/SignIn";
 import SplashScreen from "../screens/SplashScreen";
+import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
@@ -16,8 +22,13 @@ export type RootStackParamList = {
   CreateAccount: undefined;
   Menu: undefined;
   SplashScreen: undefined;
+  AllApps: undefined;
+  UploadApp: undefined;
+  MyApps: undefined;
 };
 
+export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
+  NativeStackScreenProps<RootStackParamList, T>;
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNavigator() {
@@ -54,6 +65,21 @@ export default function RootNavigator() {
             <Stack.Screen
               name="Menu"
               component={Menu}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AllApps"
+              component={AllApps}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UploadApp"
+              component={UploadApp}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="MyApps"
+              component={MyApps}
               options={{ headerShown: false }}
             />
           </>
