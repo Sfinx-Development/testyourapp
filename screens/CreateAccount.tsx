@@ -21,9 +21,35 @@ export default function CreateAccount() {
 
   const dispatch = useAppDispatch();
 
-  const handleCreateUser = () => {
-    if (password == confirmPassword) {
-      dispatch(addUserAsync({ email: email, password: password }));
+  //FIXA SÅ ACCOUNT SKAPAS DIREKT NÄR USER HAR SKAPATS?!
+  const handleCreateUser = async () => {
+    console.log("PASSWORD: ", password, " OCH CONFIRM PSW: ", confirmPassword);
+    if (password === confirmPassword) {
+      try {
+        // Anropa addUserAsync och få tillbaka användaren
+        const userResponse = await dispatch(addUserAsync({ email, password }));
+
+        // Om addUserAsync lyckades, kör addAccountAsync med användarinformationen
+        if (addUserAsync.fulfilled.match(userResponse)) {
+          const addedUser = userResponse.payload;
+
+          dispatch(
+            addAccountAsync({
+              id: "",
+              username,
+              playStoreMail,
+              appStoreMail,
+              uid: addedUser.uid,
+            })
+          );
+        } else {
+          console.log("Failed to add user");
+          // Hantera fel här om det behövs
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        // Hantera fel här om det behövs
+      }
     } else {
       console.log("fixa validering för lösen som inte stämmer som nu :)");
     }
@@ -70,13 +96,13 @@ export default function CreateAccount() {
         secureTextEntry
       />
       <TextInput
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={(text) => setConfirmPassword(text)}
         style={styles.input}
         placeholder="Lösenord"
         secureTextEntry
       />
 
-      <Text style={styles.title}>
+      <Text style={styles.subTitle}>
         Den mail du är inloggad på i play store och/eller app store
       </Text>
 
@@ -120,6 +146,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 16,
+  },
+  subTitle: {
+    fontSize: 20,
+    marginBottom: 10,
   },
   input: {
     height: 40,
