@@ -60,14 +60,14 @@ export default function RootNavigator() {
         ) : (
           <>
             <Stack.Screen
-              name="SignIn"
-              component={SignIn}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="CreateAccount"
               options={{ headerShown: false }}
               component={CreateAccount}
+            />
+            <Stack.Screen
+              name="SignIn"
+              component={SignIn}
+              options={{ headerShown: false }}
             />
           </>
         )}
