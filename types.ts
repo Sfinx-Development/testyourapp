@@ -12,11 +12,14 @@ export interface Account {
 }
 
 export interface App {
+  id: string;
   name: string;
-  link: string;
+  linkToTest: string;
   description: string;
   imageUrl: string;
+  operatingSystem: string;
   accountId: string;
+  testersMin: number;
 }
 
 export interface UserCreate {

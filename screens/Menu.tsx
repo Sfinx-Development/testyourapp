@@ -44,13 +44,13 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
-          onPress={() => navigation.navigate("SignIn")}
+          onPress={() => navigation.navigate("UploadApp")}
         >
           <Text style={styles.optionText}>Ladda upp en app</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
-          onPress={() => navigation.navigate("Menu")}
+          onPress={() => navigation.navigate("UploadApp")}
         >
           <Text style={styles.optionText}>Mina appar</Text>
         </TouchableOpacity>

@@ -11,6 +11,7 @@ import CreateAccount from "../screens/CreateAccount";
 import Menu from "../screens/Menu";
 import SignIn from "../screens/SignIn";
 import SplashScreen from "../screens/SplashScreen";
+import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Menu: undefined;
   SplashScreen: undefined;
   AllApps: undefined;
+  UploadApp: undefined;
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -66,6 +68,11 @@ export default function RootNavigator() {
             <Stack.Screen
               name="AllApps"
               component={AllApps}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UploadApp"
+              component={UploadApp}
               options={{ headerShown: false }}
             />
           </>
