@@ -50,7 +50,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
-          onPress={() => navigation.navigate("UploadApp")}
+          onPress={() => navigation.navigate("MyApps")}
         >
           <Text style={styles.optionText}>Mina appar</Text>
         </TouchableOpacity>
