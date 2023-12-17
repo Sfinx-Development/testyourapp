@@ -25,12 +25,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "265d15f7-b6f2-4d07-be2e-e5912d8ec12f"
-      }
-    },
-    "owner": "radagastno1"
+    }
+   
   }
 }

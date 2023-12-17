@@ -1,24 +1,25 @@
+// MyApps.tsx
 import React from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Card } from "react-native-paper";
+import { View, TextInput, StyleSheet, Text } from "react-native";
+import AppTestersPresentation from "../components/AppTestersPresentation";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import DeleteAppButton from "../components/DeleteAppButton";
 
 type NavigationProps = RootNavigationScreenProps<"MyApps">;
 
 export default function MyApps({ navigation }: NavigationProps) {
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
-  const activeAccount = useAppSelector(
-    (state) => state.accountSlice.activeAccount
-  );
+  const activeAccount = useAppSelector((state) => state.accountSlice.activeAccount);
+
+  const appData = {
+    imageUrl: "https://i.imgur.com/YZem2E2.png",
+    name: "GREENIFY",
+    description: "An application that helps you take care of the planet. Need 10 testers to deploy it.",
+    testersMin: 6,
+    operatingSystem: "iOS", 
+  };
 
   return (
     <View style={styles.container}>
@@ -31,25 +32,11 @@ export default function MyApps({ navigation }: NavigationProps) {
         />
       </View>
       <View style={styles.content}>
-        <Card elevation={2}>
-          <Image
-            source={{ uri: "https://i.imgur.com/YZem2E2.png" }}
-            style={styles.cardImage}
-          />
-          <Text style={{ fontSize: 16 }}>GREENIFY</Text>
-          <Text>
-            An application that helps you to take care of the planet. Need 10
-            testers to deploy it.
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              console.log("HANTERA ANMÄLAN SOM TESTARE");
-            }}
-            style={{ padding: 20, backgroundColor: "white" }}
-          >
-            <Text>Sign up as tester</Text>
-          </TouchableOpacity>
-        </Card>
+        <Text style={styles.cardTitle}>{appData.name}</Text>
+        <Text style={styles.cardDescription}>{appData.description}</Text>
+        <AppTestersPresentation testersCount={appData.testersMin} />
+        <Text style={styles.cardText}>Operating System: {appData.operatingSystem}</Text>
+        <DeleteAppButton onPress={() => console.log("Delete app pressed")} />
       </View>
     </View>
   );
@@ -61,45 +48,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     top: 100,
   },
-  header: {
-    padding: 20,
-    top: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  logoutText: {
-    color: "blue",
-  },
   content: {
     padding: 20,
     top: 20,
     justifyContent: "center",
     alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  option: {
-    marginBottom: 15,
-    padding: 15,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
-  },
-  optionText: {
-    fontSize: 18,
-  },
-  cardImage: {
-    width: 50,
-    height: 50,
   },
   input: {
     height: 40,
@@ -108,5 +61,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 10,
     width: "100%",
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  cardDescription: {
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  cardText: {
+    fontSize: 12,
+    color: "#555",
   },
 });
