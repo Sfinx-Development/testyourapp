@@ -7,15 +7,10 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import DeleteAppButton from "../components/DeleteAppButton";
 import { getMyAppsAsync } from "../store/appSlice";
 import { AnyIfEmpty } from "react-redux";
+import { App } from "../types";
 
 type NavigationProps = RootNavigationScreenProps<"MyApps">;
-type App = {
-  id: string;
-  name: string;
-  description: string;
-  testersMin: number;
-  operatingSystem: string;
-};
+
 
 export default function MyApps({ navigation }: NavigationProps) {
   const user = useAppSelector((state) => state.userSlice.user);
