@@ -1,5 +1,7 @@
+import { signOut } from "firebase/auth";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { auth } from "../api/config";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { getAccountByUidAsync } from "../store/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
@@ -15,7 +17,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   );
 
   const handleSignOut = () => {
-    dispatch(logOutUser());
+    signOut(auth).then(() => {
+      dispatch(logOutUser());
+    });
   };
 
   useEffect(() => {
@@ -50,9 +54,15 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
-          onPress={() => navigation.navigate("UploadApp")}
+          onPress={() => navigation.navigate("MyApps")}
         >
           <Text style={styles.optionText}>Mina appar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.option}
+          onPress={() => navigation.navigate("IncomingTesters")}
+        >
+          <Text style={styles.optionText}>Inkommande testare</Text>
         </TouchableOpacity>
       </View>
     </View>
