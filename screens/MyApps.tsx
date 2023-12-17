@@ -1,24 +1,44 @@
-// MyApps.tsx
-import React from "react";
-import { View, TextInput, StyleSheet, Text } from "react-native";
+
+import React, { useEffect } from "react";
+import { View, TextInput, StyleSheet, Text, FlatList } from "react-native";
 import AppTestersPresentation from "../components/AppTestersPresentation";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import DeleteAppButton from "../components/DeleteAppButton";
+import { getMyAppsAsync } from "../store/appSlice";
+import { AnyIfEmpty } from "react-redux";
 
 type NavigationProps = RootNavigationScreenProps<"MyApps">;
+type App = {
+  id: string;
+  name: string;
+  description: string;
+  testersMin: number;
+  operatingSystem: string;
+};
 
 export default function MyApps({ navigation }: NavigationProps) {
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector((state) => state.accountSlice.activeAccount);
+  const myApps = useAppSelector((state) => state.appSlice.myApps);
 
-  const appData = {
-    imageUrl: "https://i.imgur.com/YZem2E2.png",
-    name: "GREENIFY",
-    description: "An application that helps you take care of the planet. Need 10 testers to deploy it.",
-    testersMin: 6,
-    operatingSystem: "iOS", 
+  useEffect(() => {
+    if (activeAccount) {
+      dispatch(getMyAppsAsync(activeAccount));
+    }
+  }, [activeAccount]);
+
+  const renderAppItem = ({item}: {item: App} ) => {
+    return (
+      <View style={styles.content}>
+        <Text style={styles.cardTitle}>{item.name}</Text>
+        <Text style={styles.cardDescription}>{item.description}</Text>
+        <AppTestersPresentation testersCount={item.testersMin} />
+        <Text style={styles.cardText}>Operating System: {item.operatingSystem}</Text>
+        <DeleteAppButton onPress={() => console.log("Delete app pressed")} />
+      </View>
+    );
   };
 
   return (
@@ -31,13 +51,11 @@ export default function MyApps({ navigation }: NavigationProps) {
           onChangeText={(text) => console.log("SÖK PÅ: ", text)}
         />
       </View>
-      <View style={styles.content}>
-        <Text style={styles.cardTitle}>{appData.name}</Text>
-        <Text style={styles.cardDescription}>{appData.description}</Text>
-        <AppTestersPresentation testersCount={appData.testersMin} />
-        <Text style={styles.cardText}>Operating System: {appData.operatingSystem}</Text>
-        <DeleteAppButton onPress={() => console.log("Delete app pressed")} />
-      </View>
+      <FlatList
+        data={myApps}
+        renderItem={renderAppItem}
+        keyExtractor={(item) => item.id} // Ensure that you use a unique key for each item
+      />
     </View>
   );
 }
@@ -53,6 +71,9 @@ const styles = StyleSheet.create({
     top: 20,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
   input: {
     height: 40,
@@ -75,3 +96,4 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 });
+
