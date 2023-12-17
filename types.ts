@@ -31,4 +31,5 @@ export interface TesterToApp {
   id: string;
   accountId: string;
   appId: string;
+  confirmed: boolean;
 }

@@ -83,6 +83,63 @@ export const getAppsImTestingFromDb = async (accountId: string) => {
   }
 };
 
+export const getMyAppsFromDb = async (accountId: string) => {
+  const appsCollectionRef = collection(db, "apps");
+
+  try {
+    const q = query(appsCollectionRef, where("accountId", "==", accountId));
+
+    const querySnapshot = await getDocs(q);
+
+    const apps: App[] = [];
+
+    for (const doc of querySnapshot.docs) {
+      const myApp = doc.data() as App;
+      if (myApp) {
+        apps.push(myApp);
+      }
+    }
+    return apps;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getUnconfirmedTesters = async (app: App) => {
+  const testersInfo: {
+    appId: string;
+    appName: string;
+    testerId: string;
+    username: string;
+    playStoreMail: string;
+    appStoreMail: string;
+  }[] = [];
+
+  const testerToAppsCollectionRef = collection(db, "testerToApps");
+
+  try {
+    const q = query(
+      testerToAppsCollectionRef,
+      where("appId", "==", app.id),
+      where("confirmed", "==", false)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    for (const doc of querySnapshot.docs) {
+      const testerToAppData = doc.data() as TesterToApp;
+
+      const testerInfo = await getTesterInfo(testerToAppData.accountId, app);
+      if (testerInfo) {
+        testersInfo.push(testerInfo);
+      }
+    }
+    return testersInfo;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAppByIdFromDb = async (appId: string) => {
   const appDocRef = doc(collection(db, "apps"), appId);
 
@@ -92,6 +149,33 @@ export const getAppByIdFromDb = async (appId: string) => {
     if (appDoc.exists()) {
       const appData = appDoc.data();
       return appData as App;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getTesterInfo = async (id: string, app: App) => {
+  let testersProperties;
+
+  const accountDocRef = doc(collection(db, "accounts"), id);
+
+  try {
+    const accountDoc = await getDoc(accountDocRef);
+
+    if (accountDoc.exists()) {
+      const accountData = accountDoc.data();
+      testersProperties = {
+        appId: app.id,
+        appName: app.name,
+        testerId: accountData.id,
+        username: accountData.username,
+        playStoreMail: accountData.playStoreMail,
+        appStoreMail: accountData.appStoreMail,
+      };
+      return testersProperties;
     } else {
       return null;
     }

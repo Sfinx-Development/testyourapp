@@ -34,6 +34,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         id: "",
         accountId: activeAccount?.id,
         appId: appId,
+        confirmed: false
       };
       dispatch(addTesterToAppAsync(newTesterToApp));
     }

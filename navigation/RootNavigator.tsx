@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../api/config";
 import AllApps from "../screens/AllApps";
 import CreateAccount from "../screens/CreateAccount";
+import IncomingTesters from "../screens/IncomingTesters";
 import Menu from "../screens/Menu";
 import MyApps from "../screens/MyApps";
 import SignIn from "../screens/SignIn";
@@ -25,6 +26,7 @@ export type RootStackParamList = {
   AllApps: undefined;
   UploadApp: undefined;
   MyApps: undefined;
+  IncomingTesters: undefined;
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -70,17 +72,22 @@ export default function RootNavigator() {
             <Stack.Screen
               name="AllApps"
               component={AllApps}
-              options={{ headerShown: false }}
+              // options={{ headerShown: false }}
             />
             <Stack.Screen
               name="UploadApp"
               component={UploadApp}
-              options={{ headerShown: false }}
+              // options={{ headerShown: false }}
             />
             <Stack.Screen
               name="MyApps"
               component={MyApps}
-              options={{ headerShown: false }}
+              // options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="IncomingTesters"
+              component={IncomingTesters}
+              // options={{ headerShown: false }}
             />
           </>
         ) : (
@@ -94,6 +101,11 @@ export default function RootNavigator() {
               name="CreateAccount"
               options={{ headerShown: false }}
               component={CreateAccount}
+            />
+            <Stack.Screen
+              name="IncomingTesters"
+              options={{ headerShown: false }}
+              component={IncomingTesters}
             />
           </>
         )}

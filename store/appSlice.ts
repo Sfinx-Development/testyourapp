@@ -4,13 +4,23 @@ import {
   addTesterToAppToDb,
   getAllAppsFromDb,
   getAppsImTestingFromDb,
+  getMyAppsFromDb,
+  getUnconfirmedTesters,
 } from "../api/app";
-import { App, TesterToApp } from "../types";
+import { Account, App, TesterToApp } from "../types";
 
 interface AppState {
   app: App | null;
   availableApps: App[];
   appsImTesting: App[];
+  uncofirmedTesters: {
+    appId: string;
+    appName: string;
+    username: string;
+    playStoreMail: string;
+    appStoreMail: string;
+  }[];
+  myApps: App[];
   error: string | null;
 }
 
@@ -18,6 +28,8 @@ export const initialState: AppState = {
   app: null,
   availableApps: [],
   appsImTesting: [],
+  uncofirmedTesters: [],
+  myApps: [],
   error: null,
 };
 
@@ -36,6 +48,30 @@ export const addAppAsync = createAsyncThunk<App, App, { rejectValue: string }>(
     }
   }
 );
+
+export const getUnconfirmedTestersAsync = createAsyncThunk<
+  {
+    appId: string;
+    appName: string;
+    testerId:string;
+    username: string;
+    playStoreMail: string;
+    appStoreMail: string;
+  }[],
+  App,
+  { rejectValue: string }
+>("app/getUnconfirmedTesters", async (app, thunkAPI) => {
+  try {
+    const testers = await getUnconfirmedTesters(app);
+    if (testers) {
+      return testers;
+    } else {
+      return thunkAPI.rejectWithValue("failed to add app");
+    }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
 
 export const getAppsImTestingAsync = createAsyncThunk<
   App[],
@@ -79,6 +115,19 @@ export const getAllAppsAsync = createAsyncThunk<
   try {
     const allApps = await getAllAppsFromDb();
     return allApps;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const getMyAppsAsync = createAsyncThunk<
+  App[],
+  Account,
+  { rejectValue: string }
+>("app/getMyApps", async (account, thunkAPI) => {
+  try {
+    const myApps = await getMyAppsFromDb(account.id);
+    return myApps;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.message);
   }
@@ -129,6 +178,22 @@ const appSlice = createSlice({
       .addCase(getAppsImTestingAsync.rejected, (state, action) => {
         state.appsImTesting = [];
         state.error = "Something went wrong with getting apps you are testing.";
+      })
+      .addCase(getUnconfirmedTestersAsync.fulfilled, (state, action) => {
+        state.uncofirmedTesters = action.payload;
+        state.error = null;
+      })
+      .addCase(getUnconfirmedTestersAsync.rejected, (state, action) => {
+        state.uncofirmedTesters = [];
+        state.error = "Something went wrong with getting testers for your app.";
+      })
+      .addCase(getMyAppsAsync.fulfilled, (state, action) => {
+        state.myApps = action.payload;
+        state.error = null;
+      })
+      .addCase(getMyAppsAsync.rejected, (state, action) => {
+        state.myApps = [];
+        state.error = "Something went wrong with getting testers for your app.";
       });
   },
 });
