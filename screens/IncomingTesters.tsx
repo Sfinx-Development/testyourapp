@@ -4,6 +4,7 @@ import TesterConfirmCard from "../components/TesterConfirmCard";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import {
   addTesterToAppAsync,
+  confirmTesterToAppAsync,
   getMyAppsAsync,
   getUnconfirmedTestersAsync,
 } from "../store/appSlice";
@@ -27,7 +28,9 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
     if (myApps) {
       console.log("my apps: ", myApps);
       for (const app of myApps) {
-        dispatch(getUnconfirmedTestersAsync(app));
+        dispatch(getUnconfirmedTestersAsync(app)).then(() => {
+          console.log("TESTERS: ", unconfirmedTesters);
+        });
       }
     }
   }, [myApps]);
@@ -39,20 +42,9 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
     }
   }, []);
 
-  const handleConfirmTesterToApp = (appId: string) => {
+  const handleConfirmTesterToApp = (testerToAppId: string) => {
     if (activeAccount) {
-      const newTesterToApp: TesterToApp = {
-        id: "",
-        accountId: activeAccount?.id,
-        appId: appId,
-        confirmed: true,
-      };
-      dispatch(
-        addTesterToAppAsync({
-          testerToApp: newTesterToApp,
-          account: activeAccount,
-        })
-      );
+      dispatch(confirmTesterToAppAsync(testerToAppId));
     }
   };
 
@@ -67,7 +59,7 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
       //här hämta playstore eller appstore, det som gller för appen
       testerMail={item.playStoreMail}
       testerId={item.testerId}
-      onClick={handleConfirmTesterToApp}
+      onClick={() => handleConfirmTesterToApp(item.testerToAppId)}
     />
   );
 
