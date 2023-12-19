@@ -24,23 +24,23 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
     (state) => state.appSlice.uncofirmedTesters
   );
 
-  useEffect(() => {
-    if (myApps) {
-      console.log("my apps: ", myApps);
-      for (const app of myApps) {
-        dispatch(getUnconfirmedTestersAsync(app)).then(() => {
-          console.log("TESTERS: ", unconfirmedTesters);
-        });
-      }
-    }
-  }, [myApps]);
+  // useEffect(() => {
+  //   if (myApps) {
+  //     console.log("my apps: ", myApps);
+  //     for (const app of myApps) {
+  //       dispatch(getUnconfirmedTestersAsync(app)).then(() => {
+  //         console.log("TESTERS: ", unconfirmedTesters);
+  //       });
+  //     }
+  //   }
+  // }, [myApps]);
 
   //detta räcker med att det händer en gång vid startsidan och en gång när man laddar in en ny app? kanske
-  useEffect(() => {
-    if (activeAccount) {
-      dispatch(getMyAppsAsync(activeAccount));
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (activeAccount) {
+  //     dispatch(getMyAppsAsync(activeAccount));
+  //   }
+  // }, []);
 
   const handleConfirmTesterToApp = (testerToAppId: string) => {
     if (activeAccount) {
