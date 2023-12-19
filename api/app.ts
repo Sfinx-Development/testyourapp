@@ -34,6 +34,26 @@ export const addAppToDb = async (app: App) => {
   }
 };
 
+export const confirmTesterToAppDb = async (testerToAppId: string) => {
+  const testerToAppDocRef = doc(db, "testerToApps", testerToAppId);
+
+  try {
+    await updateDoc(testerToAppDocRef, {
+      confirmed: true,
+    });
+
+    const appDoc = await getDoc(testerToAppDocRef);
+    if (appDoc.exists()) {
+      const appData = appDoc.data();
+      return appData as TesterToApp;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAllAppsFromDb = async () => {
   const appCollectionRef = collection(db, "apps");
 
@@ -107,6 +127,7 @@ export const getMyAppsFromDb = async (accountId: string) => {
 
 export const getUnconfirmedTesters = async (app: App) => {
   const testersInfo: {
+    testerToAppId: string;
     appId: string;
     appName: string;
     testerId: string;
@@ -129,7 +150,7 @@ export const getUnconfirmedTesters = async (app: App) => {
     for (const doc of querySnapshot.docs) {
       const testerToAppData = doc.data() as TesterToApp;
 
-      const testerInfo = await getTesterInfo(testerToAppData.accountId, app);
+      const testerInfo = await getTesterInfo(testerToAppData, app);
       if (testerInfo) {
         testersInfo.push(testerInfo);
       }
@@ -157,10 +178,13 @@ export const getAppByIdFromDb = async (appId: string) => {
   }
 };
 
-export const getTesterInfo = async (id: string, app: App) => {
+export const getTesterInfo = async (testerToAppData: TesterToApp, app: App) => {
   let testersProperties;
 
-  const accountDocRef = doc(collection(db, "accounts"), id);
+  const accountDocRef = doc(
+    collection(db, "accounts"),
+    testerToAppData.accountId
+  );
 
   try {
     const accountDoc = await getDoc(accountDocRef);
@@ -168,6 +192,7 @@ export const getTesterInfo = async (id: string, app: App) => {
     if (accountDoc.exists()) {
       const accountData = accountDoc.data();
       testersProperties = {
+        testerToAppId: testerToAppData.id,
         appId: app.id,
         appName: app.name,
         testerId: accountData.id,

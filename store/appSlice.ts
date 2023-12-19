@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addAppToDb,
   addTesterToAppToDb,
+  confirmTesterToAppDb,
   getAllAppsFromDb,
   getAppByIdFromDb,
   getAppsImTestingFromDb,
@@ -15,6 +16,7 @@ interface AppState {
   availableApps: App[];
   appsImTesting: App[];
   uncofirmedTesters: {
+    testerToAppId: string;
     appId: string;
     appName: string;
     username: string;
@@ -50,8 +52,26 @@ export const addAppAsync = createAsyncThunk<App, App, { rejectValue: string }>(
   }
 );
 
+export const confirmTesterToAppAsync = createAsyncThunk<
+  TesterToApp,
+  string,
+  { rejectValue: string }
+>("app/confirmTesterToApp", async (testerToAppId, thunkAPI) => {
+  try {
+    const confirmedTesterToApp = await confirmTesterToAppDb(testerToAppId);
+    if (confirmedTesterToApp) {
+      return confirmedTesterToApp;
+    } else {
+      return thunkAPI.rejectWithValue("failed to add app");
+    }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
 export const getUnconfirmedTestersAsync = createAsyncThunk<
   {
+    testerToAppId: string;
     appId: string;
     appName: string;
     testerId: string;
@@ -108,7 +128,9 @@ export const addTesterToAppAsync = createAsyncThunk<
             account.playStoreMail) ||
           (app.operatingSystem.toLowerCase() === "ios" &&
             account.appStoreMail) ||
-          app.operatingSystem.toLowerCase() === "all"
+          (app.operatingSystem.toLowerCase() === "all" &&
+            account.playStoreMail &&
+            account.appStoreMail)
         ) {
           const addedTester = await addTesterToAppToDb(testerToApp);
           if (addedTester) {
@@ -223,6 +245,16 @@ const appSlice = createSlice({
       .addCase(addTesterToAppAsync.rejected, (state, action) => {
         state.error = "Have you registered email for this current OS store?";
         console.log("STATE ERROR: ", state.error);
+      })
+      .addCase(confirmTesterToAppAsync.fulfilled, (state, action) => {
+        console.log("CONFIRM FULFILLED");
+        const confirmedTesterIndex = state.uncofirmedTesters.findIndex(
+          (test) => test.testerToAppId == action.payload.id
+        );
+        if (confirmedTesterIndex !== -1) {
+          state.uncofirmedTesters.splice(confirmedTesterIndex, 1);
+        }
+        state.error = null;
       });
   },
 });

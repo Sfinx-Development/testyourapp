@@ -1,80 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet, TextInput, View } from "react-native";
-import AppCard from "../components/AppCardPresentation";
+import { FlatList, StyleSheet, View } from "react-native";
+import AppImTestingCard from "../components/AppImTestingCard";
 import ErrorModule from "../components/ErrorModule";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import {
-  addTesterToAppAsync,
-  getAllAppsAsync,
-  getAppsImTestingAsync,
-} from "../store/appSlice";
+import { getAllAppsAsync, getAppsImTestingAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { App, TesterToApp } from "../types";
+import { App } from "../types";
 
-type NavigationProps = RootNavigationScreenProps<"AllApps">;
+type NavigationProps = RootNavigationScreenProps<"AppsImTesting">;
 
-export default function HomeScreen({ navigation }: NavigationProps) {
+export default function AppsImTesting({ navigation }: NavigationProps) {
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const user = useAppSelector((state) => state.userSlice.user);
+
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
   );
-  const testerToAppError = useAppSelector((state) => state.appSlice.error);
-
-  const availableApps = useAppSelector((state) => state.appSlice.availableApps);
   const appsImTesting = useAppSelector((state) => state.appSlice.appsImTesting);
-  const myApps = useAppSelector((state) => state.appSlice.myApps);
 
   useEffect(() => {
-    if (testerToAppError) {
-      setErrorMsg(testerToAppError);
-      setErrorPopup(true);
-    }
-  }, [errorPopup]);
-
-  useEffect(() => {
-    dispatch(getAllAppsAsync());
     if (activeAccount) {
+      console.log("HÄMTAR TESTADE APPAR");
       dispatch(getAppsImTestingAsync(activeAccount?.id));
     }
-  }, []);
-
-  const handleSaveTesterToApp = (appId: string) => {
-    if (
-      appsImTesting.some((app) => app.id === appId) ||
-      myApps.some((app) => app.id === appId)
-    ) {
-      console.log("i if");
-      setErrorMsg(
-        "It seems as you are allready registered as a tester or this is your app."
-      );
-      setErrorPopup(true);
-    } else {
-      if (activeAccount) {
-        const newTesterToApp: TesterToApp = {
-          id: "",
-          accountId: activeAccount?.id,
-          appId: appId,
-          confirmed: false,
-        };
-        dispatch(
-          addTesterToAppAsync({
-            testerToApp: newTesterToApp,
-            account: activeAccount,
-          })
-        );
-      }
-    }
-  };
+  }, [activeAccount]);
 
   const renderAppCard = ({ item }: { item: App }) => (
-    <AppCard
+    <AppImTestingCard
       app={item}
-      onClick={handleSaveTesterToApp}
-      appsImTesting={appsImTesting}
-      myApps={myApps}
+      onClick={() => {
+        console.log("click");
+      }}
     />
   );
 
@@ -87,16 +44,8 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           onClose={() => setErrorPopup(false)}
         />
       ) : null}
-      <View>
-        <TextInput
-          style={styles.input}
-          placeholder="Search for apps"
-          autoCapitalize="none"
-          onChangeText={(text) => console.log("SÖK PÅ: ", text)}
-        />
-      </View>
       <FlatList
-        data={availableApps}
+        data={appsImTesting}
         renderItem={renderAppCard}
         keyExtractor={(item) => item.name}
         numColumns={2}
