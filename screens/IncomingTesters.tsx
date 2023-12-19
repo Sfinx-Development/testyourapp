@@ -47,7 +47,12 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
         appId: appId,
         confirmed: true,
       };
-      dispatch(addTesterToAppAsync(newTesterToApp));
+      dispatch(
+        addTesterToAppAsync({
+          testerToApp: newTesterToApp,
+          account: activeAccount,
+        })
+      );
     }
   };
 

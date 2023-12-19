@@ -3,6 +3,7 @@ import {
   addAppToDb,
   addTesterToAppToDb,
   getAllAppsFromDb,
+  getAppByIdFromDb,
   getAppsImTestingFromDb,
   getMyAppsFromDb,
   getUnconfirmedTesters,
@@ -53,7 +54,7 @@ export const getUnconfirmedTestersAsync = createAsyncThunk<
   {
     appId: string;
     appName: string;
-    testerId:string;
+    testerId: string;
     username: string;
     playStoreMail: string;
     appStoreMail: string;
@@ -92,18 +93,39 @@ export const getAppsImTestingAsync = createAsyncThunk<
 
 export const addTesterToAppAsync = createAsyncThunk<
   TesterToApp,
-  TesterToApp,
+  { testerToApp: TesterToApp; account: Account },
   { rejectValue: string }
->("app/addApp", async (testerToApp, thunkAPI) => {
+>("app/addTesterToApp", async ({ testerToApp, account }, thunkAPI) => {
   try {
-    const addedTester = await addTesterToAppToDb(testerToApp);
-    if (addedTester) {
-      return addedTester;
+    const app = await getAppByIdFromDb(testerToApp.appId);
+    if (app) {
+      if (app.accountId == account.id) {
+        throw new Error("This is your app.");
+      } else {
+        console.log("Hittade appen");
+        if (
+          (app.operatingSystem.toLowerCase() === "android" &&
+            account.playStoreMail) ||
+          (app.operatingSystem.toLowerCase() === "ios" &&
+            account.appStoreMail) ||
+          app.operatingSystem.toLowerCase() === "all"
+        ) {
+          const addedTester = await addTesterToAppToDb(testerToApp);
+          if (addedTester) {
+            return addedTester;
+          } else {
+            throw new Error("Failed to add tester to app");
+          }
+        } else {
+          throw new Error("Invalid combination of OS and account email");
+        }
+      }
     } else {
-      return thunkAPI.rejectWithValue("failed to add tester to app");
+      console.log("hittar kanske inte appen");
+      throw new Error("App not found");
     }
   } catch (error: any) {
-    return thunkAPI.rejectWithValue(error.message);
+    throw new Error(error.message || "An error occurred");
   }
 });
 
@@ -194,6 +216,13 @@ const appSlice = createSlice({
       .addCase(getMyAppsAsync.rejected, (state, action) => {
         state.myApps = [];
         state.error = "Something went wrong with getting testers for your app.";
+      })
+      .addCase(addTesterToAppAsync.fulfilled, (state, action) => {
+        state.error = null;
+      })
+      .addCase(addTesterToAppAsync.rejected, (state, action) => {
+        state.error = "Have you registered email for this current OS store?";
+        console.log("STATE ERROR: ", state.error);
       });
   },
 });
