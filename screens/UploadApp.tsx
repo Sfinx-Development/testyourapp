@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { RootNavigationScreenProps } from "../navigation/RootNavigator";
+import { addAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
-import { addAppAsync } from "../store/appSlice";
 
-export default function UploadApp() {
+type NavigationProps = RootNavigationScreenProps<"UploadApp">;
+export default function UploadApp({ navigation }: NavigationProps) {
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -37,7 +39,9 @@ export default function UploadApp() {
         accountId: activeAccount?.id,
         testersMin: testersMin,
       };
-      dispatch(addAppAsync(appToSave));
+      dispatch(addAppAsync(appToSave)).then(() => {
+        navigation.navigate("Menu");
+      });
     }
   };
 
