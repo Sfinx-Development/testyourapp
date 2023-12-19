@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import AppCard from "../components/AppCardPresentation";
+import ErrorModule from "../components/ErrorModule";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import {
   addTesterToAppAsync,
@@ -13,13 +14,22 @@ import { App, TesterToApp } from "../types";
 type NavigationProps = RootNavigationScreenProps<"AllApps">;
 
 export default function HomeScreen({ navigation }: NavigationProps) {
+  const [errorPopup, setErrorPopup] = useState(false);
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
   );
+  const testerToAppError = useAppSelector((state) => state.appSlice.error);
+
   const availableApps = useAppSelector((state) => state.appSlice.availableApps);
   const appsImTesting = useAppSelector((state) => state.appSlice.appsImTesting);
+
+  useEffect(() => {
+    if (testerToAppError) {
+      setErrorPopup(true);
+    }
+  }, [testerToAppError]);
 
   useEffect(() => {
     dispatch(getAllAppsAsync());
@@ -29,14 +39,22 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   }, []);
 
   const handleSaveTesterToApp = (appId: string) => {
+    if (appsImTesting.some((app) => app.id === appId)) {
+      return;
+    }
     if (activeAccount) {
       const newTesterToApp: TesterToApp = {
         id: "",
         accountId: activeAccount?.id,
         appId: appId,
-        confirmed: false
+        confirmed: false,
       };
-      dispatch(addTesterToAppAsync(newTesterToApp));
+      dispatch(
+        addTesterToAppAsync({
+          testerToApp: newTesterToApp,
+          account: activeAccount,
+        })
+      );
     }
   };
 
@@ -50,6 +68,13 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
   return (
     <View style={styles.container}>
+      {errorPopup && testerToAppError ? (
+        <ErrorModule
+          errorMessage={testerToAppError}
+          buttonMessage="Got it"
+          onClose={() => setErrorPopup(false)}
+        />
+      ) : null}
       <FlatList
         data={availableApps}
         renderItem={renderAppCard}
