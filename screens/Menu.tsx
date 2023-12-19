@@ -32,37 +32,43 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>
-          Välkommen, {activeAccount?.username}!
+          Welcome, {activeAccount?.username}!
         </Text>
         <TouchableOpacity onPress={handleSignOut}>
-          <Text style={styles.logoutText}>Logga ut</Text>
+          <Text style={styles.logoutText}>Sign out</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Text style={styles.title}>Dina val</Text>
+        <Text style={styles.title}>Test your app</Text>
         <TouchableOpacity
           style={styles.option}
           onPress={() => navigation.navigate("AllApps")}
         >
-          <Text style={styles.optionText}>Tillgängliga appar</Text>
+          <Text style={styles.optionText}>Available apps</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
           onPress={() => navigation.navigate("UploadApp")}
         >
-          <Text style={styles.optionText}>Ladda upp en app</Text>
+          <Text style={styles.optionText}>Upload app</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
           onPress={() => navigation.navigate("MyApps")}
         >
-          <Text style={styles.optionText}>Mina appar</Text>
+          <Text style={styles.optionText}>My apps</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
           onPress={() => navigation.navigate("IncomingTesters")}
         >
-          <Text style={styles.optionText}>Inkommande testare</Text>
+          <Text style={styles.optionText}>Incoming testers</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.option}
+          onPress={() => navigation.navigate("AppsImTesting")}
+        >
+          <Text style={styles.optionText}>Apps I'm testing</Text>
         </TouchableOpacity>
       </View>
     </View>
