@@ -10,7 +10,6 @@ interface AppCardProps {
   appsImTesting: App[] | [];
   myApps: App[] | [];
 }
-
 const AppCard: React.FC<AppCardProps> = ({
   app,
   onClick,

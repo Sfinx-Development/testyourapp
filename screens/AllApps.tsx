@@ -16,6 +16,8 @@ type NavigationProps = RootNavigationScreenProps<"AllApps">;
 export default function HomeScreen({ navigation }: NavigationProps) {
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [search, setSearch] = useState("");
+  const [filteredApps, setFilteredApps] = useState<App[] | []>();
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
@@ -24,6 +26,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const testerToAppError = useAppSelector((state) => state.appSlice.error);
 
   const availableApps = useAppSelector((state) => state.appSlice.availableApps);
+
   const appsImTesting = useAppSelector((state) => state.appSlice.appsImTesting);
   const myApps = useAppSelector((state) => state.appSlice.myApps);
 
@@ -40,6 +43,21 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       dispatch(getAppsImTestingAsync(activeAccount?.id));
     }
   }, []);
+
+  useEffect(() => {
+    if (availableApps) {
+      setFilteredApps(availableApps);
+    }
+  }, [availableApps]);
+
+  const filterAppsBySearch = () => {
+    const filtered = availableApps.filter(
+      (app) =>
+        app.name.toLowerCase().includes(search.toLowerCase()) ||
+        app.operatingSystem.toLowerCase().includes(search.toLowerCase())
+    );
+    setFilteredApps(filtered);
+  };
 
   const handleSaveTesterToApp = (appId: string) => {
     if (
@@ -92,11 +110,14 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={styles.input}
           placeholder="Search for apps"
           autoCapitalize="none"
-          onChangeText={(text) => console.log("SÖK PÅ: ", text)}
+          onChangeText={(text) => {
+            setSearch(text);
+            filterAppsBySearch();
+          }}
         />
       </View>
       <FlatList
-        data={availableApps}
+        data={filteredApps}
         renderItem={renderAppCard}
         keyExtractor={(item) => item.name}
         numColumns={2}
