@@ -11,7 +11,8 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { UserCreate, User } from "../types";
+import { User, UserCreate } from "../types";
+import { getAccountByUid } from "./account";
 import { auth, db } from "./config";
 
 export const addUserToDB = async (createUser: UserCreate) => {
@@ -50,8 +51,39 @@ export const signInWithAPI = async (createUser: UserCreate) => {
 
 export const deleteUserFromDB = async (userId: string) => {
   try {
-    const userDocRef = doc(db, "users", userId);
-    await deleteDoc(userDocRef);
+    //hämta accountet det gäller
+    const account = await getAccountByUid(userId);
+
+    if (account) {
+      //radera alla testertoapps som denna testern är i
+      const testerToAppQuery = query(
+        collection(db, "testerToApps"),
+        where("accountId", "==", account.id)
+      );
+      const testerToAppSnapshot = await getDocs(testerToAppQuery);
+
+      testerToAppSnapshot.forEach(async (testerToAppDoc) => {
+        await deleteDoc(testerToAppDoc.ref);
+      });
+
+      //radera alla appar som den har
+      const appQuery = query(
+        collection(db, "apps"),
+        where("accountId", "==", account.id)
+      );
+      const appSnapshot = await getDocs(appQuery);
+      appSnapshot.forEach(async (appDoc) => {
+        await deleteDoc(appDoc.ref);
+      });
+
+      //radera accountet som den har
+      const accountDocRef = doc(db, "accounts", account.id);
+      await deleteDoc(accountDocRef);
+
+      const userDocRef = doc(db, "users", userId);
+      await deleteDoc(userDocRef);
+    }
+    return true;
   } catch (error) {
     throw error;
   }

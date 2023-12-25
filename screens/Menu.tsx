@@ -11,7 +11,7 @@ import {
   getUnconfirmedTestersAsync,
 } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { logOutUser } from "../store/userSlice";
+import { deleteUserAsync, logOutUser } from "../store/userSlice";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
 
@@ -54,6 +54,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       }
     }
   }, [myApps]);
+
+  const handleDeleteAccount = () => {
+    if (user) {
+      dispatch(deleteUserAsync(user.uid));
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -111,6 +117,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           <Text style={styles.optionText}>Apps I'm testing</Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => handleDeleteAccount()}
+      >
+        <Text style={styles.optionText}>Delete account</Text>
+      </TouchableOpacity>
     </View>
   );
 }

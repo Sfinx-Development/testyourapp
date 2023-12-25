@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addUserToDB, signInWithAPI } from "../api/user";
-import { UserCreate, User } from "../types";
+import { addUserToDB, deleteUserFromDB, signInWithAPI } from "../api/user";
+import { User, UserCreate } from "../types";
 
 interface UserState {
   user: User | undefined;
@@ -46,6 +46,19 @@ export const logInUserAsync = createAsyncThunk<
   }
 });
 
+export const deleteUserAsync = createAsyncThunk<
+  boolean,
+  string,
+  { rejectValue: string }
+>("user/deleteUser", async (userId, thunkAPI) => {
+  try {
+    const response = await deleteUserFromDB(userId);
+    return response;
+  } catch (error) {
+    throw new Error("Användarnamn eller lösenord var felaktigt.");
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -81,6 +94,14 @@ const userSlice = createSlice({
       })
       .addCase(addUserAsync.rejected, (state, action) => {
         state.error = "Det verkar som att du redan har ett konto här.";
+      })
+      .addCase(deleteUserAsync.fulfilled, (state, action) => {
+        state.error = null;
+        state.user = undefined;
+      })
+      .addCase(deleteUserAsync.rejected, (state, action) => {
+        state.error =
+          "Something went wrong. Try again later or sign out and sign in again.";
       });
   },
 });
