@@ -10,9 +10,11 @@ import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { addAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
+import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"UploadApp">;
 export default function UploadApp({ navigation }: NavigationProps) {
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -38,6 +40,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         operatingSystem: operatingSystem,
         accountId: activeAccount?.id,
         testersMin: testersMin,
+        testersRegistered: 0,
       };
       dispatch(addAppAsync(appToSave)).then(() => {
         navigation.navigate("Menu");
@@ -46,7 +49,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -90,7 +93,10 @@ export default function UploadApp({ navigation }: NavigationProps) {
         onChange={(number) => setTestersMin(Number(number))}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSaveApp}>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
+        onPress={handleSaveApp}
+      >
         <Text style={styles.buttonText}>Ladda upp app</Text>
       </TouchableOpacity>
     </View>
@@ -100,7 +106,6 @@ export default function UploadApp({ navigation }: NavigationProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
@@ -119,20 +124,17 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
     alignItems: "center",
     width: "100%",
+    marginBottom: 15,
+    padding: 15,
+    borderRadius: 8,
   },
   buttonText: {
-    color: "#fff",
     fontWeight: "bold",
   },
   forgotPassword: {
     marginTop: 16,
   },
-  forgotPasswordText: {
-    color: "gray",
-  },
+  forgotPasswordText: {},
 });

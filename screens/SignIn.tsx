@@ -9,10 +9,12 @@ import {
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { logInUserAsync } from "../store/userSlice";
+import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"SignIn">;
 
 export default function SignIn({ navigation }: NavigationProps) {
+  const {colors} = useTheme();
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +33,7 @@ export default function SignIn({ navigation }: NavigationProps) {
     });
   }
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <Text style={styles.title}>Sign in</Text>
 
       <TextInput
@@ -49,11 +51,14 @@ export default function SignIn({ navigation }: NavigationProps) {
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: colors.button.darkBlue }]}onPress={handleLogin}>
         <Text style={styles.buttonText}>Sign in</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CreateAccount")}>
+      <TouchableOpacity
+       style={[styles.button, { backgroundColor: colors.button.lightBlue }]}
+        onPress={() => navigation.navigate("CreateAccount")}
+      >
         <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
 

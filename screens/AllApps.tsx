@@ -10,10 +10,12 @@ import {
 } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App, TesterToApp } from "../types";
+import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"AllApps">;
 
 export default function HomeScreen({ navigation }: NavigationProps) {
+  const {colors} = useTheme();
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [search, setSearch] = useState("");
@@ -97,7 +99,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       {errorPopup && errorMsg ? (
         <ErrorModule
           errorMessage={errorMsg}

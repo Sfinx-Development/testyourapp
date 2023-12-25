@@ -9,8 +9,10 @@ import {
 import { addAccountAsync } from "../store/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { addUserAsync } from "../store/userSlice";
+import { useTheme } from "../contexts/themeContext";
 
 export default function CreateAccount() {
+  const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,10 +28,7 @@ export default function CreateAccount() {
     console.log("PASSWORD: ", password, " OCH CONFIRM PSW: ", confirmPassword);
     if (password === confirmPassword) {
       try {
-        // Anropa addUserAsync och få tillbaka användaren
         const userResponse = await dispatch(addUserAsync({ email, password }));
-
-        // Om addUserAsync lyckades, kör addAccountAsync med användarinformationen
         if (addUserAsync.fulfilled.match(userResponse)) {
           const addedUser = userResponse.payload;
 
@@ -44,11 +43,9 @@ export default function CreateAccount() {
           );
         } else {
           console.log("Failed to add user");
-          // Hantera fel här om det behövs
         }
       } catch (error) {
         console.error("Error creating user:", error);
-        // Hantera fel här om det behövs
       }
     } else {
       console.log("fixa validering för lösen som inte stämmer som nu :)");
@@ -71,7 +68,7 @@ export default function CreateAccount() {
   }, [userCreated]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <Text style={styles.title}>Dina uppgifter för att logga in</Text>
 
       <TextInput
@@ -123,7 +120,7 @@ export default function CreateAccount() {
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
         onPress={() => {
           handleCreateUser();
         }}
