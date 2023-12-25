@@ -5,13 +5,13 @@ import {
   confirmTesterToAppDb,
   deleteAsTesterFromDb,
   getAllAppsFromDb,
+  getAmountOfTestersDb,
   getAppByIdFromDb,
   getAppsImTestingFromDb,
   getMyAppsFromDb,
   getUnconfirmedTesters,
 } from "../api/app";
 import { Account, App, TesterToApp } from "../types";
-import AppsImTesting from "../screens/AppsImTesting";
 
 interface AppState {
   app: App | null;
@@ -53,6 +53,19 @@ export const addAppAsync = createAsyncThunk<App, App, { rejectValue: string }>(
     }
   }
 );
+
+export const getAmountOfTestersForAppAsync = async(appId: string) => {
+  try {
+    const amountOfTesters = await getAmountOfTestersDb(appId);
+    if (amountOfTesters) {
+      return amountOfTesters;
+    } else {
+      return 0;
+    }
+  } catch (error: any) {
+    return 0;
+  }
+};
 
 export const confirmTesterToAppAsync = createAsyncThunk<
   TesterToApp,

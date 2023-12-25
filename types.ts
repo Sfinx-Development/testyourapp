@@ -20,6 +20,7 @@ export interface App {
   operatingSystem: string;
   accountId: string;
   testersMin: number;
+  testersRegistered: number;
 }
 
 export interface UserCreate {

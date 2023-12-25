@@ -127,6 +127,20 @@ export const getMyAppsFromDb = async (accountId: string) => {
   }
 };
 
+export const getAmountOfTestersDb = async (appId: string) => {
+  const testerToAppsCollectionRef = collection(db, "testerToApps");
+
+  try {
+    const q = query(testerToAppsCollectionRef, where("appId", "==", appId));
+
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.length;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getUnconfirmedTesters = async (app: App) => {
   const testersInfo: {
     testerToAppId: string;
@@ -181,6 +195,7 @@ export const deleteAsTesterFromDb = async (
     if (!querySnapshot.empty) {
       const doc = querySnapshot.docs[0];
       await deleteDoc(doc.ref);
+      await decreaseAmountOfTesterForAppDb(appId);
       return true;
     } else {
       return false;
@@ -250,8 +265,58 @@ export const addTesterToAppToDb = async (testerToApp: TesterToApp) => {
 
     const testerToAppDoc = await getDoc(docRef);
     if (testerToAppDoc.exists()) {
-      const testerToAppData = testerToAppDoc.data();
+      const testerToAppData = testerToAppDoc.data() as TesterToApp;
+      await increaseAmountOfTesterForAppDb(testerToAppData.appId);
       return testerToAppData as TesterToApp;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const increaseAmountOfTesterForAppDb = async (appId: string) => {
+  const appCollectionRef = collection(db, "apps");
+
+  try {
+    const appDocRef = doc(appCollectionRef, appId);
+    const appDoc = await getDoc(appDocRef);
+
+    if (appDoc.exists()) {
+      const appData = appDoc.data();
+      const updatedTestersRegistered = (appData?.testersRegistered || 0) + 1;
+
+      await updateDoc(appDocRef, {
+        testersRegistered: updatedTestersRegistered,
+      });
+
+      return { ...appData, testersRegistered: updatedTestersRegistered };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const decreaseAmountOfTesterForAppDb = async (appId: string) => {
+  const appCollectionRef = collection(db, "apps");
+
+  try {
+    const appDocRef = doc(appCollectionRef, appId);
+    const appDoc = await getDoc(appDocRef);
+
+    if (appDoc.exists()) {
+      const appData = appDoc.data();
+      if (appData.testersRegistered > 0) {
+        const updatedTestersRegistered = (appData?.testersRegistered || 0) - 1;
+        await updateDoc(appDocRef, {
+          testersRegistered: updatedTestersRegistered,
+        });
+
+        return { ...appData, testersRegistered: updatedTestersRegistered };
+      }
     } else {
       return null;
     }
