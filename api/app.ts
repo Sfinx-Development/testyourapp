@@ -2,6 +2,7 @@ import "firebase/firestore";
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -157,6 +158,33 @@ export const getUnconfirmedTesters = async (app: App) => {
       }
     }
     return testersInfo;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteAsTesterFromDb = async (
+  accountId: string,
+  appId: string
+) => {
+  const testerToAppDocRef = collection(db, "testerToApps");
+
+  const q = query(
+    testerToAppDocRef,
+    where("appId", "==", appId),
+    where("accountId", "==", accountId)
+  );
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      await deleteDoc(doc.ref);
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     throw error;
   }

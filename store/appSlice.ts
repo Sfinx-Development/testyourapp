@@ -3,6 +3,7 @@ import {
   addAppToDb,
   addTesterToAppToDb,
   confirmTesterToAppDb,
+  deleteAsTesterFromDb,
   getAllAppsFromDb,
   getAppByIdFromDb,
   getAppsImTestingFromDb,
@@ -10,6 +11,7 @@ import {
   getUnconfirmedTesters,
 } from "../api/app";
 import { Account, App, TesterToApp } from "../types";
+import AppsImTesting from "../screens/AppsImTesting";
 
 interface AppState {
   app: App | null;
@@ -106,6 +108,19 @@ export const getAppsImTestingAsync = createAsyncThunk<
     } else {
       return thunkAPI.rejectWithValue("failed to get apps im testing");
     }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const deleteAsTesterAsync = createAsyncThunk<
+  boolean,
+  { accountId: string; appId: string },
+  { rejectValue: string }
+>("app/deleteAsTester", async ({ accountId, appId }, thunkAPI) => {
+  try {
+    const isDeleted = await deleteAsTesterFromDb(accountId, appId);
+    return isDeleted;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.message);
   }
@@ -255,6 +270,13 @@ const appSlice = createSlice({
           state.uncofirmedTesters.splice(confirmedTesterIndex, 1);
         }
         state.error = null;
+      })
+      .addCase(deleteAsTesterAsync.fulfilled, (state, action) => {
+        state.error = null;
+        state.appsImTesting;
+      })
+      .addCase(deleteAsTesterAsync.rejected, (state, action) => {
+        state.error = "Try again later.";
       });
   },
 });

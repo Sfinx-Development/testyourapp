@@ -3,7 +3,11 @@ import { FlatList, StyleSheet, View } from "react-native";
 import AppImTestingCard from "../components/AppImTestingCard";
 import ErrorModule from "../components/ErrorModule";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import { getAllAppsAsync, getAppsImTestingAsync } from "../store/appSlice";
+import {
+  deleteAsTesterAsync,
+  getAllAppsAsync,
+  getAppsImTestingAsync,
+} from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
 
@@ -30,7 +34,14 @@ export default function AppsImTesting({ navigation }: NavigationProps) {
     <AppImTestingCard
       app={item}
       onClick={() => {
-        console.log("click");
+        if (activeAccount) {
+          dispatch(
+            deleteAsTesterAsync({
+              accountId: activeAccount?.id,
+              appId: item.id,
+            })
+          );
+        }
       }}
     />
   );
