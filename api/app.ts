@@ -80,7 +80,8 @@ export const getAppsImTestingFromDb = async (accountId: string) => {
   try {
     const q = query(
       testerToAppsCollectionRef,
-      where("accountId", "==", accountId)
+      where("accountId", "==", accountId),
+      where("confirmed", "==", true)
     );
 
     const querySnapshot = await getDocs(q);
