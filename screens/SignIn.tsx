@@ -6,10 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { logInUserAsync } from "../store/userSlice";
 
-export default function SignIn() {
+type NavigationProps = RootNavigationScreenProps<"SignIn">;
+
+export default function SignIn({ navigation }: NavigationProps) {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,11 +32,11 @@ export default function SignIn() {
   }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Logga in</Text>
+      <Text style={styles.title}>Sign in</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="E-postadress"
+        placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
         onChangeText={(text) => setEmail(text)}
@@ -42,16 +45,20 @@ export default function SignIn() {
       <TextInput
         onChangeText={(text) => setPassword(text)}
         style={styles.input}
-        placeholder="Lösenord"
+        placeholder="Password"
         secureTextEntry
       />
 
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Logga in</Text>
+        <Text style={styles.buttonText}>Sign in</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("CreateAccount")}>
+        <Text style={styles.buttonText}>Create account</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.forgotPassword}>
-        <Text style={styles.forgotPasswordText}>Glömt lösenord?</Text>
+        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
       </TouchableOpacity>
     </View>
   );
