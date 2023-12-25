@@ -1,16 +1,12 @@
-import React, { useEffect } from "react";
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import AppTestersPresentation from "../components/AppTestersPresentation";
 import DeleteAppButton from "../components/DeleteAppButton";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import { getMyAppsAsync } from "../store/appSlice";
+import {
+  getAmountOfTestersForAppAsync,
+  getMyAppsAsync,
+} from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
 
@@ -36,7 +32,7 @@ export default function MyApps({ navigation }: NavigationProps) {
       <View style={styles.content}>
         <Text style={styles.cardTitle}>{item.name}</Text>
         <Text style={styles.cardDescription}>{item.description}</Text>
-        <AppTestersPresentation testersCount={item.testersMin} />
+        <AppTestersPresentation testersCount={item.testersRegistered} />
         <Text style={styles.cardText}>
           Operating System: {item.operatingSystem}
         </Text>

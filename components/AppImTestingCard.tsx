@@ -5,7 +5,7 @@ import { App } from "../types";
 
 interface AppTestingCardProps {
   app: App;
-  onClick: (appId: string) => void;
+  onClick: () => void;
 }
 
 const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
@@ -30,7 +30,7 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
       </Card.Content>
       <Card.Actions>
         <TouchableOpacity style={styles.linkContainer}>
-          <Paragraph style={{ color: "blue" }} onPress={() => onClick("")}>
+          <Paragraph style={{ color: "blue" }} onPress={() => onClick()}>
             Remove me as tester
           </Paragraph>
         </TouchableOpacity>
