@@ -19,12 +19,12 @@ export default function AppsImTesting({ navigation }: NavigationProps) {
   );
   const appsImTesting = useAppSelector((state) => state.appSlice.appsImTesting);
 
-  useEffect(() => {
-    if (activeAccount) {
-      console.log("HÄMTAR TESTADE APPAR");
-      dispatch(getAppsImTestingAsync(activeAccount?.id));
-    }
-  }, [activeAccount]);
+  // useEffect(() => {
+  //   if (activeAccount) {
+  //     console.log("HÄMTAR TESTADE APPAR");
+  //     dispatch(getAppsImTestingAsync(activeAccount?.id));
+  //   }
+  // }, [activeAccount]);
 
   const renderAppCard = ({ item }: { item: App }) => (
     <AppImTestingCard

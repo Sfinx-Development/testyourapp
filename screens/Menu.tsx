@@ -1,9 +1,15 @@
 import { signOut } from "firebase/auth";
 import React, { useEffect } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { getAccountByUidAsync } from "../store/accountSlice";
+import {
+  getAppsImTestingAsync,
+  getMyAppsAsync,
+  getUnconfirmedTestersAsync,
+} from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { logOutUser } from "../store/userSlice";
 
@@ -14,6 +20,10 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
+  );
+  const myApps = useAppSelector((state) => state.appSlice.myApps);
+  const unconfirmedTesters = useAppSelector(
+    (state) => state.appSlice.uncofirmedTesters
   );
 
   const handleSignOut = () => {
@@ -27,6 +37,23 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       dispatch(getAccountByUidAsync(user.uid));
     }
   }, [user]);
+
+  useEffect(() => {
+    if (activeAccount) {
+      console.log("HÄMTAR TESTADE APPAR");
+      dispatch(getAppsImTestingAsync(activeAccount?.id));
+      dispatch(getMyAppsAsync(activeAccount));
+    }
+  }, [activeAccount]);
+
+  useEffect(() => {
+    if (myApps) {
+      console.log("my apps: ", myApps);
+      for (const app of myApps) {
+        dispatch(getUnconfirmedTestersAsync(app));
+      }
+    }
+  }, [myApps]);
 
   return (
     <View style={styles.container}>
@@ -62,7 +89,20 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={styles.option}
           onPress={() => navigation.navigate("IncomingTesters")}
         >
-          <Text style={styles.optionText}>Incoming testers</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.optionText}>Incoming testers</Text>
+            {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
+              <Badge style={{ backgroundColor: "blue" }}>
+                {unconfirmedTesters.length}
+              </Badge>
+            ) : null}
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.option}
