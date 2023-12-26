@@ -29,7 +29,7 @@ export default function ForgotPassword({ navigation }: NavigationProps) {
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Text style={styles.title}>Forgot your password?</Text>
+   <Text style={[styles.title, { color: colors.secondary }]}>Forgot your password?</Text>
 
       <TextInput
         style={styles.input}

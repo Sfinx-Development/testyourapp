@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, Text, Linking } from "react-native";
+import { Linking, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Card, Paragraph, Title } from "react-native-paper";
+import { useTheme } from "../contexts/themeContext";
 import { App } from "../types";
 
 interface AppTestingCardProps {
@@ -10,6 +11,7 @@ interface AppTestingCardProps {
 
 const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
   const { imageUrl, name, testersMin, operatingSystem, linkToTest } = app;
+  const { colors } = useTheme();
 
   const handleOpenLink = async () => {
     try {
@@ -20,17 +22,27 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
   };
 
   return (
-    <Card style={styles.card}>
+    <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
       <Card.Cover source={{ uri: imageUrl }} style={{ height: 100 }} />
       <Card.Content>
-        <Title style={{ fontSize: 16, fontWeight: "bold" }}>{name}</Title>
-        <TouchableOpacity onPress={handleOpenLink} style={styles.linkContainer}>
-          <Text style={{ color: "blue" }}>Click here to download app</Text>
+        <Title style={{ fontSize: 16, fontWeight: "bold" }}>
+          {name.toUpperCase()}
+        </Title>
+        <TouchableOpacity
+          onPress={handleOpenLink}
+          style={styles.linkContainerCenter}
+        >
+          <Text style={[{ fontSize: 18 }, { color: colors.secondary }]}>
+            Click here to download app
+          </Text>
         </TouchableOpacity>
       </Card.Content>
       <Card.Actions>
-        <TouchableOpacity style={styles.linkContainer}>
-          <Paragraph style={{ color: "blue" }} onPress={() => onClick()}>
+        <TouchableOpacity
+          style={[styles.linkContainer, { backgroundColor: colors.button.red }]}
+          onPress={() => onClick()}
+        >
+          <Paragraph style={{ fontSize: 12, color: "white" }}>
             Remove me as tester
           </Paragraph>
         </TouchableOpacity>
@@ -42,10 +54,15 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
 const styles = StyleSheet.create({
   card: {
     margin: 10,
-    flex: 1,
+    flex: 1 / 2,
   },
   linkContainer: {
-    alignItems: "flex-end",
+    alignItems: "flex-start",
+    borderRadius: 5,
+    padding: 2,
+  },
+  linkContainerCenter: {
+    alignItems: "center",
   },
 });
 

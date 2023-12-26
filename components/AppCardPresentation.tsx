@@ -9,6 +9,7 @@ interface AppCardProps {
   onClick: (appId: string) => void;
   appsImTesting: App[] | [];
   myApps: App[] | [];
+  testersNeeded: number;
 }
 
 const AppCard: React.FC<AppCardProps> = ({
@@ -16,6 +17,7 @@ const AppCard: React.FC<AppCardProps> = ({
   onClick,
   appsImTesting,
   myApps,
+  testersNeeded,
 }) => {
   const { imageUrl, name, testersMin, operatingSystem } = app;
   const isTester = appsImTesting.some((testedApp) => testedApp.id === app.id);
@@ -35,7 +37,7 @@ const AppCard: React.FC<AppCardProps> = ({
       <Card.Cover source={{ uri: imageUrl }} style={styles.cardCover} />
       <Card.Content>
         <Title style={styles.cardTitle}>{name.toUpperCase()}</Title>
-        <Paragraph>{testersMin} TESTERS NEEDED</Paragraph>
+        <Paragraph>{testersNeeded} TESTERS NEEDED</Paragraph>
         <Paragraph>{operatingSystem.toUpperCase()}</Paragraph>
       </Card.Content>
       <Card.Actions>
@@ -43,7 +45,9 @@ const AppCard: React.FC<AppCardProps> = ({
           <Paragraph
             style={[
               styles.linkText,
-              { color: isMyApp ? colors.primary : colors.button.darkBlue },
+              {
+                color: isMyApp || isTester ? colors.primary : colors.secondary,
+              },
             ]}
             onPress={() => handlePress()}
           >
@@ -74,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   linkText: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "500",
   },
 });

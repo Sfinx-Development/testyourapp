@@ -120,7 +120,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               Incoming testers
             </Text>
             {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
-              <Badge style={{ backgroundColor: colors.primary }}>
+              <Badge
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.secondary,
+                }}
+              >
                 {unconfirmedTesters.length}
               </Badge>
             ) : null}

@@ -1,7 +1,7 @@
 import React, {
+  ReactNode,
   createContext,
   useContext,
-  ReactNode,
   useEffect,
   useState,
 } from "react";
@@ -21,11 +21,11 @@ interface ThemeColors {
 
 const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
   return {
-    primary: colorScheme === "light" ? "#FFFFFF" : "#212121",
-    secondary: colorScheme === "light" ? "#424242" : "#FFFFFF",
+    primary: colorScheme === "light" ? "#F8F5FF" : "#4A4258",
+    secondary: colorScheme === "light" ? "#675E7F" : "#A190B5",
     button: {
-      darkBlue: colorScheme === "light" ? "#364E65" : "#708AA2",
-      lightBlue: colorScheme === "light" ? "#BACFE2" : "#7F98B0",
+      darkBlue: colorScheme === "light" ? "#9B83B0" : "#6E5C8D",
+      lightBlue: colorScheme === "light" ? "#C3B1D1" : "#A190B5",
       red: "#E74C3C",
     },
   };

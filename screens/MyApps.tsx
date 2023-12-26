@@ -45,7 +45,7 @@ export default function MyApps({ navigation }: NavigationProps) {
       <FlatList
         data={myApps}
         renderItem={renderAppItem}
-        keyExtractor={(item) => item.id} // Ensure that you use a unique key for each item
+        keyExtractor={(item) => item.id}
       />
     </View>
   );

@@ -71,12 +71,11 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
         />
       ) : (
         <Text
-          style={{
+          style={[{
             fontSize: 20,
-            color: "black",
             top: 100,
             textAlign: "center",
-          }}
+          }, { color: colors.secondary }]}
         >
           No incoming testers
         </Text>

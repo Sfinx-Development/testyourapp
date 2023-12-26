@@ -34,7 +34,7 @@ export default function SignIn({ navigation }: NavigationProps) {
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Text style={styles.title}>Sign in</Text>
+      <Text style={[styles.title, { color: colors.secondary }]}>Sign in</Text>
 
       <TextInput
         style={styles.input}

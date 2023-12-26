@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { addAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
-import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"UploadApp">;
 export default function UploadApp({ navigation }: NavigationProps) {
@@ -22,6 +22,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
   const [operatingSystem, setOperatingSystem] = useState(
     "Android" || "IOS" || "All"
   );
+  const [error, setErrorMsg] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [testersMin, setTestersMin] = useState(1);
 
@@ -30,6 +31,16 @@ export default function UploadApp({ navigation }: NavigationProps) {
   );
 
   const handleSaveApp = () => {
+    if (
+      name == "" ||
+      description == "" ||
+      linkToTest == "" ||
+      imageUrl == "" ||
+      testersMin == null
+    ) {
+      setErrorMsg(true);
+      return;
+    }
     if (activeAccount) {
       const appToSave: App = {
         id: "",
@@ -50,9 +61,9 @@ export default function UploadApp({ navigation }: NavigationProps) {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Text style={styles.warningText}>
-        In this version, only Android is available as an operating system.
-      </Text>
+      {error ? (
+        <Text style={styles.warningText}>All inputs are required.</Text>
+      ) : null}
 
       <TextInput
         style={styles.input}
@@ -67,7 +78,9 @@ export default function UploadApp({ navigation }: NavigationProps) {
         autoCapitalize="none"
         onChangeText={(text) => setDescription(text)}
       />
-
+      <Text style={styles.warningText}>
+        In this version, only Android is available as an operating system.
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Operating system"

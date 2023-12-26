@@ -93,12 +93,17 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     }
   };
 
+  function testersNeeded(app: App) {
+    return app.testersMin - app.testersRegistered;
+  }
+
   const renderAppCard = ({ item }: { item: App }) => (
     <AppCard
       app={item}
       onClick={handleSaveTesterToApp}
       appsImTesting={appsImTesting}
       myApps={myApps}
+      testersNeeded={testersNeeded(item)}
     />
   );
 
@@ -187,7 +192,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 10,
-    width: "80%",
+    width: "90%",
     borderRadius: 20,
     textAlign: "center",
   },
