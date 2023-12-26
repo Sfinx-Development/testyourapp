@@ -1,19 +1,15 @@
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, View, Text } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import TesterConfirmCard from "../components/TesterConfirmCard";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import {
-  addTesterToAppAsync,
-  confirmTesterToAppAsync,
-  getMyAppsAsync,
-  getUnconfirmedTestersAsync,
-} from "../store/appSlice";
+import { confirmTesterToAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { TesterToApp } from "../types";
+import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"IncomingTesters">;
 
 export default function IncomingTesters({ navigation }: NavigationProps) {
+  const {colors} = useTheme();
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
@@ -64,7 +60,7 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       {unconfirmedTesters.length > 0 ? (
         <FlatList
           data={unconfirmedTesters}
@@ -75,12 +71,11 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
         />
       ) : (
         <Text
-          style={{
+          style={[{
             fontSize: 20,
-            color: "black",
             top: 100,
             textAlign: "center",
-          }}
+          }, { color: colors.secondary }]}
         >
           No incoming testers
         </Text>

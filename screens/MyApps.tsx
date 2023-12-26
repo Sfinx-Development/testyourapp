@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import AppTestersPresentation from "../components/AppTestersPresentation";
 import DeleteAppButton from "../components/DeleteAppButton";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import {
-  getAmountOfTestersForAppAsync,
-  getMyAppsAsync,
-} from "../store/appSlice";
+import { getMyAppsAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
+import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"MyApps">;
 
 export default function MyApps({ navigation }: NavigationProps) {
+  const { colors } = useTheme();
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
@@ -30,11 +29,11 @@ export default function MyApps({ navigation }: NavigationProps) {
   const renderAppItem = ({ item }: { item: App }) => {
     return (
       <View style={styles.content}>
-        <Text style={styles.cardTitle}>{item.name}</Text>
+        <Text style={styles.cardTitle}>{item.name.toUpperCase()}</Text>
         <Text style={styles.cardDescription}>{item.description}</Text>
         <AppTestersPresentation testersCount={item.testersRegistered} />
         <Text style={styles.cardText}>
-          Operating System: {item.operatingSystem}
+          Operating System: {item.operatingSystem.toUpperCase()}
         </Text>
         <DeleteAppButton onPress={() => console.log("Delete app pressed")} />
       </View>
@@ -42,11 +41,11 @@ export default function MyApps({ navigation }: NavigationProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <FlatList
         data={myApps}
         renderItem={renderAppItem}
-        keyExtractor={(item) => item.id} // Ensure that you use a unique key for each item
+        keyExtractor={(item) => item.id}
       />
     </View>
   );

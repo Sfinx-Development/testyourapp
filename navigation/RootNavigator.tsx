@@ -18,6 +18,7 @@ import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
+import ForgotPassword from "../screens/ForgotPassword";
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   MyApps: undefined;
   IncomingTesters: undefined;
   AppsImTesting: undefined;
+  ForgotPassword: undefined;
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -108,6 +110,11 @@ export default function RootNavigator() {
               name="CreateAccount"
               options={{ headerShown: false }}
               component={CreateAccount}
+            />
+            <Stack.Screen
+              name="ForgotPassword"
+              options={{ headerShown: false }}
+              component={ForgotPassword}
             />
           </>
         )}

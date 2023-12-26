@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTheme } from "../contexts/themeContext";
 import { addAccountAsync } from "../store/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { addUserAsync } from "../store/userSlice";
 
 export default function CreateAccount() {
+  const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,18 +20,23 @@ export default function CreateAccount() {
   const [playStoreMail, setPlayStoreMail] = useState("");
   const [appStoreMail, setAppStoreMail] = useState("");
   const userCreated = useAppSelector((state) => state.userSlice.user);
+  const [error, setErrorMsg] = useState(false);
 
   const dispatch = useAppDispatch();
 
   //FIXA SÅ ACCOUNT SKAPAS DIREKT NÄR USER HAR SKAPATS?!
   const handleCreateUser = async () => {
-    console.log("PASSWORD: ", password, " OCH CONFIRM PSW: ", confirmPassword);
+    if (
+      playStoreMail == "" ||
+      playStoreMail == undefined ||
+      playStoreMail == null
+    ) {
+      setErrorMsg(true);
+      return;
+    }
     if (password === confirmPassword) {
       try {
-        // Anropa addUserAsync och få tillbaka användaren
         const userResponse = await dispatch(addUserAsync({ email, password }));
-
-        // Om addUserAsync lyckades, kör addAccountAsync med användarinformationen
         if (addUserAsync.fulfilled.match(userResponse)) {
           const addedUser = userResponse.payload;
 
@@ -44,11 +51,9 @@ export default function CreateAccount() {
           );
         } else {
           console.log("Failed to add user");
-          // Hantera fel här om det behövs
         }
       } catch (error) {
         console.error("Error creating user:", error);
-        // Hantera fel här om det behövs
       }
     } else {
       console.log("fixa validering för lösen som inte stämmer som nu :)");
@@ -71,8 +76,8 @@ export default function CreateAccount() {
   }, [userCreated]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Dina uppgifter för att logga in</Text>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
+      <Text style={styles.title}>Create account</Text>
 
       <TextInput
         style={styles.input}
@@ -102,9 +107,12 @@ export default function CreateAccount() {
         secureTextEntry
       />
 
-      <Text style={styles.subTitle}>
-        Den mail du är inloggad på i play store och/eller app store
-      </Text>
+      {error ? (
+        <Text style={styles.warningText}>
+          In this version, only android operating system is being handled.
+          Please enter your email for play store.
+        </Text>
+      ) : null}
 
       <TextInput
         style={styles.input}
@@ -123,7 +131,7 @@ export default function CreateAccount() {
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
         onPress={() => {
           handleCreateUser();
         }}
@@ -158,6 +166,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 10,
     width: "100%",
+    borderRadius: 10,
   },
   button: {
     backgroundColor: "blue",
@@ -175,5 +184,9 @@ const styles = StyleSheet.create({
   },
   forgotPasswordText: {
     color: "gray",
+  },
+  warningText: {
+    color: "red",
+    marginBottom: 10,
   },
 });

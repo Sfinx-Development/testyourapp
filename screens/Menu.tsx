@@ -12,10 +12,13 @@ import {
 } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { deleteUserAsync, logOutUser } from "../store/userSlice";
+import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
 
 export default function HomeScreen({ navigation }: NavigationProps) {
+  const { colors, theme } = useTheme();
+
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
@@ -35,6 +38,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   useEffect(() => {
     if (user) {
       dispatch(getAccountByUidAsync(user.uid));
+      console.log("THEME: ", theme);
     }
   }, [user]);
 
@@ -62,37 +66,47 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>
+        <Text style={[styles.headerText, { color: colors.secondary }]}>
           Welcome, {activeAccount?.username}!
         </Text>
         <TouchableOpacity onPress={handleSignOut}>
-          <Text style={styles.logoutText}>Sign out</Text>
+          <Text style={[styles.logoutText, { color: colors.secondary }]}>
+            Sign out
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Text style={styles.title}>Test your app</Text>
+        <Text style={[styles.title, { color: colors.secondary }]}>
+          Test your app
+        </Text>
         <TouchableOpacity
-          style={styles.option}
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("AllApps")}
         >
-          <Text style={styles.optionText}>Available apps</Text>
+          <Text style={[styles.optionText, { color: colors.primary }]}>
+            Available apps
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.option}
+          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
           onPress={() => navigation.navigate("UploadApp")}
         >
-          <Text style={styles.optionText}>Upload app</Text>
+          <Text style={[styles.optionText, { color: colors.primary }]}>
+            Upload app
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.option}
+          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
           onPress={() => navigation.navigate("MyApps")}
         >
-          <Text style={styles.optionText}>My apps</Text>
+          <Text style={[styles.optionText, { color: colors.primary }]}>
+            My apps
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.option}
+          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
           onPress={() => navigation.navigate("IncomingTesters")}
         >
           <View
@@ -102,27 +116,38 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               alignItems: "center",
             }}
           >
-            <Text style={styles.optionText}>Incoming testers</Text>
+            <Text style={[styles.optionText, { color: colors.primary }]}>
+              Incoming testers
+            </Text>
             {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
-              <Badge style={{ backgroundColor: "blue" }}>
+              <Badge
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.secondary,
+                }}
+              >
                 {unconfirmedTesters.length}
               </Badge>
             ) : null}
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.option}
+          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
           onPress={() => navigation.navigate("AppsImTesting")}
         >
-          <Text style={styles.optionText}>Apps I'm testing</Text>
+          <Text style={[styles.optionText, { color: colors.primary }]}>
+            Apps I'm testing
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.deleteOption, { backgroundColor: colors.button.red }]}
+          onPress={() => handleDeleteAccount()}
+        >
+          <Text style={[styles.logoutText, { color: colors.primary }]}>
+            Delete account
+          </Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        style={styles.option}
-        onPress={() => handleDeleteAccount()}
-      >
-        <Text style={styles.optionText}>Delete account</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -130,7 +155,6 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   header: {
     padding: 20,
@@ -145,9 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  logoutText: {
-    color: "blue",
-  },
+  logoutText: {},
   content: {
     padding: 20,
     top: 20,
@@ -160,10 +182,16 @@ const styles = StyleSheet.create({
   option: {
     marginBottom: 15,
     padding: 15,
-    backgroundColor: "#f0f0f0",
     borderRadius: 8,
+  },
+  deleteOption: {
+    marginBottom: 15,
+    padding: 15,
+    borderRadius: 8,
+    width: "50%",
   },
   optionText: {
     fontSize: 18,
+    fontWeight: "500",
   },
 });

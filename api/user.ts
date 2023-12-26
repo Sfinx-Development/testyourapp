@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import "firebase/firestore";
@@ -86,6 +87,15 @@ export const deleteUserFromDB = async (userId: string) => {
     return true;
   } catch (error) {
     throw error;
+  }
+};
+
+export const handleForgotPasswordFirestore = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return true;
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
   }
 };
 

@@ -1,5 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addUserToDB, deleteUserFromDB, signInWithAPI } from "../api/user";
+import {
+  addUserToDB,
+  deleteUserFromDB,
+  handleForgotPasswordFirestore,
+  signInWithAPI,
+} from "../api/user";
 import { User, UserCreate } from "../types";
 
 interface UserState {
@@ -59,6 +64,23 @@ export const deleteUserAsync = createAsyncThunk<
   }
 });
 
+export const handleForgotPasswordAsync = createAsyncThunk<
+  boolean,
+  string,
+  { rejectValue: string }
+>("user/forgotPassword", async (email, thunkAPI) => {
+  try {
+    const emailSent = await handleForgotPasswordFirestore(email);
+    if (emailSent) {
+      return true;
+    } else {
+      return thunkAPI.rejectWithValue("Try resetting password later.");
+    }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -102,6 +124,13 @@ const userSlice = createSlice({
       .addCase(deleteUserAsync.rejected, (state, action) => {
         state.error =
           "Something went wrong. Try again later or sign out and sign in again.";
+      })
+      .addCase(handleForgotPasswordAsync.fulfilled, (state, action) => {
+        state.error = null;
+      })
+      .addCase(handleForgotPasswordAsync.rejected, (state, action) => {
+        state.error =
+          "Check your email. If you haven't got a mail, please try again later.";
       });
   },
 });

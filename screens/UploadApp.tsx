@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { addAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
@@ -13,6 +14,7 @@ import { App } from "../types";
 
 type NavigationProps = RootNavigationScreenProps<"UploadApp">;
 export default function UploadApp({ navigation }: NavigationProps) {
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -20,6 +22,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
   const [operatingSystem, setOperatingSystem] = useState(
     "Android" || "IOS" || "All"
   );
+  const [error, setErrorMsg] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [testersMin, setTestersMin] = useState(1);
 
@@ -28,6 +31,16 @@ export default function UploadApp({ navigation }: NavigationProps) {
   );
 
   const handleSaveApp = () => {
+    if (
+      name == "" ||
+      description == "" ||
+      linkToTest == "" ||
+      imageUrl == "" ||
+      testersMin == null
+    ) {
+      setErrorMsg(true);
+      return;
+    }
     if (activeAccount) {
       const appToSave: App = {
         id: "",
@@ -38,6 +51,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         operatingSystem: operatingSystem,
         accountId: activeAccount?.id,
         testersMin: testersMin,
+        testersRegistered: 0,
       };
       dispatch(addAppAsync(appToSave)).then(() => {
         navigation.navigate("Menu");
@@ -46,7 +60,11 @@ export default function UploadApp({ navigation }: NavigationProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
+      {error ? (
+        <Text style={styles.warningText}>All inputs are required.</Text>
+      ) : null}
+
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -60,12 +78,16 @@ export default function UploadApp({ navigation }: NavigationProps) {
         autoCapitalize="none"
         onChangeText={(text) => setDescription(text)}
       />
-
+      <Text style={styles.warningText}>
+        In this version, only Android is available as an operating system.
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Operating system"
         autoCapitalize="none"
+        value="Android"
         onChangeText={(text) => setOperatingSystem(text)}
+        editable={false}
       />
 
       <TextInput
@@ -90,17 +112,23 @@ export default function UploadApp({ navigation }: NavigationProps) {
         onChange={(number) => setTestersMin(Number(number))}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSaveApp}>
-        <Text style={styles.buttonText}>Ladda upp app</Text>
+      <TouchableOpacity
+        style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
+        onPress={handleSaveApp}
+      >
+        <Text style={styles.buttonText}>Upload app</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  warningText: {
+    color: "red",
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
     padding: 16,
@@ -117,22 +145,21 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 10,
     width: "100%",
+    borderRadius: 10,
   },
   button: {
-    backgroundColor: "blue",
-    padding: 10,
-    borderRadius: 5,
     alignItems: "center",
     width: "100%",
+    marginBottom: 15,
+    padding: 15,
+    borderRadius: 8,
   },
   buttonText: {
-    color: "#fff",
     fontWeight: "bold",
+    color: "white",
   },
   forgotPassword: {
     marginTop: 16,
   },
-  forgotPasswordText: {
-    color: "gray",
-  },
+  forgotPasswordText: {},
 });

@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { Image } from "react-native";
 
 export default function SplashScreen() {
   return (
     <View style={styles.container}>
-      <Text>SPLASHSCREEN</Text>
-      <StatusBar style="auto" />
+      <Image source={require("../assets/logo.png")} style={styles.image} />
     </View>
   );
 }
@@ -16,5 +16,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  image: {
+    width: "100%",
+    height: "auto",
   },
 });

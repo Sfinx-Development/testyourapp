@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import AppImTestingCard from "../components/AppImTestingCard";
 import ErrorModule from "../components/ErrorModule";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import {
-  deleteAsTesterAsync,
-  getAllAppsAsync,
-  getAppsImTestingAsync,
-} from "../store/appSlice";
+import { deleteAsTesterAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
+import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"AppsImTesting">;
 
 export default function AppsImTesting({ navigation }: NavigationProps) {
+  const { colors } = useTheme();
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -47,7 +45,7 @@ export default function AppsImTesting({ navigation }: NavigationProps) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.primary }]}>
       {errorPopup && errorMsg ? (
         <ErrorModule
           errorMessage={errorMsg}
