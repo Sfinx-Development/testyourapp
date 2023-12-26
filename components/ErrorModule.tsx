@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Card } from "react-native-paper";
 import { BlurView } from "expo-blur";
+import { useTheme } from "../contexts/themeContext";
 
 interface Props {
   errorMessage: string;
@@ -11,6 +12,7 @@ interface Props {
 
 export default function ErrorModule(props: Props) {
   const [isModalVisible, setIsModalVisible] = useState(true);
+  const { colors } = useTheme();
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -27,8 +29,14 @@ export default function ErrorModule(props: Props) {
         <Card style={{ alignContent: "center" }}>
           <BlurView intensity={40} style={styles.blurContainer}>
             <Text style={styles.text}>{props.errorMessage}</Text>
-            <TouchableOpacity onPress={closeModal}>
-              <Text>{props.buttonMessage}</Text>
+            <TouchableOpacity
+              style={[
+                styles.buttonView,
+                { backgroundColor: colors.button.darkBlue },
+              ]}
+              onPress={closeModal}
+            >
+              <Text style={styles.button}>{props.buttonMessage}</Text>
             </TouchableOpacity>
           </BlurView>
         </Card>
@@ -38,8 +46,13 @@ export default function ErrorModule(props: Props) {
 }
 
 const styles = StyleSheet.create({
+  buttonView: {
+    padding: 10,
+    borderRadius: 10,
+  },
+  button: { color: "white", fontSize: 20 },
   blurContainer: {
-    height: 600,
+    flex: 1,
     padding: 20,
     margin: 16,
     alignItems: "center",
@@ -62,7 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: "center",
   },
 });

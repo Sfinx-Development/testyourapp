@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTheme } from "../contexts/themeContext";
 import { addAccountAsync } from "../store/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { addUserAsync } from "../store/userSlice";
-import { useTheme } from "../contexts/themeContext";
 
 export default function CreateAccount() {
   const { colors } = useTheme();
@@ -20,12 +20,20 @@ export default function CreateAccount() {
   const [playStoreMail, setPlayStoreMail] = useState("");
   const [appStoreMail, setAppStoreMail] = useState("");
   const userCreated = useAppSelector((state) => state.userSlice.user);
+  const [error, setErrorMsg] = useState(false);
 
   const dispatch = useAppDispatch();
 
   //FIXA SÅ ACCOUNT SKAPAS DIREKT NÄR USER HAR SKAPATS?!
   const handleCreateUser = async () => {
-    console.log("PASSWORD: ", password, " OCH CONFIRM PSW: ", confirmPassword);
+    if (
+      playStoreMail == "" ||
+      playStoreMail == undefined ||
+      playStoreMail == null
+    ) {
+      setErrorMsg(true);
+      return;
+    }
     if (password === confirmPassword) {
       try {
         const userResponse = await dispatch(addUserAsync({ email, password }));
@@ -69,7 +77,7 @@ export default function CreateAccount() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Text style={styles.title}>Dina uppgifter för att logga in</Text>
+      <Text style={styles.title}>Create account</Text>
 
       <TextInput
         style={styles.input}
@@ -99,9 +107,12 @@ export default function CreateAccount() {
         secureTextEntry
       />
 
-      <Text style={styles.subTitle}>
-        Den mail du är inloggad på i play store och/eller app store
-      </Text>
+      {error ? (
+        <Text style={styles.warningText}>
+          In this version, only android operating system is being handled.
+          Please enter your email for play store.
+        </Text>
+      ) : null}
 
       <TextInput
         style={styles.input}
@@ -155,6 +166,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 10,
     width: "100%",
+    borderRadius: 10,
   },
   button: {
     backgroundColor: "blue",
@@ -172,5 +184,9 @@ const styles = StyleSheet.create({
   },
   forgotPasswordText: {
     color: "gray",
+  },
+  warningText: {
+    color: "red",
+    marginBottom: 10,
   },
 });

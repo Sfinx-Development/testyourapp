@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import * as firebaseAuth from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { initializeAuth } from "firebase/auth";
+import { initializeAuth, sendPasswordResetEmail } from "firebase/auth";
 import ReactNativeAsyncStorage, {
   AsyncStorageStatic,
 } from "@react-native-async-storage/async-storage";
@@ -23,4 +23,4 @@ const auth = initializeAuth(app, {
   persistence: reactNativePersistence(ReactNativeAsyncStorage),
 });
 
-export { app, db, auth };
+export { app, db, auth,sendPasswordResetEmail  };

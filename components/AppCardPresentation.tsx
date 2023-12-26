@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Card, Paragraph, Title } from "react-native-paper";
 import { App } from "../types";
-import MyApps from "../screens/MyApps";
+import { useTheme } from "../contexts/themeContext";
 
 interface AppCardProps {
   app: App;
@@ -10,6 +10,7 @@ interface AppCardProps {
   appsImTesting: App[] | [];
   myApps: App[] | [];
 }
+
 const AppCard: React.FC<AppCardProps> = ({
   app,
   onClick,
@@ -19,6 +20,7 @@ const AppCard: React.FC<AppCardProps> = ({
   const { imageUrl, name, testersMin, operatingSystem } = app;
   const isTester = appsImTesting.some((testedApp) => testedApp.id === app.id);
   const isMyApp = myApps.some((myApp) => myApp.id === app.id);
+  const { colors } = useTheme();
 
   const handlePress = () => {
     if (isTester || isMyApp) {
@@ -29,17 +31,20 @@ const AppCard: React.FC<AppCardProps> = ({
   };
 
   return (
-    <Card style={styles.card}>
-      <Card.Cover source={{ uri: imageUrl }} style={{ height: 100 }} />
+    <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
+      <Card.Cover source={{ uri: imageUrl }} style={styles.cardCover} />
       <Card.Content>
-        <Title style={{ fontSize: 16, fontWeight: "bold" }}>{name}</Title>
-        <Paragraph>{testersMin} Testers Needed</Paragraph>
-        <Paragraph>{operatingSystem}</Paragraph>
+        <Title style={styles.cardTitle}>{name.toUpperCase()}</Title>
+        <Paragraph>{testersMin} TESTERS NEEDED</Paragraph>
+        <Paragraph>{operatingSystem.toUpperCase()}</Paragraph>
       </Card.Content>
       <Card.Actions>
         <TouchableOpacity style={styles.linkContainer}>
           <Paragraph
-            style={{ color: isMyApp ? "grey" : "blue" }}
+            style={[
+              styles.linkText,
+              { color: isMyApp ? colors.primary : colors.button.darkBlue },
+            ]}
             onPress={() => handlePress()}
           >
             {isTester ? "You are a tester" : "Test app"}
@@ -53,10 +58,24 @@ const AppCard: React.FC<AppCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     margin: 10,
-    flex: 1,
+    flex: 1 / 2,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  cardCover: {
+    height: 100,
+    resizeMode: "cover",
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   linkContainer: {
     alignItems: "flex-end",
+  },
+  linkText: {
+    fontSize: 14,
+    fontWeight: "500",
   },
 });
 

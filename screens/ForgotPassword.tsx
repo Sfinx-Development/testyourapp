@@ -8,33 +8,28 @@ import {
 } from "react-native";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { logInUserAsync } from "../store/userSlice";
+import { handleForgotPasswordAsync, logInUserAsync } from "../store/userSlice";
 import { useTheme } from "../contexts/themeContext";
 
-type NavigationProps = RootNavigationScreenProps<"SignIn">;
+type NavigationProps = RootNavigationScreenProps<"ForgotPassword">;
 
-export default function SignIn({ navigation }: NavigationProps) {
+export default function ForgotPassword({ navigation }: NavigationProps) {
   const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const loggedInUser = useAppSelector((state) => state.userSlice.user);
   const userError = useAppSelector((state) => state.userSlice.error);
 
-  async function handleLogin() {
-    dispatch(logInUserAsync({ email: email, password: password })).then(() => {
-      if (userError) {
-        setEmail("");
-        setPassword("");
-      } else if (loggedInUser) {
-        console.log("INLOGGAD! : ", loggedInUser?.email);
-      }
-    });
+  async function handleForgotPassword() {
+    dispatch(handleForgotPasswordAsync(email)).then(
+        () => {
+            navigation.navigate("SignIn")
+        }
+    )
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Text style={styles.title}>Sign in</Text>
+      <Text style={styles.title}>Forgot your password?</Text>
 
       <TextInput
         style={styles.input}
@@ -44,33 +39,13 @@ export default function SignIn({ navigation }: NavigationProps) {
         onChangeText={(text) => setEmail(text)}
       />
 
-      <TextInput
-        onChangeText={(text) => setPassword(text)}
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-      />
-
       <TouchableOpacity
         style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
-        onPress={handleLogin}
+        onPress={handleForgotPassword}
       >
-        <Text style={styles.buttonText}>Sign in</Text>
+        <Text style={styles.buttonText}>Reset my password</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.button.lightBlue }]}
-        onPress={() => navigation.navigate("CreateAccount")}
-      >
-        <Text style={styles.buttonText}>Create account</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.forgotPassword}
-        onPress={() => navigation.navigate("ForgotPassword")}
-      >
-        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-      </TouchableOpacity>
     </View>
   );
 }

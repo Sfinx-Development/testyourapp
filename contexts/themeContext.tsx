@@ -1,6 +1,11 @@
-// ThemeContext.tsx
-import React, { ReactNode, createContext, useContext, useState } from "react";
-import { useColorScheme } from "react-native";
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import { Appearance, ColorSchemeName } from "react-native";
 
 type Theme = "light" | "dark";
 
@@ -14,10 +19,22 @@ interface ThemeColors {
   };
 }
 
+const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
+  return {
+    primary: colorScheme === "light" ? "#FFFFFF" : "#212121",
+    secondary: colorScheme === "light" ? "#424242" : "#FFFFFF",
+    button: {
+      darkBlue: colorScheme === "light" ? "#364E65" : "#708AA2",
+      lightBlue: colorScheme === "light" ? "#BACFE2" : "#7F98B0",
+      red: "#E74C3C",
+    },
+  };
+};
+
 interface ThemeContextProps {
   theme: Theme;
-  toggleTheme: () => void;
   colors: ThemeColors;
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
@@ -35,23 +52,29 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const systemTheme = useColorScheme();
-  const defaultTheme: Theme = systemTheme === "dark" ? "dark" : "light";
-  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  const [theme, setTheme] = useState<Theme>("dark");
+  const [colors, setColors] = useState<ThemeColors>(
+    getColors(Appearance.getColorScheme())
+  );
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
 
-  const colors: ThemeColors = {
-    primary: theme === "light" ? "#ffffff" : "#2C3E50",
-    secondary: theme === "light" ? "#2C3E50" : "#ffffff",
-    button: {
-      darkBlue: "#34495E",
-      lightBlue: "#3498DB",
-      red: "#E74C3C",
-    },
-  };
+  useEffect(() => {
+    const initialColorScheme: ColorSchemeName =
+      Appearance.getColorScheme() || "dark";
+    setTheme(initialColorScheme as Theme);
+    setColors(getColors(initialColorScheme));
+
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      const updatedColors = getColors(colorScheme);
+      setTheme(colorScheme as Theme);
+      setColors(updatedColors);
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   const value = {
     theme,

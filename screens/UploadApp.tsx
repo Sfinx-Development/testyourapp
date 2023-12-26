@@ -50,6 +50,10 @@ export default function UploadApp({ navigation }: NavigationProps) {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
+      <Text style={styles.warningText}>
+        In this version, only Android is available as an operating system.
+      </Text>
+
       <TextInput
         style={styles.input}
         placeholder="Name"
@@ -68,7 +72,9 @@ export default function UploadApp({ navigation }: NavigationProps) {
         style={styles.input}
         placeholder="Operating system"
         autoCapitalize="none"
+        value="Android"
         onChangeText={(text) => setOperatingSystem(text)}
+        editable={false}
       />
 
       <TextInput
@@ -97,13 +103,17 @@ export default function UploadApp({ navigation }: NavigationProps) {
         style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
         onPress={handleSaveApp}
       >
-        <Text style={styles.buttonText}>Ladda upp app</Text>
+        <Text style={styles.buttonText}>Upload app</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  warningText: {
+    color: "red",
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     alignItems: "center",
@@ -122,6 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     paddingHorizontal: 10,
     width: "100%",
+    borderRadius: 10,
   },
   button: {
     alignItems: "center",
@@ -132,6 +143,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: "bold",
+    color: "white",
   },
   forgotPassword: {
     marginTop: 16,

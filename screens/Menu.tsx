@@ -82,7 +82,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           Test your app
         </Text>
         <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("AllApps")}
         >
           <Text style={[styles.optionText, { color: colors.primary }]}>
@@ -120,7 +120,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               Incoming testers
             </Text>
             {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
-              <Badge style={{ backgroundColor: "blue" }}>
+              <Badge style={{ backgroundColor: colors.primary }}>
                 {unconfirmedTesters.length}
               </Badge>
             ) : null}

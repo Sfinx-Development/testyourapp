@@ -15,7 +15,7 @@ import { useTheme } from "../contexts/themeContext";
 type NavigationProps = RootNavigationScreenProps<"AllApps">;
 
 export default function HomeScreen({ navigation }: NavigationProps) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [search, setSearch] = useState("");
@@ -37,7 +37,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       setErrorMsg(testerToAppError);
       setErrorPopup(true);
     }
-  }, [errorPopup]);
+  }, [testerToAppError]);
 
   useEffect(() => {
     dispatch(getAllAppsAsync());
@@ -53,12 +53,16 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   }, [availableApps]);
 
   const filterAppsBySearch = () => {
-    const filtered = availableApps.filter(
-      (app) =>
-        app.name.toLowerCase().includes(search.toLowerCase()) ||
-        app.operatingSystem.toLowerCase().includes(search.toLowerCase())
-    );
-    setFilteredApps(filtered);
+    if (search == "" || search == null || search == undefined) {
+      setFilteredApps(availableApps);
+    } else {
+      const filtered = availableApps.filter(
+        (app) =>
+          app.name.toLowerCase().includes(search.toLowerCase()) ||
+          app.operatingSystem.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredApps(filtered);
+    }
   };
 
   const handleSaveTesterToApp = (appId: string) => {
@@ -107,7 +111,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           onClose={() => setErrorPopup(false)}
         />
       ) : null}
-      <View>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
         <TextInput
           style={styles.input}
           placeholder="Search for apps"
@@ -183,6 +187,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 10,
-    width: "100%",
+    width: "80%",
+    borderRadius: 20,
+    textAlign: "center",
   },
 });

@@ -11,7 +11,7 @@ import { useTheme } from "../contexts/themeContext";
 type NavigationProps = RootNavigationScreenProps<"MyApps">;
 
 export default function MyApps({ navigation }: NavigationProps) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
@@ -29,11 +29,11 @@ export default function MyApps({ navigation }: NavigationProps) {
   const renderAppItem = ({ item }: { item: App }) => {
     return (
       <View style={styles.content}>
-        <Text style={styles.cardTitle}>{item.name}</Text>
+        <Text style={styles.cardTitle}>{item.name.toUpperCase()}</Text>
         <Text style={styles.cardDescription}>{item.description}</Text>
         <AppTestersPresentation testersCount={item.testersRegistered} />
         <Text style={styles.cardText}>
-          Operating System: {item.operatingSystem}
+          Operating System: {item.operatingSystem.toUpperCase()}
         </Text>
         <DeleteAppButton onPress={() => console.log("Delete app pressed")} />
       </View>
