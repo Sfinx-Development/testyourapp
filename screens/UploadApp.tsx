@@ -66,23 +66,23 @@ export default function UploadApp({ navigation }: NavigationProps) {
       ) : null}
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Name"
         autoCapitalize="none"
         onChangeText={(text) => setName(text)}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Description"
         autoCapitalize="none"
         onChangeText={(text) => setDescription(text)}
       />
-      <Text style={styles.warningText}>
+      <Text style={[styles.warningText, { fontFamily: colors.fontFamily }]}>
         In this version, only Android is available as an operating system.
       </Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Operating system"
         autoCapitalize="none"
         value="Android"
@@ -91,21 +91,21 @@ export default function UploadApp({ navigation }: NavigationProps) {
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Image url"
         autoCapitalize="none"
         onChangeText={(text) => setImageUrl(text)}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Link to test"
         autoCapitalize="none"
         onChangeText={(text) => setLinkToTest(text)}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Amount of testers (minimum)"
         autoCapitalize="none"
         keyboardType="numeric"
@@ -116,7 +116,9 @@ export default function UploadApp({ navigation }: NavigationProps) {
         style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
         onPress={handleSaveApp}
       >
-        <Text style={styles.buttonText}>Upload app</Text>
+        <Text style={[styles.buttonText, { fontFamily: colors.fontFamily }]}>
+          Upload App
+        </Text>
       </TouchableOpacity>
     </View>
   );

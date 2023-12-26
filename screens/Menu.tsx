@@ -1,8 +1,10 @@
 import { signOut } from "firebase/auth";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
+import AreYouSureModule from "../components/AreYouSure";
+import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { getAccountByUidAsync } from "../store/accountSlice";
 import {
@@ -12,7 +14,7 @@ import {
 } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { deleteUserAsync, logOutUser } from "../store/userSlice";
-import { useTheme } from "../contexts/themeContext";
+import { color } from "react-native-elements/dist/helpers";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
 
@@ -28,6 +30,8 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const unconfirmedTesters = useAppSelector(
     (state) => state.appSlice.uncofirmedTesters
   );
+  const [errorPopup, setErrorPopup] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
@@ -59,54 +63,71 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     }
   }, [myApps]);
 
-  const handleDeleteAccount = () => {
+  const handleConfirmedDelete = () => {
     if (user) {
       dispatch(deleteUserAsync(user.uid));
     }
   };
 
+  const handleDeleteAccount = () => {
+    setErrorMsg(
+      "Are you sure you want to delete your account and all your information?"
+    );
+    setErrorPopup(true);
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <View style={styles.header}>
-        <Text style={[styles.headerText, { color: colors.secondary }]}>
+        <Text style={[styles.headerText, { color: colors.secondary, fontFamily:colors.fontFamily }]}>
           Welcome, {activeAccount?.username}!
         </Text>
         <TouchableOpacity onPress={handleSignOut}>
-          <Text style={[styles.logoutText, { color: colors.secondary }]}>
+          <Text style={[styles.logoutText, { color: colors.secondary, fontFamily:colors.fontFamily  }]}>
             Sign out
           </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.secondary }]}>
+        {errorPopup && errorMsg ? (
+          <AreYouSureModule
+            errorMessage={errorMsg}
+            buttonMessage1="Yes"
+            buttonMessage2="No"
+            onDelete={() => handleConfirmedDelete()}
+            onClose={() => setErrorPopup(false)}
+            appId={null}
+          />
+        ) : null}
+        <Text style={[styles.title, { color: colors.secondary, fontFamily:colors.fontFamily  }]}>
           Test your app
         </Text>
         <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
+          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
           onPress={() => navigation.navigate("AllApps")}
         >
-          <Text style={[styles.optionText, { color: colors.primary }]}>
+          <Text style={[styles.optionText, { color: colors.primary, fontFamily:colors.fontFamily  }]}>
             Available apps
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("UploadApp")}
         >
-          <Text style={[styles.optionText, { color: colors.primary }]}>
+          <Text style={[styles.optionText, { color: colors.primary, fontFamily:colors.fontFamily  }]}>
             Upload app
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("MyApps")}
         >
-          <Text style={[styles.optionText, { color: colors.primary }]}>
+          <Text style={[styles.optionText, { color: colors.primary, fontFamily:colors.fontFamily  }]}>
             My apps
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("IncomingTesters")}
         >
           <View
@@ -116,7 +137,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               alignItems: "center",
             }}
           >
-            <Text style={[styles.optionText, { color: colors.primary }]}>
+            <Text style={[styles.optionText, { color: colors.primary, fontFamily:colors.fontFamily  }]}>
               Incoming testers
             </Text>
             {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
@@ -132,21 +153,32 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.darkBlue }]}
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("AppsImTesting")}
         >
-          <Text style={[styles.optionText, { color: colors.primary }]}>
+          <Text style={[styles.optionText, { color: colors.primary, fontFamily:colors.fontFamily  }]}>
             Apps I'm testing
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.deleteOption, { backgroundColor: colors.button.red }]}
-          onPress={() => handleDeleteAccount()}
+        <View
+          style={{
+            height: 100,
+            justifyContent: "flex-end",
+            alignItems: "flex-end",
+          }}
         >
-          <Text style={[styles.logoutText, { color: colors.primary }]}>
-            Delete account
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.deleteOption,
+              { backgroundColor: colors.button.red },
+            ]}
+            onPress={() => handleDeleteAccount()}
+          >
+            <Text style={[styles.logoutText, { color: colors.primary, fontFamily:colors.fontFamily  }]}>
+              Delete account
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -169,7 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
   },
-  logoutText: {},
+  logoutText: { fontSize: 16 },
   content: {
     padding: 20,
     top: 20,

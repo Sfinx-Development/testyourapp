@@ -1,15 +1,19 @@
 // DeleteAppButton.tsx
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useTheme } from "../contexts/themeContext";
 
 interface DeleteAppButtonProps {
   onPress: () => void;
 }
 
 const DeleteAppButton: React.FC<DeleteAppButtonProps> = ({ onPress }) => {
+  const { colors } = useTheme();
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Text style={styles.text}>Delete App</Text>
+      <Text style={[styles.text, { fontFamily: colors.fontFamily }]}>
+        Delete App
+      </Text>
     </TouchableOpacity>
   );
 };

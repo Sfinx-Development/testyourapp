@@ -3,6 +3,7 @@ import {
   addAppToDb,
   addTesterToAppToDb,
   confirmTesterToAppDb,
+  deleteAppFromDb,
   deleteAsTesterFromDb,
   getAllAppsFromDb,
   getAmountOfTestersDb,
@@ -54,7 +55,7 @@ export const addAppAsync = createAsyncThunk<App, App, { rejectValue: string }>(
   }
 );
 
-export const getAmountOfTestersForAppAsync = async(appId: string) => {
+export const getAmountOfTestersForAppAsync = async (appId: string) => {
   try {
     const amountOfTesters = await getAmountOfTestersDb(appId);
     if (amountOfTesters) {
@@ -134,6 +135,24 @@ export const deleteAsTesterAsync = createAsyncThunk<
   try {
     const isDeleted = await deleteAsTesterFromDb(accountId, appId);
     return isDeleted;
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const deleteAppAsync = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("app/deleteApp", async (appId, thunkAPI) => {
+  try {
+    console.log("APPID som ska raderas: ", appId);
+    const deletedAppId = await deleteAppFromDb(appId);
+    if (deletedAppId == null) {
+      throw Error;
+    } else {
+      return deletedAppId;
+    }
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.message);
   }
@@ -289,6 +308,17 @@ const appSlice = createSlice({
         state.appsImTesting;
       })
       .addCase(deleteAsTesterAsync.rejected, (state, action) => {
+        state.error = "Try again later.";
+      })
+      .addCase(deleteAppAsync.fulfilled, (state, action) => {
+        state.error = null;
+        const index = state.myApps.findIndex((app) => app.id == action.payload);
+        if (index) {
+          const newState = state.myApps.slice(index, 1);
+          state.myApps = newState;
+        }
+      })
+      .addCase(deleteAppAsync.rejected, (state, action) => {
         state.error = "Try again later.";
       });
   },

@@ -118,7 +118,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       ) : null}
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { fontFamily: colors.fontFamily }]}
           placeholder="Search for apps"
           autoCapitalize="none"
           onChangeText={(text) => {

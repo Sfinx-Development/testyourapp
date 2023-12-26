@@ -36,7 +36,9 @@ const AppCard: React.FC<AppCardProps> = ({
     <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
       <Card.Cover source={{ uri: imageUrl }} style={styles.cardCover} />
       <Card.Content>
-        <Title style={styles.cardTitle}>{name.toUpperCase()}</Title>
+        <Title style={[styles.cardTitle, { fontFamily: colors.fontFamily }]}>
+          {name.toUpperCase()}
+        </Title>
         <Paragraph>{testersNeeded} TESTERS NEEDED</Paragraph>
         <Paragraph>{operatingSystem.toUpperCase()}</Paragraph>
       </Card.Content>
@@ -47,6 +49,7 @@ const AppCard: React.FC<AppCardProps> = ({
               styles.linkText,
               {
                 color: isMyApp || isTester ? colors.primary : colors.secondary,
+                fontFamily: colors.fontFamily,
               },
             ]}
             onPress={() => handlePress()}

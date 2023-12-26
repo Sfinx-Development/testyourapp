@@ -6,6 +6,18 @@ import React, {
   useState,
 } from "react";
 import { Appearance, ColorSchemeName } from "react-native";
+import {
+  useFonts,
+  RobotoSlab_100Thin,
+  RobotoSlab_200ExtraLight,
+  RobotoSlab_300Light,
+  RobotoSlab_400Regular,
+  RobotoSlab_500Medium,
+  RobotoSlab_600SemiBold,
+  RobotoSlab_700Bold,
+  RobotoSlab_800ExtraBold,
+  RobotoSlab_900Black,
+} from "@expo-google-fonts/roboto-slab";
 
 type Theme = "light" | "dark";
 
@@ -17,6 +29,7 @@ interface ThemeColors {
     lightBlue: string;
     red: string;
   };
+  fontFamily: string;
 }
 
 const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
@@ -28,6 +41,7 @@ const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
       lightBlue: colorScheme === "light" ? "#C3B1D1" : "#A190B5",
       red: "#E74C3C",
     },
+    fontFamily: "Roboto",
   };
 };
 
