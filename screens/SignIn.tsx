@@ -37,7 +37,7 @@ export default function SignIn({ navigation }: NavigationProps) {
       <Text style={[styles.title, { color: colors.secondary }]}>Sign in</Text>
 
       <TextInput
-        style={styles.input}
+          style={[styles.input, {   fontFamily: colors.fontFamily, }]}
         placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
@@ -46,7 +46,7 @@ export default function SignIn({ navigation }: NavigationProps) {
 
       <TextInput
         onChangeText={(text) => setPassword(text)}
-        style={styles.input}
+        style={[styles.input, {   fontFamily: colors.fontFamily, }]}
         placeholder="Password"
         secureTextEntry
       />
@@ -55,21 +55,21 @@ export default function SignIn({ navigation }: NavigationProps) {
         style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
         onPress={handleLogin}
       >
-        <Text style={styles.buttonText}>Sign in</Text>
+        <Text      style={[styles.buttonText, {   fontFamily: colors.fontFamily, }]}>Sign in</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: colors.button.lightBlue }]}
         onPress={() => navigation.navigate("CreateAccount")}
       >
-        <Text style={styles.buttonText}>Create account</Text>
+        <Text      style={[styles.buttonText, {   fontFamily: colors.fontFamily, }]}>Create account</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.forgotPassword}
         onPress={() => navigation.navigate("ForgotPassword")}
       >
-        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+        <Text      style={[styles.forgotPasswordText, {   fontFamily: colors.fontFamily, }]}>Forgot password?</Text>
       </TouchableOpacity>
     </View>
   );

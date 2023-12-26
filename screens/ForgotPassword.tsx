@@ -29,10 +29,10 @@ export default function ForgotPassword({ navigation }: NavigationProps) {
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-   <Text style={[styles.title, { color: colors.secondary }]}>Forgot your password?</Text>
+   <Text style={[styles.title, { color: colors.secondary, fontFamily:colors.fontFamily  }]}>Forgot your password?</Text>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily:colors.fontFamily }]}
         placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
@@ -43,7 +43,7 @@ export default function ForgotPassword({ navigation }: NavigationProps) {
         style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
         onPress={handleForgotPassword}
       >
-        <Text style={styles.buttonText}>Reset my password</Text>
+        <Text style={[styles.buttonText,  { fontFamily:colors.fontFamily }]}>Reset my password</Text>
       </TouchableOpacity>
 
     </View>

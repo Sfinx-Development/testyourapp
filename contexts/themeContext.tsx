@@ -17,17 +17,19 @@ interface ThemeColors {
     lightBlue: string;
     red: string;
   };
+  fontFamily: string;
 }
 
 const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
   return {
-    primary: colorScheme === "light" ? "#F8F5FF" : "#4A4258",
-    secondary: colorScheme === "light" ? "#675E7F" : "#A190B5",
+    primary: colorScheme === "light" ? "#DDEFEE" : "#46434d",
+    secondary: colorScheme === "light" ? "black" : "#e4daf5",
     button: {
-      darkBlue: colorScheme === "light" ? "#9B83B0" : "#6E5C8D",
-      lightBlue: colorScheme === "light" ? "#C3B1D1" : "#A190B5",
-      red: "#E74C3C",
+      darkBlue: colorScheme === "light" ? "#8BADAC" : "#D5A181",
+      lightBlue: colorScheme === "light" ? "#5B8381" : "#A190B5",
+      red: "#E3A076",
     },
+    fontFamily: "Roboto",
   };
 };
 
@@ -59,13 +61,16 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    console.log("THEME ÄR NU: ", theme);
   };
 
   useEffect(() => {
     const initialColorScheme: ColorSchemeName =
       Appearance.getColorScheme() || "dark";
     setTheme(initialColorScheme as Theme);
-    setColors(getColors(initialColorScheme));
+
+    const initialColors = getColors(initialColorScheme);
+    setColors(initialColors);
 
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
       const updatedColors = getColors(colorScheme);

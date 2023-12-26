@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
 import ForgotPassword from "../screens/ForgotPassword";
+import { useTheme } from "../contexts/themeContext";
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -41,6 +42,7 @@ export default function RootNavigator() {
   const [isUserFetched, setUserFetched] = useState(false);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.userSlice.user);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (response) => {
@@ -76,27 +78,57 @@ export default function RootNavigator() {
             <Stack.Screen
               name="AllApps"
               component={AllApps}
-              // options={{ headerShown: false }}
+              options={{
+                title: "All Apps",
+                headerTintColor: colors.secondary,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
             />
             <Stack.Screen
               name="UploadApp"
               component={UploadApp}
-              // options={{ headerShown: false }}
+              options={{
+                title: "Upload app",
+                headerTintColor: colors.secondary,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
             />
             <Stack.Screen
               name="MyApps"
               component={MyApps}
-              // options={{ headerShown: false }}
+              options={{
+                title: "My Apps",
+                headerTintColor: colors.secondary,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
             />
             <Stack.Screen
               name="IncomingTesters"
               component={IncomingTesters}
-              // options={{ headerShown: false }}
+              options={{
+                title: "Incoming Testers",
+                headerTintColor: colors.secondary,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
             />
             <Stack.Screen
               name="AppsImTesting"
               component={AppsImTesting}
-              // options={{ headerShown: false }}
+              options={{
+                title: "Apps I'm Testing",
+                headerTintColor: colors.secondary,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
             />
           </>
         ) : (
@@ -108,12 +140,24 @@ export default function RootNavigator() {
             />
             <Stack.Screen
               name="CreateAccount"
-              options={{ headerShown: false }}
+              options={{
+                title: "Create Account",
+                headerTintColor: colors.secondary,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
               component={CreateAccount}
             />
             <Stack.Screen
               name="ForgotPassword"
-              options={{ headerShown: false }}
+              options={{
+                title: "Forgot Password",
+                headerTintColor: colors.secondary,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
               component={ForgotPassword}
             />
           </>

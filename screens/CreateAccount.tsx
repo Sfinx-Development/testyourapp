@@ -77,17 +77,24 @@ export default function CreateAccount() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Text style={styles.title}>Create account</Text>
+      <Text
+        style={[
+          styles.title,
+          { color: colors.secondary, fontFamily: colors.fontFamily },
+        ]}
+      >
+        Create account
+      </Text>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Username"
         autoCapitalize="none"
         onChangeText={(text) => setUsername(text)}
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="E-postadress"
         keyboardType="email-address"
         autoCapitalize="none"
@@ -96,26 +103,26 @@ export default function CreateAccount() {
 
       <TextInput
         onChangeText={(text) => setPassword(text)}
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Lösenord"
         secureTextEntry
       />
       <TextInput
         onChangeText={(text) => setConfirmPassword(text)}
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Lösenord"
         secureTextEntry
       />
 
       {error ? (
-        <Text style={styles.warningText}>
+        <Text style={[styles.warningText, { fontFamily: colors.fontFamily }]}>
           In this version, only android operating system is being handled.
           Please enter your email for play store.
         </Text>
       ) : null}
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Email for your play store (ANDROID)"
         keyboardType="email-address"
         autoCapitalize="none"
@@ -123,7 +130,7 @@ export default function CreateAccount() {
       />
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Email for your app store (IOS)"
         keyboardType="email-address"
         autoCapitalize="none"
@@ -136,7 +143,9 @@ export default function CreateAccount() {
           handleCreateUser();
         }}
       >
-        <Text style={styles.buttonText}>Skapa konto</Text>
+        <Text style={[styles.buttonText, { fontFamily: colors.fontFamily }]}>
+          Create account
+        </Text>
       </TouchableOpacity>
     </View>
   );

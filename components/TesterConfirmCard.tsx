@@ -27,14 +27,22 @@ const AppCard: React.FC<TesterConfirmCardProps> = ({
   return (
     <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
       <Card.Content>
-        <Title style={{ fontSize: 16, fontWeight: "bold" }}>
+        <Title
+          style={[
+            { fontSize: 16, fontWeight: "bold" },
+            { fontFamily: colors.fontFamily },
+          ]}
+        >
           {appName.toUpperCase()}
         </Title>
         <Paragraph>{testerUsername} wants to be a tester</Paragraph>
       </Card.Content>
       <Card.Actions>
         <TouchableOpacity style={styles.linkContainer}>
-          <Paragraph style={styles.link} onPress={() => onClick(testerId)}>
+          <Paragraph
+            style={[styles.link, { fontFamily: colors.fontFamily }]}
+            onPress={() => onClick(testerId)}
+          >
             I have added {testerMail} as a tester
           </Paragraph>
         </TouchableOpacity>

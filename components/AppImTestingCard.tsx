@@ -25,14 +25,24 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
     <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
       <Card.Cover source={{ uri: imageUrl }} style={{ height: 100 }} />
       <Card.Content>
-        <Title style={{ fontSize: 16, fontWeight: "bold" }}>
+        <Title
+          style={[
+            { fontSize: 16, fontWeight: "bold" },
+            { fontFamily: colors.fontFamily },
+          ]}
+        >
           {name.toUpperCase()}
         </Title>
         <TouchableOpacity
           onPress={handleOpenLink}
           style={styles.linkContainerCenter}
         >
-          <Text style={[{ fontSize: 18 }, { color: colors.secondary }]}>
+          <Text
+            style={[
+              { fontSize: 18 },
+              { color: colors.secondary, fontFamily: colors.fontFamily },
+            ]}
+          >
             Click here to download app
           </Text>
         </TouchableOpacity>
@@ -42,7 +52,12 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
           style={[styles.linkContainer, { backgroundColor: colors.button.red }]}
           onPress={() => onClick()}
         >
-          <Paragraph style={{ fontSize: 12, color: "white" }}>
+          <Paragraph
+            style={[
+              { fontSize: 12, color: "white" },
+              { fontFamily: colors.fontFamily },
+            ]}
+          >
             Remove me as tester
           </Paragraph>
         </TouchableOpacity>

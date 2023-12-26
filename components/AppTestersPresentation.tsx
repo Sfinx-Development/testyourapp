@@ -1,15 +1,21 @@
 // AppTestersPresentation.tsx
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { useTheme } from "../contexts/themeContext";
 
 interface AppTestersPresentationProps {
   testersCount: number;
 }
 
-const AppTestersPresentation: React.FC<AppTestersPresentationProps> = ({ testersCount }) => {
+const AppTestersPresentation: React.FC<AppTestersPresentationProps> = ({
+  testersCount,
+}) => {
+  const { colors } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{testersCount} Testers</Text>
+      <Text style={[styles.text, { fontFamily: colors.fontFamily }]}>
+        {testersCount} Testers
+      </Text>
     </View>
   );
 };
@@ -26,7 +32,3 @@ const styles = StyleSheet.create({
 });
 
 export default AppTestersPresentation;
-
-
-
-

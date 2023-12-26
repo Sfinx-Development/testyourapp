@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
 } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { addAppAsync } from "../store/appSlice";
@@ -24,7 +27,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
   );
   const [error, setErrorMsg] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const [testersMin, setTestersMin] = useState(1);
+  const [testersMin, setTestersMin] = useState<number>(1);
 
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
@@ -42,6 +45,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
       return;
     }
     if (activeAccount) {
+      console.log("TESTERS MIN: ", testersMin);
       const appToSave: App = {
         id: "",
         name: name,
@@ -60,65 +64,96 @@ export default function UploadApp({ navigation }: NavigationProps) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      {error ? (
-        <Text style={styles.warningText}>All inputs are required.</Text>
-      ) : null}
-
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        autoCapitalize="none"
-        onChangeText={(text) => setName(text)}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Description"
-        autoCapitalize="none"
-        onChangeText={(text) => setDescription(text)}
-      />
-      <Text style={styles.warningText}>
-        In this version, only Android is available as an operating system.
-      </Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Operating system"
-        autoCapitalize="none"
-        value="Android"
-        onChangeText={(text) => setOperatingSystem(text)}
-        editable={false}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Image url"
-        autoCapitalize="none"
-        onChangeText={(text) => setImageUrl(text)}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Link to test"
-        autoCapitalize="none"
-        onChangeText={(text) => setLinkToTest(text)}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Amount of testers (minimum)"
-        autoCapitalize="none"
-        keyboardType="numeric"
-        onChange={(number) => setTestersMin(Number(number))}
-      />
-
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
-        onPress={handleSaveApp}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: colors.primary },
+        ]}
       >
-        <Text style={styles.buttonText}>Upload app</Text>
-      </TouchableOpacity>
-    </View>
+        {error ? (
+          <Text style={styles.warningText}>All inputs are required.</Text>
+        ) : null}
+
+        <TextInput
+          style={[
+            styles.input,
+            { fontFamily: colors.fontFamily, color: colors.secondary },
+          ]}
+          placeholder="Name"
+          autoCapitalize="none"
+          onChangeText={(text) => setName(text)}
+        />
+
+        <TextInput
+          style={[
+            styles.input,
+            { fontFamily: colors.fontFamily, color: colors.secondary },
+          ]}
+          placeholder="Description"
+          autoCapitalize="none"
+          onChangeText={(text) => setDescription(text)}
+        />
+        <Text style={[styles.warningText, { fontFamily: colors.fontFamily }]}>
+          In this version, only Android is available as an operating system.
+        </Text>
+        <TextInput
+          style={[
+            styles.input,
+            { fontFamily: colors.fontFamily, color: colors.secondary },
+          ]}
+          placeholder="Operating system"
+          autoCapitalize="none"
+          value="Android"
+          onChangeText={(text) => setOperatingSystem(text)}
+          editable={false}
+        />
+
+        <TextInput
+          style={[
+            styles.input,
+            { fontFamily: colors.fontFamily, color: colors.secondary },
+          ]}
+          placeholder="Image url"
+          autoCapitalize="none"
+          onChangeText={(text) => setImageUrl(text)}
+        />
+
+        <TextInput
+          style={[
+            styles.input,
+            { fontFamily: colors.fontFamily, color: colors.secondary },
+          ]}
+          placeholder="Link to test"
+          autoCapitalize="none"
+          onChangeText={(text) => setLinkToTest(text)}
+        />
+
+        <TextInput
+          style={[
+            styles.input,
+            { fontFamily: colors.fontFamily, color: colors.secondary },
+          ]}
+          placeholder="Amount of testers needed (minimum)"
+          autoCapitalize="none"
+          keyboardType="numeric"
+          onChangeText={(text) => setTestersMin(Number(text))}
+        />
+
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
+          onPress={handleSaveApp}
+        >
+          <Text style={[styles.buttonText, { fontFamily: colors.fontFamily }]}>
+            Upload App
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

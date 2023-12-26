@@ -75,7 +75,7 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
             fontSize: 20,
             top: 100,
             textAlign: "center",
-          }, { color: colors.secondary }]}
+          }, { color: colors.secondary, fontFamily:colors.fontFamily  }]}
         >
           No incoming testers
         </Text>

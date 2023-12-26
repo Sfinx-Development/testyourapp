@@ -28,7 +28,7 @@ export default function ErrorModule(props: Props) {
       <View style={styles.modalContainer}>
         <Card style={{ alignContent: "center" }}>
           <BlurView intensity={40} style={styles.blurContainer}>
-            <Text style={styles.text}>{props.errorMessage}</Text>
+            <Text style={[styles.text, {fontFamily:colors.fontFamily}]}>{props.errorMessage}</Text>
             <TouchableOpacity
               style={[
                 styles.buttonView,
@@ -36,7 +36,7 @@ export default function ErrorModule(props: Props) {
               ]}
               onPress={closeModal}
             >
-              <Text style={styles.button}>{props.buttonMessage}</Text>
+              <Text style={[styles.button, {fontFamily:colors.fontFamily}]}>{props.buttonMessage}</Text>
             </TouchableOpacity>
           </BlurView>
         </Card>

@@ -205,6 +205,38 @@ export const deleteAsTesterFromDb = async (
   }
 };
 
+export const deleteAppFromDb = async (appId: string) => {
+  const appDocRef = collection(db, "apps");
+  const appQuery = query(appDocRef, where("id", "==", appId));
+
+  try {
+    const appQuerySnapshot = await getDocs(appQuery);
+    if (!appQuerySnapshot.empty) {
+      const appDoc = appQuerySnapshot.docs[0];
+      await deleteDoc(appDoc.ref);
+      const testerToAppDocRef = collection(db, "testerToApps");
+      const testerToAppQuery = query(
+        testerToAppDocRef,
+        where("appId", "==", appId)
+      );
+      const testerToAppQuerySnapshot = await getDocs(testerToAppQuery);
+      if (!testerToAppQuerySnapshot.empty) {
+        const deletionPromises = testerToAppQuerySnapshot.docs.map(
+          async (docSnapshot) => {
+            const docRef = doc(testerToAppDocRef, docSnapshot.id);
+            await deleteDoc(docRef);
+          }
+        );
+        await Promise.all(deletionPromises);
+      }
+      return appId;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 export const getAppByIdFromDb = async (appId: string) => {
   const appDocRef = doc(collection(db, "apps"), appId);
 

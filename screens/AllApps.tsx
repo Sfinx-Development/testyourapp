@@ -118,7 +118,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       ) : null}
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { fontFamily: colors.fontFamily }]}
           placeholder="Search for apps"
           autoCapitalize="none"
           onChangeText={(text) => {
@@ -141,7 +141,6 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     paddingTop: 50,
   },
   flatListContainer: {
@@ -177,7 +176,6 @@ const styles = StyleSheet.create({
   option: {
     marginBottom: 15,
     padding: 15,
-    backgroundColor: "#f0f0f0",
     borderRadius: 8,
   },
   optionText: {
