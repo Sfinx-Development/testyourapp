@@ -22,12 +22,12 @@ interface ThemeColors {
 
 const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
   return {
-    primary: colorScheme === "light" ? "#F8F5FF" : "#46434d",
-    secondary: colorScheme === "light" ? "#675E7F" : "#e4daf5",
+    primary: colorScheme === "light" ? "#DDEFEE" : "#46434d",
+    secondary: colorScheme === "light" ? "black" : "#e4daf5",
     button: {
-      darkBlue: colorScheme === "light" ? "#9B83B0" : "#9982bf",
-      lightBlue: colorScheme === "light" ? "#C3B1D1" : "#A190B5",
-      red: "#E74C3C",
+      darkBlue: colorScheme === "light" ? "#8BADAC" : "#D5A181",
+      lightBlue: colorScheme === "light" ? "#5B8381" : "#A190B5",
+      red: "#E3A076",
     },
     fontFamily: "Roboto",
   };

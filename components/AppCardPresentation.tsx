@@ -33,7 +33,7 @@ const AppCard: React.FC<AppCardProps> = ({
   };
 
   return (
-    <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
+    <Card style={[styles.card, { backgroundColor: colors.button.darkBlue }]}>
       <Card.Cover source={{ uri: imageUrl }} style={styles.cardCover} />
       <Card.Content>
         <Title style={[styles.cardTitle, { fontFamily: colors.fontFamily }]}>

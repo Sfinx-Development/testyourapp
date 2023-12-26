@@ -1,6 +1,7 @@
+import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
 import AreYouSureModule from "../components/AreYouSure";
@@ -14,8 +15,7 @@ import {
 } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { deleteUserAsync, logOutUser } from "../store/userSlice";
-import { color } from "react-native-elements/dist/helpers";
-import { Image } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
 
@@ -79,15 +79,15 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <View style={styles.header}>
-        <Text
+      <View style={[styles.header, { backgroundColor: colors.primary }]}>
+        {/* <Text
           style={[
             styles.headerText,
             { color: colors.secondary, fontFamily: colors.fontFamily },
           ]}
         >
           Test Your App
-        </Text>
+        </Text> */}
         <TouchableOpacity onPress={handleSignOut}>
           <Text
             style={[
@@ -135,6 +135,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("AllApps")}
         >
+          <AntDesign
+            name="search1"
+            size={24}
+            color="black"
+            style={styles.icon}
+          />
           <Text
             style={[
               styles.optionText,
@@ -148,6 +154,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("UploadApp")}
         >
+          <Feather name="upload" size={24} color="black" style={styles.icon} />
           <Text
             style={[
               styles.optionText,
@@ -161,6 +168,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("MyApps")}
         >
+          <AntDesign
+            name="mobile1"
+            size={24}
+            color="black"
+            style={styles.icon}
+          />
           <Text
             style={[
               styles.optionText,
@@ -174,6 +187,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("IncomingTesters")}
         >
+          <MaterialCommunityIcons
+            name="head-question-outline"
+            size={24}
+            color="black"
+            style={styles.icon}
+          />
           <View
             style={{
               flexDirection: "row",
@@ -205,6 +224,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("AppsImTesting")}
         >
+          <MaterialIcons
+            name="approval"
+            size={24}
+            color="black"
+            style={styles.icon}
+          />
           <Text
             style={[
               styles.optionText,
@@ -220,6 +245,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
             justifyContent: "flex-end",
             alignItems: "flex-end",
             marginTop: 10,
+            flexDirection: "row",
           }}
         >
           <TouchableOpacity
@@ -228,8 +254,8 @@ export default function HomeScreen({ navigation }: NavigationProps) {
               {
                 backgroundColor:
                   theme == "dark"
-                    ? colors.button.lightBlue
-                    : colors.button.darkBlue,
+                    ? colors.button.darkBlue
+                    : colors.button.lightBlue,
               },
             ]}
             onPress={() => toggleTheme()}
@@ -246,7 +272,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           <TouchableOpacity
             style={[
               styles.deleteOption,
-              { backgroundColor: colors.button.red },
+              { backgroundColor: colors.button.red, marginLeft: 5 },
             ]}
             onPress={() => handleDeleteAccount()}
           >
@@ -272,16 +298,18 @@ const styles = StyleSheet.create({
   header: {
     padding: 20,
     top: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomWidth: 0,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
   },
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
     marginLeft: 10,
+  },
+  icon: {
+    marginRight: 10,
   },
   logoutText: { fontSize: 16 },
   content: {
@@ -290,20 +318,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: "500",
     marginBottom: 10,
   },
   option: {
     marginBottom: 15,
     padding: 15,
     borderRadius: 8,
+    flexDirection: "row",
   },
   deleteOption: {
     marginBottom: 15,
     padding: 15,
     borderRadius: 8,
     width: "50%",
-    fontWeight: "500",
+    fontWeight: "600",
   },
   optionText: {
     fontSize: 18,

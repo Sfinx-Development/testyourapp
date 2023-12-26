@@ -27,7 +27,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
   );
   const [error, setErrorMsg] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-  const [testersMin, setTestersMin] = useState(1);
+  const [testersMin, setTestersMin] = useState<number>(1);
 
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
@@ -45,6 +45,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
       return;
     }
     if (activeAccount) {
+      console.log("TESTERS MIN: ", testersMin);
       const appToSave: App = {
         id: "",
         name: name,
@@ -137,10 +138,10 @@ export default function UploadApp({ navigation }: NavigationProps) {
             styles.input,
             { fontFamily: colors.fontFamily, color: colors.secondary },
           ]}
-          placeholder="Amount of testers (minimum)"
+          placeholder="Amount of testers needed (minimum)"
           autoCapitalize="none"
           keyboardType="numeric"
-          onChange={(number) => setTestersMin(Number(number))}
+          onChangeText={(text) => setTestersMin(Number(text))}
         />
 
         <TouchableOpacity
