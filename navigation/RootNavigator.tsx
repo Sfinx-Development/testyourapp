@@ -83,6 +83,7 @@ export default function RootNavigator() {
                 headerTintColor: colors.secondary,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
               }}
             />
             <Stack.Screen
@@ -93,6 +94,7 @@ export default function RootNavigator() {
                 headerTintColor: colors.secondary,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
               }}
             />
             <Stack.Screen
@@ -103,6 +105,7 @@ export default function RootNavigator() {
                 headerTintColor: colors.secondary,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
               }}
             />
             <Stack.Screen
@@ -113,6 +116,7 @@ export default function RootNavigator() {
                 headerTintColor: colors.secondary,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
               }}
             />
             <Stack.Screen
@@ -123,6 +127,7 @@ export default function RootNavigator() {
                 headerTintColor: colors.secondary,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
               }}
             />
           </>
@@ -140,6 +145,7 @@ export default function RootNavigator() {
                 headerTintColor: colors.secondary,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
               }}
               component={CreateAccount}
             />
@@ -150,6 +156,7 @@ export default function RootNavigator() {
                 headerTintColor: colors.secondary,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
               }}
               component={ForgotPassword}
             />

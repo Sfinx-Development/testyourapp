@@ -6,18 +6,6 @@ import React, {
   useState,
 } from "react";
 import { Appearance, ColorSchemeName } from "react-native";
-import {
-  useFonts,
-  RobotoSlab_100Thin,
-  RobotoSlab_200ExtraLight,
-  RobotoSlab_300Light,
-  RobotoSlab_400Regular,
-  RobotoSlab_500Medium,
-  RobotoSlab_600SemiBold,
-  RobotoSlab_700Bold,
-  RobotoSlab_800ExtraBold,
-  RobotoSlab_900Black,
-} from "@expo-google-fonts/roboto-slab";
 
 type Theme = "light" | "dark";
 
@@ -34,10 +22,10 @@ interface ThemeColors {
 
 const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
   return {
-    primary: colorScheme === "light" ? "#F8F5FF" : "#4A4258",
-    secondary: colorScheme === "light" ? "#675E7F" : "#A190B5",
+    primary: colorScheme === "light" ? "#F8F5FF" : "#46434d",
+    secondary: colorScheme === "light" ? "#675E7F" : "#e4daf5",
     button: {
-      darkBlue: colorScheme === "light" ? "#9B83B0" : "#6E5C8D",
+      darkBlue: colorScheme === "light" ? "#9B83B0" : "#9982bf",
       lightBlue: colorScheme === "light" ? "#C3B1D1" : "#A190B5",
       red: "#E74C3C",
     },
@@ -73,13 +61,16 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    console.log("THEME ÄR NU: ", theme);
   };
 
   useEffect(() => {
     const initialColorScheme: ColorSchemeName =
       Appearance.getColorScheme() || "dark";
     setTheme(initialColorScheme as Theme);
-    setColors(getColors(initialColorScheme));
+
+    const initialColors = getColors(initialColorScheme);
+    setColors(initialColors);
 
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
       const updatedColors = getColors(colorScheme);
