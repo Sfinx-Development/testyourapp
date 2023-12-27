@@ -6,6 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/phoneicon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      "./increaseVersion"
+    ],
     "splash": {
       "image": "./assets/logo2.png",
       "resizeMode": "contain",
@@ -22,7 +25,8 @@
         "foregroundImage": "./assets/phoneicon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.radagastno1.testyourapp"
+      "package": "com.radagastno1.testyourapp",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/phoneicon.png"
