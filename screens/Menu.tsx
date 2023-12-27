@@ -1,10 +1,16 @@
-import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Feather,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
 import AreYouSureModule from "../components/AreYouSure";
+import DeleteAccountModule from "../components/DeleteAccount";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { getAccountByUidAsync } from "../store/accountSlice";
@@ -15,12 +21,13 @@ import {
 } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { deleteUserAsync, logOutUser } from "../store/userSlice";
-import { MaterialIcons } from "@expo/vector-icons";
+import { UserCreate } from "../types";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
 
 export default function HomeScreen({ navigation }: NavigationProps) {
   const { colors, theme, toggleTheme } = useTheme();
+  const [deleteModule, setDeleteModule] = useState(false);
 
   const user = useAppSelector((state) => state.userSlice.user);
   const dispatch = useAppDispatch();
@@ -64,9 +71,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     }
   }, [myApps]);
 
-  const handleConfirmedDelete = () => {
+  const handleConfirmedDelete = ({ email, password }: UserCreate) => {
     if (user) {
-      dispatch(deleteUserAsync(user.uid));
+      dispatch(deleteUserAsync({ email, password }));
     }
   };
 
@@ -105,9 +112,20 @@ export default function HomeScreen({ navigation }: NavigationProps) {
             errorMessage={errorMsg}
             buttonMessage1="Yes"
             buttonMessage2="No"
-            onDelete={() => handleConfirmedDelete()}
+            onDelete={() => setDeleteModule(true)}
             onClose={() => setErrorPopup(false)}
             appId={null}
+          />
+        ) : null}
+        {deleteModule ? (
+          <DeleteAccountModule
+            onDeleteConfirmed={({ email, password }) => {
+              setDeleteModule(false);
+              handleConfirmedDelete({ email, password });
+            }}
+            onClose={() => {
+              setDeleteModule(false);
+            }}
           />
         ) : null}
         <View

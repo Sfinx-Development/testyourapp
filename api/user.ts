@@ -1,6 +1,8 @@
 import {
   createUserWithEmailAndPassword,
+  getAuth,
   sendPasswordResetEmail,
+  signInWithCredential,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import "firebase/firestore";
@@ -50,7 +52,28 @@ export const signInWithAPI = async (createUser: UserCreate) => {
   }
 };
 
-export const deleteUserFromDB = async (userId: string) => {
+export const deleteUserFromDb = async (user: UserCreate) => {
+  try {
+    const auth = getAuth();
+
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      user.email,
+      user.password
+    );
+
+    await deleteUserRelatedFromDB(userCredential.user.uid);
+
+    await auth.currentUser?.delete();
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    throw error;
+  }
+};
+
+export const deleteUserRelatedFromDB = async (userId: string) => {
   try {
     //hämta accountet det gäller
     const account = await getAccountByUid(userId);
@@ -80,9 +103,6 @@ export const deleteUserFromDB = async (userId: string) => {
       //radera accountet som den har
       const accountDocRef = doc(db, "accounts", account.id);
       await deleteDoc(accountDocRef);
-
-      const userDocRef = doc(db, "users", userId);
-      await deleteDoc(userDocRef);
     }
     return true;
   } catch (error) {

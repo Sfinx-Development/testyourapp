@@ -4,7 +4,7 @@
     "slug": "test-your-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.jpg",
+    "icon": "./assets/phoneicon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/logo2.png",
@@ -19,12 +19,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icon",
+        "foregroundImage": "./assets/phoneicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.radagastno1.testyourapp"
     },
     "web": {
-      "favicon": "./assets/icon"
-    }
+      "favicon": "./assets/phoneicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "528d76c0-4608-4c13-bfb0-5f6aaf982e48"
+      }
+    },
+    "owner": "radagastno1"
   }
 }
