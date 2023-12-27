@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addUserToDB,
-  deleteUserFromDB,
+  deleteUserFromDb,
   handleForgotPasswordFirestore,
   signInWithAPI,
 } from "../api/user";
@@ -53,11 +53,11 @@ export const logInUserAsync = createAsyncThunk<
 
 export const deleteUserAsync = createAsyncThunk<
   boolean,
-  string,
+  UserCreate,
   { rejectValue: string }
->("user/deleteUser", async (userId, thunkAPI) => {
+>("user/deleteUser", async (user, thunkAPI) => {
   try {
-    const response = await deleteUserFromDB(userId);
+    const response = await deleteUserFromDb(user);
     return response;
   } catch (error) {
     throw new Error("Användarnamn eller lösenord var felaktigt.");
