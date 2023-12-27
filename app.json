@@ -6,9 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/phoneicon.png",
     "userInterfaceStyle": "light",
-    "plugins": [
-      "./increaseVersion"
-    ],
+    "plugins": [],
     "splash": {
       "image": "./assets/logo2.png",
       "resizeMode": "contain",
