@@ -120,6 +120,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         <TextInput
           style={[styles.input, { fontFamily: colors.fontFamily }]}
           placeholder="Search for apps"
+          placeholderTextColor={colors.button.darkBlue}
           autoCapitalize="none"
           onChangeText={(text) => {
             setSearch(text);
@@ -185,13 +186,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 10,
     width: "90%",
-    borderRadius: 20,
+    borderRadius: 10,
     textAlign: "center",
   },
 });

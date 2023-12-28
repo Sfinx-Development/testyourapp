@@ -45,11 +45,19 @@ export default function MyApps({ navigation }: NavigationProps) {
   const renderAppItem = ({ item }: { item: App }) => {
     return (
       <View style={styles.content}>
-        <Text style={[styles.cardTitle, { fontFamily: colors.fontFamily }]}>
+        <Text
+          style={[
+            styles.cardTitle,
+            { color: colors.button.darkBlue, fontFamily: colors.fontFamily },
+          ]}
+        >
           {item.name.toUpperCase()}
         </Text>
         <Text
-          style={[styles.cardDescription, { fontFamily: colors.fontFamily }]}
+          style={[
+            styles.cardDescription,
+            { color: colors.button.darkBlue, fontFamily: colors.fontFamily },
+          ]}
         >
           {item.description}
         </Text>

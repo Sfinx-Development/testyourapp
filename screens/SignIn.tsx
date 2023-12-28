@@ -42,11 +42,14 @@ export default function SignIn({ navigation }: NavigationProps) {
           justifyContent: "center",
         }}
       >
-        <Image
+        {/* <Image
           source={require("../assets/title.png")}
           style={styles.image}
           resizeMode="contain"
-        />
+        /> */}
+        <Text style={[styles.title, { color: colors.button.lightBlue }]}>
+          Test Your App
+        </Text>
         <Image
           source={require("../assets/phone.png")}
           style={styles.phoneImage}
@@ -61,6 +64,7 @@ export default function SignIn({ navigation }: NavigationProps) {
         placeholder="Email"
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor={colors.button.darkBlue}
         onChangeText={(text) => setEmail(text)}
       />
 
@@ -68,6 +72,7 @@ export default function SignIn({ navigation }: NavigationProps) {
         onChangeText={(text) => setPassword(text)}
         style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Password"
+        placeholderTextColor={colors.button.darkBlue}
         secureTextEntry
       />
 
@@ -111,9 +116,10 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
+    fontSize: 32,
+    fontWeight: "500",
+    marginBottom: 0,
+    marginRight: 5,
   },
   subtitle: {
     fontSize: 18,
@@ -138,7 +144,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
-    width: 300,
+    width: 250,
     height: 100,
     marginRight: 0,
   },

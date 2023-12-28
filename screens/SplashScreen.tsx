@@ -8,10 +8,7 @@ export default function SplashScreen() {
   const { colors } = useTheme();
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Image
-        source={require("../assets/bigtestlogo.png")}
-        style={styles.image}
-      />
+      <Image source={require("../assets/phone.png")} style={styles.image} />
     </View>
   );
 }
@@ -24,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    width: "100%",
+    width: 100,
     height: "auto",
   },
 });

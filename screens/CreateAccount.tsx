@@ -90,6 +90,7 @@ export default function CreateAccount() {
         style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Username"
         autoCapitalize="none"
+        placeholderTextColor={colors.button.darkBlue}
         onChangeText={(text) => setUsername(text)}
       />
 
@@ -98,6 +99,7 @@ export default function CreateAccount() {
         placeholder="E-postadress"
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor={colors.button.darkBlue}
         onChangeText={(text) => setEmail(text)}
       />
 
@@ -105,12 +107,14 @@ export default function CreateAccount() {
         onChangeText={(text) => setPassword(text)}
         style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Lösenord"
+        placeholderTextColor={colors.button.darkBlue}
         secureTextEntry
       />
       <TextInput
         onChangeText={(text) => setConfirmPassword(text)}
         style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Lösenord"
+        placeholderTextColor={colors.button.darkBlue}
         secureTextEntry
       />
 
@@ -126,6 +130,7 @@ export default function CreateAccount() {
         placeholder="Email for your play store (ANDROID)"
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor={colors.button.darkBlue}
         onChangeText={(text) => setPlayStoreMail(text)}
       />
 
@@ -134,6 +139,7 @@ export default function CreateAccount() {
         placeholder="Email for your app store (IOS)"
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor={colors.button.darkBlue}
         onChangeText={(text) => setAppStoreMail(text)}
       />
 

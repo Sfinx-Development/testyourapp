@@ -22,7 +22,7 @@ interface ThemeColors {
 
 const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
   return {
-    primary: colorScheme === "light" ? "#DDEFEE" : "#3E5754",
+    primary: colorScheme === "light" ? "#DDEFEE" : "black",
     secondary: colorScheme === "light" ? "white" : "black",
     button: {
       darkBlue: colorScheme === "light" ? "#8BADAC" : "#8BADAC",

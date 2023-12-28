@@ -34,6 +34,7 @@ export default function ForgotPassword({ navigation }: NavigationProps) {
       <TextInput
         style={[styles.input, { fontFamily:colors.fontFamily }]}
         placeholder="Email"
+        placeholderTextColor={colors.button.darkBlue}
         keyboardType="email-address"
         autoCapitalize="none"
         onChangeText={(text) => setEmail(text)}

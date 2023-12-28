@@ -80,7 +80,7 @@ export default function RootNavigator() {
               component={AllApps}
               options={{
                 title: "All Apps",
-                headerTintColor: colors.secondary,
+                headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
                 headerStyle: { backgroundColor: colors.primary },
@@ -91,7 +91,7 @@ export default function RootNavigator() {
               component={UploadApp}
               options={{
                 title: "Upload app",
-                headerTintColor: colors.secondary,
+                headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
                 headerStyle: { backgroundColor: colors.primary },
@@ -102,7 +102,7 @@ export default function RootNavigator() {
               component={MyApps}
               options={{
                 title: "My Apps",
-                headerTintColor: colors.secondary,
+                headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
                 headerStyle: { backgroundColor: colors.primary },
@@ -113,7 +113,7 @@ export default function RootNavigator() {
               component={IncomingTesters}
               options={{
                 title: "Incoming Testers",
-                headerTintColor: colors.secondary,
+                headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
                 headerStyle: { backgroundColor: colors.primary },
@@ -124,7 +124,7 @@ export default function RootNavigator() {
               component={AppsImTesting}
               options={{
                 title: "Apps I'm Testing",
-                headerTintColor: colors.secondary,
+                headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
                 headerStyle: { backgroundColor: colors.primary },

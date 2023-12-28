@@ -8,8 +8,8 @@
     "userInterfaceStyle": "light",
     "plugins": [],
     "splash": {
-      "image": "./assets/bigtestlogo.png",
-      "resizeMode": "cover",
+      "image": "./assets/phone.png",
+      "resizeMode": "center",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
@@ -24,7 +24,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.radagastno1.testyourapp",
-      "versionCode": 3
+      "versionCode": 4
     },
     "web": {
       "favicon": "./assets/phoneicon.png"

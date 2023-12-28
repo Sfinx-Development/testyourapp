@@ -13,7 +13,12 @@ const AppTestersPresentation: React.FC<AppTestersPresentationProps> = ({
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
-      <Text style={[styles.text, { fontFamily: colors.fontFamily }]}>
+      <Text
+        style={[
+          styles.text,
+          { color: colors.button.darkBlue, fontFamily: colors.fontFamily },
+        ]}
+      >
         {testersCount} Testers
       </Text>
     </View>

@@ -52,6 +52,7 @@ export default function DeleteAccountModule(props: Props) {
               keyboardType="email-address"
               autoCapitalize="none"
               onChangeText={(text) => setEmail(text)}
+              placeholderTextColor={colors.button.darkBlue}
             />
 
             <TextInput

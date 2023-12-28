@@ -86,6 +86,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
           ]}
           placeholder="Name"
           autoCapitalize="none"
+          placeholderTextColor={colors.button.darkBlue}
           onChangeText={(text) => setName(text)}
         />
 
@@ -94,6 +95,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
             styles.input,
             { fontFamily: colors.fontFamily, color: colors.secondary },
           ]}
+          placeholderTextColor={colors.button.darkBlue}
           placeholder="Description"
           autoCapitalize="none"
           onChangeText={(text) => setDescription(text)}
@@ -104,7 +106,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         <TextInput
           style={[
             styles.input,
-            { fontFamily: colors.fontFamily, color: colors.secondary },
+            { fontFamily: colors.fontFamily, color: colors.button.red },
           ]}
           placeholder="Operating system"
           autoCapitalize="none"
@@ -118,6 +120,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
             styles.input,
             { fontFamily: colors.fontFamily, color: colors.secondary },
           ]}
+          placeholderTextColor={colors.button.darkBlue}
           placeholder="Image url"
           autoCapitalize="none"
           onChangeText={(text) => setImageUrl(text)}
@@ -128,6 +131,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
             styles.input,
             { fontFamily: colors.fontFamily, color: colors.secondary },
           ]}
+          placeholderTextColor={colors.button.darkBlue}
           placeholder="Link to test"
           autoCapitalize="none"
           onChangeText={(text) => setLinkToTest(text)}
@@ -138,6 +142,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
             styles.input,
             { fontFamily: colors.fontFamily, color: colors.secondary },
           ]}
+          placeholderTextColor={colors.button.darkBlue}
           placeholder="Amount of testers needed (minimum)"
           autoCapitalize="none"
           keyboardType="numeric"
