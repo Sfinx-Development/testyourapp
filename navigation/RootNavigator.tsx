@@ -142,7 +142,7 @@ export default function RootNavigator() {
               name="CreateAccount"
               options={{
                 title: "Create Account",
-                headerTintColor: colors.secondary,
+                headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
                 headerStyle: { backgroundColor: colors.primary },
@@ -153,7 +153,7 @@ export default function RootNavigator() {
               name="ForgotPassword"
               options={{
                 title: "Forgot Password",
-                headerTintColor: colors.secondary,
+                headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",
                 headerStyle: { backgroundColor: colors.primary },

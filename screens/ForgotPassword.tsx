@@ -21,18 +21,23 @@ export default function ForgotPassword({ navigation }: NavigationProps) {
   const userError = useAppSelector((state) => state.userSlice.error);
 
   async function handleForgotPassword() {
-    dispatch(handleForgotPasswordAsync(email)).then(
-        () => {
-            navigation.navigate("SignIn")
-        }
-    )
+    dispatch(handleForgotPasswordAsync(email)).then(() => {
+      navigation.navigate("SignIn");
+    });
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-   <Text style={[styles.title, { color: colors.secondary, fontFamily:colors.fontFamily  }]}>Forgot your password?</Text>
+      <Text
+        style={[
+          styles.title,
+          { color: colors.button.darkBlue, fontFamily: colors.fontFamily },
+        ]}
+      >
+        Forgot your password?
+      </Text>
 
       <TextInput
-        style={[styles.input, { fontFamily:colors.fontFamily }]}
+        style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Email"
         placeholderTextColor={colors.button.darkBlue}
         keyboardType="email-address"
@@ -44,9 +49,10 @@ export default function ForgotPassword({ navigation }: NavigationProps) {
         style={[styles.button, { backgroundColor: colors.button.darkBlue }]}
         onPress={handleForgotPassword}
       >
-        <Text style={[styles.buttonText,  { fontFamily:colors.fontFamily }]}>Reset my password</Text>
+        <Text style={[styles.buttonText, { fontFamily: colors.fontFamily }]}>
+          Reset my password
+        </Text>
       </TouchableOpacity>
-
     </View>
   );
 }
