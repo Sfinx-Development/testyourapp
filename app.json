@@ -24,7 +24,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.radagastno1.testyourapp",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
       "favicon": "./assets/phoneicon.png"
