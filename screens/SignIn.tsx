@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import {
+  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { logInUserAsync } from "../store/userSlice";
-import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"SignIn">;
 
@@ -34,8 +35,27 @@ export default function SignIn({ navigation }: NavigationProps) {
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      <Text style={[styles.title, { color: colors.secondary }]}>Sign in</Text>
-
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          source={require("../assets/title.png")}
+          style={styles.image}
+          resizeMode="contain"
+        />
+        <Image
+          source={require("../assets/phone.png")}
+          style={styles.phoneImage}
+          resizeMode="center"
+        />
+      </View>
+      <Text style={[styles.subtitle, { color: colors.button.lightBlue }]}>
+        Gather testers for your mobile app!
+      </Text>
       <TextInput
         style={[styles.input, { fontFamily: colors.fontFamily }]}
         placeholder="Email"
@@ -95,8 +115,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 16,
   },
+  subtitle: {
+    fontSize: 18,
+    marginBottom: 50,
+    marginLeft: 10,
+  },
   input: {
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 12,
@@ -112,9 +137,19 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10,
   },
+  image: {
+    width: 300,
+    height: 100,
+    marginRight: 0,
+  },
+  phoneImage: {
+    width: 50,
+    height: 100,
+  },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
   },
   forgotPassword: {
     marginTop: 16,

@@ -22,11 +22,11 @@ interface ThemeColors {
 
 const getColors = (colorScheme: ColorSchemeName | undefined): ThemeColors => {
   return {
-    primary: colorScheme === "light" ? "#DDEFEE" : "#46434d",
-    secondary: colorScheme === "light" ? "black" : "#e4daf5",
+    primary: colorScheme === "light" ? "#DDEFEE" : "#3E5754",
+    secondary: colorScheme === "light" ? "white" : "black",
     button: {
-      darkBlue: colorScheme === "light" ? "#8BADAC" : "#D5A181",
-      lightBlue: colorScheme === "light" ? "#5B8381" : "#A190B5",
+      darkBlue: colorScheme === "light" ? "#8BADAC" : "#8BADAC",
+      lightBlue: colorScheme === "light" ? "#5B8381" : "#8BADAC",
       red: "#E3A076",
     },
     fontFamily: "Roboto",
@@ -61,6 +61,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    const updatedColors = getColors(theme === "light" ? "dark" : "light");
+    setColors(updatedColors);
     console.log("THEME ÄR NU: ", theme);
   };
 

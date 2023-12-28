@@ -99,7 +99,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           <Text
             style={[
               styles.logoutText,
-              { color: colors.secondary, fontFamily: colors.fontFamily },
+              { color: colors.button.darkBlue, fontFamily: colors.fontFamily },
             ]}
           >
             Sign out
@@ -131,23 +131,24 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         <View
           style={{
             flexDirection: "row",
-            alignItems: "flex-end",
-            justifyContent: "flex-start",
-            marginBottom: 20,
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 40,
           }}
         >
-          <Image
-            source={require("../assets/phoneicon.png")}
-            style={styles.image}
-          />
           <Text
             style={[
               styles.title,
-              { color: colors.secondary, fontFamily: colors.fontFamily },
+              {
+                color: colors.button.lightBlue,
+                fontFamily: colors.fontFamily,
+              },
             ]}
           >
             Welcome, {activeAccount?.username}!
           </Text>
+
+          {/* <Image source={require("../assets/phone.png")} style={styles.image} /> */}
         </View>
         <TouchableOpacity
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
@@ -335,12 +336,12 @@ const styles = StyleSheet.create({
     top: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "500",
-    marginBottom: 10,
+    fontSize: 26,
+    fontWeight: "600",
+    marginBottom: 20,
   },
   option: {
-    marginBottom: 15,
+    marginBottom: 20,
     padding: 15,
     borderRadius: 8,
     flexDirection: "row",
@@ -353,12 +354,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   optionText: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "600",
   },
   image: {
     width: 60,
-    height: 60,
+    height: 80,
     marginRight: 10,
   },
 });
