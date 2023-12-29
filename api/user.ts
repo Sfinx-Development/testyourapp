@@ -97,6 +97,7 @@ export const deleteUserRelatedFromDB = async (userId: string) => {
       );
       const appSnapshot = await getDocs(appQuery);
       appSnapshot.forEach(async (appDoc) => {
+        console.log("RADERAR: ", appDoc);
         await deleteDoc(appDoc.ref);
       });
 

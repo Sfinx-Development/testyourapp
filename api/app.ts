@@ -286,13 +286,18 @@ export const getTesterInfo = async (testerToAppData: TesterToApp, app: App) => {
 };
 
 export const addTesterToAppToDb = async (testerToApp: TesterToApp) => {
-  const appCollectionRef = collection(db, "testerToApps");
-
   try {
+    const appCollectionRef = collection(db, "testerToApps");
+
+    const collectionQuery = query(appCollectionRef);
+    const collectionQuerySnapshot = await getDocs(collectionQuery);
+
+    if (collectionQuerySnapshot.empty) {
+      await addDoc(appCollectionRef, {});
+    }
+
     const docRef = await addDoc(appCollectionRef, {});
-
     testerToApp.id = docRef.id;
-
     await updateDoc(docRef, testerToApp as Partial<TesterToApp>);
 
     const testerToAppDoc = await getDoc(docRef);
