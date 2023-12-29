@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,11 +7,14 @@ import {
   View,
 } from "react-native";
 import { useTheme } from "../contexts/themeContext";
+import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { addAccountAsync } from "../store/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { addUserAsync } from "../store/userSlice";
+import { addUserAsync, resetUser } from "../store/userSlice";
 
-export default function CreateAccount() {
+type NavigationProps = RootNavigationScreenProps<"CreateAccount">;
+
+export default function CreateAccount({ navigation }: NavigationProps) {
   const { colors } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +24,7 @@ export default function CreateAccount() {
   const [appStoreMail, setAppStoreMail] = useState("");
   const userCreated = useAppSelector((state) => state.userSlice.user);
   const [error, setErrorMsg] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -39,7 +43,6 @@ export default function CreateAccount() {
         const userResponse = await dispatch(addUserAsync({ email, password }));
         if (addUserAsync.fulfilled.match(userResponse)) {
           const addedUser = userResponse.payload;
-
           dispatch(
             addAccountAsync({
               id: "",
@@ -49,6 +52,10 @@ export default function CreateAccount() {
               uid: addedUser.uid,
             })
           );
+          if (userCreated) {
+            dispatch(resetUser(userCreated));
+          }
+          navigation.navigate("SignIn");
         } else {
           console.log("Failed to add user");
         }
@@ -56,31 +63,31 @@ export default function CreateAccount() {
         console.error("Error creating user:", error);
       }
     } else {
-      console.log("fixa validering för lösen som inte stämmer som nu :)");
+      setPasswordError(true);
     }
   };
 
-  useEffect(() => {
-    if (userCreated) {
-      //när user har satts efter att adduserasync har körts, så en useeffec med user som dependency?
-      dispatch(
-        addAccountAsync({
-          id: "",
-          username: username,
-          playStoreMail: playStoreMail,
-          appStoreMail: appStoreMail,
-          uid: userCreated.uid,
-        })
-      );
-    }
-  }, [userCreated]);
+  // useEffect(() => {
+  //   if (userCreated) {
+  //     //när user har satts efter att adduserasync har körts, så en useeffec med user som dependency?
+  //     dispatch(
+  //       addAccountAsync({
+  //         id: "",
+  //         username: username,
+  //         playStoreMail: playStoreMail,
+  //         appStoreMail: appStoreMail,
+  //         uid: userCreated.uid,
+  //       })
+  //     ).then(() => navigation.navigate("SignIn"));
+  //   }
+  // }, [userCreated]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <Text
         style={[
           styles.title,
-          { color: colors.secondary, fontFamily: colors.fontFamily },
+          { color: colors.button.lightBlue, fontFamily: colors.fontFamily },
         ]}
       >
         Create account
@@ -102,6 +109,12 @@ export default function CreateAccount() {
         placeholderTextColor={colors.button.darkBlue}
         onChangeText={(text) => setEmail(text)}
       />
+
+      {passwordError ? (
+        <Text style={[styles.warningText, { fontFamily: colors.fontFamily }]}>
+          Passwords does not match.
+        </Text>
+      ) : null}
 
       <TextInput
         onChangeText={(text) => setPassword(text)}
@@ -175,7 +188,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 12,

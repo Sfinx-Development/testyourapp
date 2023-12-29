@@ -6,14 +6,20 @@ import {
 } from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  AccessibilityInfo,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
 import AreYouSureModule from "../components/AreYouSure";
 import DeleteAccountModule from "../components/DeleteAccount";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import { getAccountByUidAsync } from "../store/accountSlice";
+import { getAccountByUidAsync, resetAccount } from "../store/accountSlice";
 import {
   getAppsImTestingAsync,
   getMyAppsAsync,
@@ -43,12 +49,19 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
-      dispatch(logOutUser());
+      if (activeAccount) {
+        dispatch(resetAccount(activeAccount)).then(() =>
+          dispatch(logOutUser())
+        );
+      }
     });
   };
 
   useEffect(() => {
-    if (user) {
+    if (
+      (user && activeAccount == undefined) ||
+      (user && activeAccount == null)
+    ) {
       dispatch(getAccountByUidAsync(user.uid));
       console.log("THEME: ", theme);
     }
@@ -73,6 +86,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
   const handleConfirmedDelete = ({ email, password }: UserCreate) => {
     if (user) {
+      if (activeAccount) {
+        dispatch(resetAccount(activeAccount));
+      }
       dispatch(deleteUserAsync({ email, password }));
     }
   };
@@ -330,7 +346,7 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 10,
   },
-  logoutText: { fontSize: 16 },
+  logoutText: { fontSize: 20 },
   content: {
     padding: 20,
     top: 20,

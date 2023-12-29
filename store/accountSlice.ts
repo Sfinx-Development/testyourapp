@@ -69,6 +69,22 @@ export const editAccountAsync = createAsyncThunk<
   }
 });
 
+export const resetAccount = createAsyncThunk<
+  Account,
+  Account,
+  { rejectValue: string }
+>("user/resetAccount", async (account, thunkAPI) => {
+  try {
+    if (account) {
+      return account;
+    } else {
+      return thunkAPI.rejectWithValue("");
+    }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 const accountSlice = createSlice({
   name: "account",
   initialState,
@@ -87,7 +103,7 @@ const accountSlice = createSlice({
     builder
       .addCase(addAccountAsync.fulfilled, (state, action) => {
         if (action.payload) {
-          state.account = action.payload;
+          state.account = null;
         }
       })
       .addCase(editAccountAsync.fulfilled, (state, action) => {
@@ -106,6 +122,14 @@ const accountSlice = createSlice({
       })
       .addCase(getAccountByUidAsync.rejected, (state, action) => {
         state.error = "Det gick inte att hämta kontot just nu.";
+      })
+      .addCase(resetAccount.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.activeAccount = null;
+        }
+      })
+      .addCase(resetAccount.rejected, (state, action) => {
+        state.error = "";
       });
   },
 });

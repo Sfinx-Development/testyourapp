@@ -42,6 +42,9 @@ export default function RootNavigator() {
   const [isUserFetched, setUserFetched] = useState(false);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.userSlice.user);
+  const activeAccount = useAppSelector(
+    (state) => state.accountSlice.activeAccount
+  );
   const { colors } = useTheme();
 
   useEffect(() => {
@@ -68,7 +71,7 @@ export default function RootNavigator() {
             component={SplashScreen}
             options={{ headerShown: false }}
           />
-        ) : user ? (
+        ) : user && activeAccount ? (
           <>
             <Stack.Screen
               name="Menu"

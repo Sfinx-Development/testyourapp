@@ -81,6 +81,21 @@ export const handleForgotPasswordAsync = createAsyncThunk<
   }
 });
 
+export const resetUser = createAsyncThunk<User, User, { rejectValue: string }>(
+  "user/resetUseer",
+  async (user, thunkAPI) => {
+    try {
+      if (user) {
+        return user;
+      } else {
+        return thunkAPI.rejectWithValue("");
+      }
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -115,6 +130,7 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(addUserAsync.rejected, (state, action) => {
+        state.user = undefined;
         state.error = "Det verkar som att du redan har ett konto här.";
       })
       .addCase(deleteUserAsync.fulfilled, (state, action) => {
@@ -131,6 +147,12 @@ const userSlice = createSlice({
       .addCase(handleForgotPasswordAsync.rejected, (state, action) => {
         state.error =
           "Check your email. If you haven't got a mail, please try again later.";
+      })
+      .addCase(resetUser.fulfilled, (state, action) => {
+        state.user = undefined;
+      })
+      .addCase(resetUser.rejected, (state, action) => {
+        state.error = "Restart app.";
       });
   },
 });

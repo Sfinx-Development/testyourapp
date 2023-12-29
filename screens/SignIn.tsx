@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
+import { getAccountByUidAsync } from "../store/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { logInUserAsync } from "../store/userSlice";
 
@@ -19,19 +20,26 @@ export default function SignIn({ navigation }: NavigationProps) {
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const user = useAppSelector(state => state.userSlice.user)
 
   const loggedInUser = useAppSelector((state) => state.userSlice.user);
   const userError = useAppSelector((state) => state.userSlice.error);
 
   async function handleLogin() {
-    dispatch(logInUserAsync({ email: email, password: password })).then(() => {
-      if (userError) {
-        setEmail("");
-        setPassword("");
-      } else if (loggedInUser) {
-        console.log("INLOGGAD! : ", loggedInUser?.email);
-      }
-    });
+    dispatch(logInUserAsync({ email: email, password: password }))
+      .then(() => {
+        if (userError) {
+          setEmail("");
+          setPassword("");
+        } else if (loggedInUser) {
+          console.log("INLOGGAD! : ", loggedInUser?.email);
+        }
+      })
+      .then(() => {
+        if(user){
+          dispatch(getAccountByUidAsync(user.uid));
+        }
+      });
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>

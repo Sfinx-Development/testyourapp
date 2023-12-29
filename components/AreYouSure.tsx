@@ -30,12 +30,15 @@ export default function AreYouSureModule(props: Props) {
     <Modal transparent={true} visible={isModalVisible} animationType="slide">
       <View style={styles.modalContainer}>
         <Card style={{ alignContent: "center" }}>
-          <BlurView intensity={40} style={styles.blurContainer}>
+          <BlurView
+            intensity={80}
+            style={[styles.blurContainer, { backgroundColor: colors.primary }]}
+          >
             <Text
               style={[
                 styles.text,
                 {
-                  color: colors.button.darkBlue,
+                  color: colors.button.lightBlue,
                   fontFamily: colors.fontFamily,
                 },
               ]}
