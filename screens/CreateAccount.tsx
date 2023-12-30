@@ -23,6 +23,7 @@ export default function CreateAccount({ navigation }: NavigationProps) {
   const [playStoreMail, setPlayStoreMail] = useState("");
   const [appStoreMail, setAppStoreMail] = useState("");
   const userCreated = useAppSelector((state) => state.userSlice.user);
+  const userCreatedError = useAppSelector((state) => state.userSlice.error);
   const [error, setErrorMsg] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
 
@@ -55,7 +56,6 @@ export default function CreateAccount({ navigation }: NavigationProps) {
           if (userCreated) {
             dispatch(resetUser(userCreated));
           }
-          navigation.navigate("SignIn");
         } else {
           console.log("Failed to add user");
         }
@@ -93,8 +93,17 @@ export default function CreateAccount({ navigation }: NavigationProps) {
         Create account
       </Text>
 
+      {userCreatedError ? (
+        <Text style={[styles.warningText, { fontFamily: colors.fontFamily }]}>
+          {userCreatedError}
+        </Text>
+      ) : null}
+
       <TextInput
-        style={[styles.input, { fontFamily: colors.fontFamily }]}
+        style={[
+          styles.input,
+          { fontFamily: colors.fontFamily, color: colors.button.darkBlue },
+        ]}
         placeholder="Username"
         autoCapitalize="none"
         placeholderTextColor={colors.button.darkBlue}

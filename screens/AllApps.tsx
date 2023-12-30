@@ -7,6 +7,7 @@ import {
   addTesterToAppAsync,
   getAllAppsAsync,
   getAppsImTestingAsync,
+  getAppsImTestingUnconfirmedAsync,
 } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App, TesterToApp } from "../types";
@@ -30,6 +31,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const availableApps = useAppSelector((state) => state.appSlice.availableApps);
 
   const appsImTesting = useAppSelector((state) => state.appSlice.appsImTesting);
+  const appsImTestingUnconfirmed = useAppSelector(
+    (state) => state.appSlice.appsImTestingUnconfirmed
+  );
   const myApps = useAppSelector((state) => state.appSlice.myApps);
 
   useEffect(() => {
@@ -43,6 +47,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     dispatch(getAllAppsAsync());
     if (activeAccount) {
       dispatch(getAppsImTestingAsync(activeAccount?.id));
+      dispatch(getAppsImTestingUnconfirmedAsync(activeAccount?.id));
     }
   }, []);
 
@@ -102,6 +107,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       app={item}
       onClick={handleSaveTesterToApp}
       appsImTesting={appsImTesting}
+      appsImTestingUnconfirmed={appsImTestingUnconfirmed}
       myApps={myApps}
       testersNeeded={testersNeeded(item)}
     />

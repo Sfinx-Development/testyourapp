@@ -1,4 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  PayloadAction,
+  createAction,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import {
   addUserToDB,
   deleteUserFromDb,
@@ -20,6 +25,8 @@ export const initialState: UserState = {
   user: undefined,
   error: null,
 };
+
+export const resetUserState = createAction("user/resetUserState");
 
 export const addUserAsync = createAsyncThunk<
   User,
@@ -103,6 +110,9 @@ const userSlice = createSlice({
     logOutUser: (state) => {
       state.user = undefined;
     },
+    resetUserState: (state) => {
+      return initialState;
+    },
     setActiveUser: (state, action: PayloadAction<User | undefined>) => {
       if (action.payload) {
         state.user = {
@@ -131,7 +141,7 @@ const userSlice = createSlice({
       })
       .addCase(addUserAsync.rejected, (state, action) => {
         state.user = undefined;
-        state.error = "Det verkar som att du redan har ett konto här.";
+        state.error = "Looks like this email is already registered.";
       })
       .addCase(deleteUserAsync.fulfilled, (state, action) => {
         state.error = null;

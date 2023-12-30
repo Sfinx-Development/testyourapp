@@ -5,10 +5,13 @@ import {
 } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
+import { getAccountByUid } from "../api/account";
 import { auth } from "../api/config";
+import { useTheme } from "../contexts/themeContext";
 import AllApps from "../screens/AllApps";
 import AppsImTesting from "../screens/AppsImTesting";
 import CreateAccount from "../screens/CreateAccount";
+import ForgotPassword from "../screens/ForgotPassword";
 import IncomingTesters from "../screens/IncomingTesters";
 import Menu from "../screens/Menu";
 import MyApps from "../screens/MyApps";
@@ -18,8 +21,7 @@ import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
-import ForgotPassword from "../screens/ForgotPassword";
-import { useTheme } from "../contexts/themeContext";
+import { getAccountByUidAsync } from "../store/accountSlice";
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -55,6 +57,9 @@ export default function RootNavigator() {
           email: response.email,
         };
         dispatch(setActiveUser(fetchedUser));
+        if (fetchedUser) {
+          dispatch(getAccountByUidAsync(fetchedUser.uid));
+        }
       } else {
         dispatch(setActiveUser(undefined));
       }
@@ -62,6 +67,7 @@ export default function RootNavigator() {
     });
     return unsubscribe;
   }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

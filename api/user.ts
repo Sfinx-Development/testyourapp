@@ -1,8 +1,8 @@
 import {
   createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
   getAuth,
   sendPasswordResetEmail,
-  signInWithCredential,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import "firebase/firestore";
@@ -20,6 +20,15 @@ import { auth, db } from "./config";
 
 export const addUserToDB = async (createUser: UserCreate) => {
   try {
+    const signInMethods = await fetchSignInMethodsForEmail(
+      auth,
+      createUser.email
+    );
+
+    if (signInMethods.length > 0) {
+      throw new Error("This email address is already registered.");
+    }
+
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       createUser.email,
@@ -42,7 +51,7 @@ export const signInWithAPI = async (createUser: UserCreate) => {
       createUser.email,
       createUser.password
     );
-    console.log(userCredential);
+    // console.log(userCredential);
     return {
       uid: userCredential.user.uid,
       email: createUser.email,

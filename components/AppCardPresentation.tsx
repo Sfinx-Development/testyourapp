@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { Card, Paragraph, Title } from "react-native-paper";
-import { App } from "../types";
 import { useTheme } from "../contexts/themeContext";
+import { App } from "../types";
 
 interface AppCardProps {
   app: App;
@@ -10,6 +10,7 @@ interface AppCardProps {
   appsImTesting: App[] | [];
   myApps: App[] | [];
   testersNeeded: number;
+  appsImTestingUnconfirmed: App[] | [];
 }
 
 const AppCard: React.FC<AppCardProps> = ({
@@ -18,14 +19,18 @@ const AppCard: React.FC<AppCardProps> = ({
   appsImTesting,
   myApps,
   testersNeeded,
+  appsImTestingUnconfirmed,
 }) => {
   const { imageUrl, name, testersMin, operatingSystem } = app;
   const isTester = appsImTesting.some((testedApp) => testedApp.id === app.id);
+  const isTesterUnconfirmed = appsImTestingUnconfirmed.some(
+    (testedApp) => testedApp.id === app.id
+  );
   const isMyApp = myApps.some((myApp) => myApp.id === app.id);
   const { colors } = useTheme();
 
   const handlePress = () => {
-    if (isTester || isMyApp) {
+    if (isTester || isMyApp || isTesterUnconfirmed) {
       return;
     } else {
       onClick(app.id);
@@ -54,7 +59,11 @@ const AppCard: React.FC<AppCardProps> = ({
             ]}
             onPress={() => handlePress()}
           >
-            {isTester ? "You are a tester" : "Test app"}
+            {isTester
+              ? "You are a tester"
+              : isTesterUnconfirmed
+              ? "Request sent"
+              : "Test app"}
           </Paragraph>
         </TouchableOpacity>
       </Card.Actions>
@@ -81,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   linkText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "500",
   },
 });

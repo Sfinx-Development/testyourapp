@@ -75,6 +75,36 @@ export const getAllAppsFromDb = async () => {
   }
 };
 
+export const getAppsImTestingUnconfirmedFromDb = async (accountId: string) => {
+  const testerToAppsCollectionRef = collection(db, "testerToApps");
+
+  try {
+    const q = query(
+      testerToAppsCollectionRef,
+      where("accountId", "==", accountId),
+      where("confirmed", "==", false)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    const apps: App[] = [];
+
+    for (const doc of querySnapshot.docs) {
+      const testerToAppData = doc.data() as TesterToApp;
+
+      const app = await getAppByIdFromDb(testerToAppData.appId);
+
+      if (app) {
+        apps.push(app);
+      }
+    }
+
+    return apps;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getAppsImTestingFromDb = async (accountId: string) => {
   const testerToAppsCollectionRef = collection(db, "testerToApps");
 

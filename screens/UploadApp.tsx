@@ -82,7 +82,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         <TextInput
           style={[
             styles.input,
-            { fontFamily: colors.fontFamily, color: colors.secondary },
+            { fontFamily: colors.fontFamily, color: colors.button.darkBlue },
           ]}
           placeholder="Name"
           autoCapitalize="none"
@@ -93,7 +93,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         <TextInput
           style={[
             styles.input,
-            { fontFamily: colors.fontFamily, color: colors.secondary },
+            { fontFamily: colors.fontFamily, color: colors.button.darkBlue },
           ]}
           placeholderTextColor={colors.button.darkBlue}
           placeholder="Description"
@@ -118,7 +118,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         <TextInput
           style={[
             styles.input,
-            { fontFamily: colors.fontFamily, color: colors.secondary },
+            { fontFamily: colors.fontFamily, color: colors.button.darkBlue },
           ]}
           placeholderTextColor={colors.button.darkBlue}
           placeholder="Image url"
@@ -129,7 +129,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         <TextInput
           style={[
             styles.input,
-            { fontFamily: colors.fontFamily, color: colors.secondary },
+            { fontFamily: colors.fontFamily, color: colors.button.darkBlue },
           ]}
           placeholderTextColor={colors.button.darkBlue}
           placeholder="Link to test"
@@ -140,7 +140,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
         <TextInput
           style={[
             styles.input,
-            { fontFamily: colors.fontFamily, color: colors.secondary },
+            { fontFamily: colors.fontFamily, color: colors.button.darkBlue },
           ]}
           placeholderTextColor={colors.button.darkBlue}
           placeholder="Amount of testers needed (minimum)"

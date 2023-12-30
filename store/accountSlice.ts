@@ -1,4 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  PayloadAction,
+  createAction,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import {
   addAccountToDB,
   editAccountToDB,
@@ -17,6 +22,8 @@ export const initialState: AccountState = {
   activeAccount: null,
   error: null,
 };
+
+export const resetAccountState = createAction("account/resetAccountState");
 
 export const addAccountAsync = createAsyncThunk(
   "accounts/addAccount",
@@ -69,22 +76,6 @@ export const editAccountAsync = createAsyncThunk<
   }
 });
 
-export const resetAccount = createAsyncThunk<
-  Account,
-  Account,
-  { rejectValue: string }
->("user/resetAccount", async (account, thunkAPI) => {
-  try {
-    if (account) {
-      return account;
-    } else {
-      return thunkAPI.rejectWithValue("");
-    }
-  } catch (error: any) {
-    return thunkAPI.rejectWithValue(error);
-  }
-});
-
 const accountSlice = createSlice({
   name: "account",
   initialState,
@@ -94,9 +85,15 @@ const accountSlice = createSlice({
         state.account = action.payload;
       }
     },
+    resetAccountState: (state) => {
+      return initialState;
+    },
     editProfile: (state, action) => {
       const updatedAccount = action.payload;
       state.account = updatedAccount;
+    },
+    resetAccount: (state) => {
+      state.activeAccount = null;
     },
   },
   extraReducers: (builder) => {
@@ -122,33 +119,9 @@ const accountSlice = createSlice({
       })
       .addCase(getAccountByUidAsync.rejected, (state, action) => {
         state.error = "Det gick inte att hämta kontot just nu.";
-      })
-      .addCase(resetAccount.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.activeAccount = null;
-        }
-      })
-      .addCase(resetAccount.rejected, (state, action) => {
-        state.error = "";
       });
   },
 });
 
-// export const deactivateProfileAsync = createAsyncThunk(
-//   "profiles/deactivateProfile",
-//   async (profileId: string, thunkAPI) => {
-//     try {
-//       const response = await deactivateProfileInDB(profileId);
-//       if (response.success) {
-//         return true;
-//       } else {
-//         return thunkAPI.rejectWithValue(response.error);
-//       }
-//     } catch (error: any) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-export const { editProfile } = accountSlice.actions;
+export const { editProfile, resetAccount } = accountSlice.actions;
 export const accountReducer = accountSlice.reducer;
