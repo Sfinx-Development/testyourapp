@@ -9,8 +9,9 @@ import {
 } from "react-native";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
 import { FeedbackMessage } from "../types";
+import { sendFeedbackAsync } from "../store/feedbackSlice";
 
 type NavigationProps = RootNavigationScreenProps<"SendFeedback">;
 export default function SendFeeback({ navigation, route }: NavigationProps) {
@@ -23,7 +24,7 @@ export default function SendFeeback({ navigation, route }: NavigationProps) {
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
   );
-
+  const dispatch = useAppDispatch();
   const getFormattedDate = () => {
     const currentDate = new Date();
 
@@ -46,7 +47,12 @@ export default function SendFeeback({ navigation, route }: NavigationProps) {
         appName: title,
         developerId: activeAccount.id,
         dateSent: getFormattedDate(),
+        appId: id,
+        senderId: activeAccount.id,
       };
+      dispatch(sendFeedbackAsync(newMessage)).then(() => {
+        navigation.navigate("Menu");
+      });
     }
   };
 
@@ -78,7 +84,7 @@ export default function SendFeeback({ navigation, route }: NavigationProps) {
       />
       <TouchableOpacity
         style={[styles.button, { backgroundColor: colors.button.lightBlue }]}
-        onPress={() => console.log("handle send feedback message")}
+        onPress={() => handleSendMessage()}
       >
         <Text style={[styles.buttonText, { fontFamily: colors.fontFamily }]}>
           Send Message

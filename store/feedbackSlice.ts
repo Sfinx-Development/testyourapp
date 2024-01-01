@@ -27,9 +27,9 @@ export const sendFeedbackAsync = createAsyncThunk<
         "Failed to send feedback due to potentially harming words."
       );
     }
-    const addedApp = await addFeedbackMessageToDb(message);
-    if (addedApp) {
-      return addedApp;
+    const addedMessage = await addFeedbackMessageToDb(message);
+    if (addedMessage) {
+      return addedMessage;
     } else {
       return thunkAPI.rejectWithValue("failed to send feedback");
     }
@@ -115,10 +115,9 @@ const feedbackSlice = createSlice({
 export const feedbackReducer = feedbackSlice.reducer;
 
 const isMessageClean = (message: string): boolean => {
-  // Lista över stötande ord (anpassa efter behov)
-  const offensiveWords = ["stötande1", "stötande2", "stötande3"];
+  //hitta en lista på nätet?
+  const offensiveWords = ["bitch", "suck", "whore"];
 
-  // Om inget stötande ord finns i meddelandet, returnera true
   return !offensiveWords.some((word) =>
     message.toLowerCase().includes(word.toLowerCase())
   );

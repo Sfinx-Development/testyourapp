@@ -75,6 +75,26 @@ export const getAllAppsFromDb = async () => {
   }
 };
 
+export const getAppDeveloper = async (appId: string) => {
+  const appsCollectionRef = collection(db, "apps");
+
+  try {
+    const q = query(appsCollectionRef, where("id", "==", appId));
+
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.size > 0) {
+      const app = querySnapshot.docs[0].data() as App;
+      return app;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching app developer:", error);
+    throw error;
+  }
+};
+
 export const getAppsImTestingFromDb = async (accountId: string) => {
   const testerToAppsCollectionRef = collection(db, "testerToApps");
 

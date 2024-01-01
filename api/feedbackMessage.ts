@@ -3,19 +3,24 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  doc,
   getDoc,
   getDocs,
   query,
   updateDoc,
   where,
 } from "firebase/firestore";
-import { App, FeedbackMessage, TesterToApp } from "../types";
+import { FeedbackMessage } from "../types";
+import { getAppDeveloper } from "./app";
 import { db } from "./config";
 
 export const addFeedbackMessageToDb = async (feedback: FeedbackMessage) => {
   const feedbackCollectionRef = collection(db, "feedbackMessages");
   try {
+    const app = await getAppDeveloper(feedback.appId);
+    if (app) {
+      feedback.developerId = app.accountId;
+    }
+
     const docRef = await addDoc(feedbackCollectionRef, {});
 
     feedback.id = docRef.id;
