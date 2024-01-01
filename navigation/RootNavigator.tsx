@@ -6,9 +6,13 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { auth } from "../api/config";
+import { useTheme } from "../contexts/themeContext";
 import AllApps from "../screens/AllApps";
 import AppsImTesting from "../screens/AppsImTesting";
 import CreateAccount from "../screens/CreateAccount";
+import FeedbackMessage from "../screens/FeedbackMessage";
+import ForgotPassword from "../screens/ForgotPassword";
+import IncomingFeedback from "../screens/IncomingFeedback";
 import IncomingTesters from "../screens/IncomingTesters";
 import Menu from "../screens/Menu";
 import MyApps from "../screens/MyApps";
@@ -18,9 +22,6 @@ import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
-import ForgotPassword from "../screens/ForgotPassword";
-import { useTheme } from "../contexts/themeContext";
-import IncomingFeedback from "../screens/IncomingFeedback";
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -34,7 +35,7 @@ export type RootStackParamList = {
   AppsImTesting: undefined;
   ForgotPassword: undefined;
   IncomingFeedback: undefined;
-  FeedbackMessage: undefined;
+  FeedbackMessage: { id: string };
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -112,6 +113,17 @@ export default function RootNavigator() {
               }}
             />
             <Stack.Screen
+              name="AppsImTesting"
+              component={AppsImTesting}
+              options={{
+                title: "Apps I'm Testing",
+                headerTintColor: colors.button.lightBlue,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
+            />
+            <Stack.Screen
               name="IncomingTesters"
               component={IncomingTesters}
               options={{
@@ -134,10 +146,10 @@ export default function RootNavigator() {
               }}
             />
             <Stack.Screen
-              name="AppsImTesting"
-              component={AppsImTesting}
+              name="FeedbackMessage"
+              component={FeedbackMessage}
               options={{
-                title: "Apps I'm Testing",
+                title: "Message",
                 headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",

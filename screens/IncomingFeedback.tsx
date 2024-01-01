@@ -1,5 +1,11 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import FeedbackMessagesCard from "../components/FeedbackMessagesCard";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
@@ -19,7 +25,16 @@ export default function IncomingFeedback({ navigation }: NavigationProps) {
   );
 
   const renderAppCard = ({ item }: { item: FeedbackMessage }) => (
-    <FeedbackMessagesCard message={item} onClick={() => console.log("click")} />
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate("FeedbackMessage", { id: item.id });
+      }}
+    >
+      <FeedbackMessagesCard
+        message={item}
+        onClick={() => console.log("click")}
+      />
+    </TouchableOpacity>
   );
 
   return (

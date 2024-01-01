@@ -1,15 +1,17 @@
+import { useRoute } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import TesterConfirmCard from "../components/TesterConfirmCard";
+import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { confirmTesterToAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { useTheme } from "../contexts/themeContext";
 
 type NavigationProps = RootNavigationScreenProps<"IncomingTesters">;
 
 export default function IncomingTesters({ navigation }: NavigationProps) {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
@@ -19,24 +21,6 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
   const unconfirmedTesters = useAppSelector(
     (state) => state.appSlice.uncofirmedTesters
   );
-
-  // useEffect(() => {
-  //   if (myApps) {
-  //     console.log("my apps: ", myApps);
-  //     for (const app of myApps) {
-  //       dispatch(getUnconfirmedTestersAsync(app)).then(() => {
-  //         console.log("TESTERS: ", unconfirmedTesters);
-  //       });
-  //     }
-  //   }
-  // }, [myApps]);
-
-  //detta räcker med att det händer en gång vid startsidan och en gång när man laddar in en ny app? kanske
-  // useEffect(() => {
-  //   if (activeAccount) {
-  //     dispatch(getMyAppsAsync(activeAccount));
-  //   }
-  // }, []);
 
   const handleConfirmTesterToApp = (testerToAppId: string) => {
     if (activeAccount) {
@@ -49,14 +33,19 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
   }, [unconfirmedTesters]);
 
   const renderAppCard = ({ item }: { item: any }) => (
-    <TesterConfirmCard
-      appName={item.appName}
-      testerUsername={item.username}
-      //här hämta playstore eller appstore, det som gller för appen
-      testerMail={item.playStoreMail}
-      testerId={item.testerId}
-      onClick={() => handleConfirmTesterToApp(item.testerToAppId)}
-    />
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate("FeedbackMessage", { id: item.id });
+      }}
+    >
+      <TesterConfirmCard
+        appName={item.appName}
+        testerUsername={item.username}
+        testerMail={item.playStoreMail}
+        testerId={item.testerId}
+        onClick={() => handleConfirmTesterToApp(item.testerToAppId)}
+      />
+    </TouchableOpacity>
   );
 
   return (
@@ -71,11 +60,14 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
         />
       ) : (
         <Text
-          style={[{
-            fontSize: 20,
-            top: 100,
-            textAlign: "center",
-          }, { color: colors.secondary, fontFamily:colors.fontFamily  }]}
+          style={[
+            {
+              fontSize: 20,
+              top: 100,
+              textAlign: "center",
+            },
+            { color: colors.secondary, fontFamily: colors.fontFamily },
+          ]}
         >
           No incoming testers
         </Text>
