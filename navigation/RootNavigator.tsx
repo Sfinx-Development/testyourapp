@@ -20,6 +20,7 @@ import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
 import ForgotPassword from "../screens/ForgotPassword";
 import { useTheme } from "../contexts/themeContext";
+import IncomingFeedback from "../screens/IncomingFeedback";
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -32,6 +33,8 @@ export type RootStackParamList = {
   IncomingTesters: undefined;
   AppsImTesting: undefined;
   ForgotPassword: undefined;
+  IncomingFeedback: undefined;
+  FeedbackMessage: undefined;
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -113,6 +116,17 @@ export default function RootNavigator() {
               component={IncomingTesters}
               options={{
                 title: "Incoming Testers",
+                headerTintColor: colors.button.lightBlue,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
+            />
+            <Stack.Screen
+              name="IncomingFeedback"
+              component={IncomingFeedback}
+              options={{
+                title: "Incoming Feedback",
                 headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",

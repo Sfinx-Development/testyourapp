@@ -39,6 +39,8 @@ export interface FeedbackMessage {
   id: string;
   message: string;
   testerToAppId: string;
+  appName:string;
+  senderMail:string;
   developerId: string;
   dateSent: string;
 }

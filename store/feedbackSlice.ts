@@ -112,7 +112,7 @@ const feedbackSlice = createSlice({
   },
 });
 
-export const appReducer = feedbackSlice.reducer;
+export const feedbackReducer = feedbackSlice.reducer;
 
 const isMessageClean = (message: string): boolean => {
   // Lista över stötande ord (anpassa efter behov)

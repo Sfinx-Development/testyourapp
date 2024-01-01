@@ -38,6 +38,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const unconfirmedTesters = useAppSelector(
     (state) => state.appSlice.uncofirmedTesters
   );
+  const incomingFeedback = useAppSelector(
+    (state) => state.feedbackSlice.incomingFeedback
+  );
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -257,6 +260,43 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           >
             Apps I'm testing
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
+          onPress={() => navigation.navigate("IncomingFeedback")}
+        >
+          <MaterialCommunityIcons
+            name="message-text-outline"
+            size={24}
+            color="black"
+            style={styles.icon}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={[
+                styles.optionText,
+                { color: colors.secondary, fontFamily: colors.fontFamily },
+              ]}
+            >
+              Incoming Feedback
+            </Text>
+            {incomingFeedback && incomingFeedback.length > 0 ? (
+              <Badge
+                style={{
+                  backgroundColor: colors.primary,
+                  color: colors.secondary,
+                }}
+              >
+                {incomingFeedback.length}
+              </Badge>
+            ) : null}
+          </View>
         </TouchableOpacity>
         <View
           style={{
