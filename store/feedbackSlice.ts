@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Account, App, FeedbackMessage, TesterToApp } from "../types";
+import {
+  addFeedbackMessageToDb,
+  deleteFeedbackMessageFromDb,
+  getFeedbackMessagesByDeveloperId,
+} from "../api/feedbackMessage";
 
 interface AppState {
   incomingFeedback: FeedbackMessage[];
@@ -22,7 +27,7 @@ export const sendFeedbackAsync = createAsyncThunk<
         "Failed to send feedback due to potentially harming words."
       );
     }
-    const addedApp = await addAppToDb(message);
+    const addedApp = await addFeedbackMessageToDb(message);
     if (addedApp) {
       return addedApp;
     } else {
@@ -39,7 +44,7 @@ export const getFeedbackMessagesAsync = createAsyncThunk<
   { rejectValue: string }
 >("feedback/getFeedbackMessages", async (accountId, thunkAPI) => {
   try {
-    const appsImTesting = await getAppsImTestingFromDb(accountId);
+    const appsImTesting = await getFeedbackMessagesByDeveloperId(accountId);
     if (appsImTesting) {
       return appsImTesting;
     } else {
@@ -56,8 +61,16 @@ export const deleteFeedbackMessageAsync = createAsyncThunk<
   { rejectValue: string }
 >("feedback/deleteAsTester", async (feedbackMessageId, thunkAPI) => {
   try {
-    const deletedMessageId = await deleteAsTesterFromDb(feedbackMessageId);
-    return deletedMessageId;
+    const deletedMessageId = await deleteFeedbackMessageFromDb(
+      feedbackMessageId
+    );
+    if (deletedMessageId) {
+      return deletedMessageId;
+    } else {
+      return thunkAPI.rejectWithValue(
+        "Something went wrong when deleting the message."
+      );
+    }
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.message);
   }
