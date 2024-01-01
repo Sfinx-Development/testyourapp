@@ -22,6 +22,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { deleteUserAsync, logOutUser } from "../store/userSlice";
 import { UserCreate } from "../types";
+import { getFeedbackMessagesAsync } from "../store/feedbackSlice";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
 
@@ -73,6 +74,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       }
     }
   }, [myApps]);
+
+  useEffect(() => {
+    if (activeAccount) {
+      dispatch(getFeedbackMessagesAsync(activeAccount?.id));
+    }
+  }, [activeAccount]);
 
   const handleConfirmedDelete = ({ email, password }: UserCreate) => {
     if (user) {
@@ -150,7 +157,6 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           >
             Welcome, {activeAccount?.username}!
           </Text>
-
           {/* <Image source={require("../assets/phone.png")} style={styles.image} /> */}
         </View>
         <TouchableOpacity
