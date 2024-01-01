@@ -34,3 +34,11 @@ export interface TesterToApp {
   appId: string;
   confirmed: boolean;
 }
+
+export interface FeedbackMessage {
+  id: string;
+  message: string;
+  testerToAppId: string;
+  developerId: string;
+  dateSent: string;
+}
