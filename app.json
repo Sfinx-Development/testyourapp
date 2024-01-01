@@ -28,12 +28,7 @@
     },
     "web": {
       "favicon": "./assets/phoneicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "528d76c0-4608-4c13-bfb0-5f6aaf982e48"
-      }
-    },
-    "owner": "radagastno1"
+    }
+
   }
 }
