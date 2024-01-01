@@ -22,6 +22,7 @@ import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
+import SendFeeback from "../screens/SendFeedback";
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -36,6 +37,7 @@ export type RootStackParamList = {
   ForgotPassword: undefined;
   IncomingFeedback: undefined;
   FeedbackMessage: { id: string };
+  SendFeedback: { id: string };
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -150,6 +152,17 @@ export default function RootNavigator() {
               component={FeedbackMessage}
               options={{
                 title: "Message",
+                headerTintColor: colors.button.lightBlue,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
+            />
+            <Stack.Screen
+              name="SendFeedback"
+              component={SendFeeback}
+              options={{
+                title: "Send Feedback",
                 headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",

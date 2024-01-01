@@ -7,10 +7,15 @@ import { App } from "../types";
 interface AppTestingCardProps {
   app: App;
   onClick: () => void;
+  onSendMessage: () => void;
 }
 
-const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
-  const { imageUrl, name, testersMin, operatingSystem, linkToTest } = app;
+const AppImTestingCard: React.FC<AppTestingCardProps> = ({
+  app,
+  onClick,
+  onSendMessage,
+}) => {
+  const { imageUrl, name, linkToTest } = app;
   const { colors } = useTheme();
 
   const handleOpenLink = async () => {
@@ -23,43 +28,34 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({ app, onClick }) => {
 
   return (
     <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
-      <Card.Cover source={{ uri: imageUrl }} style={{ height: 100 }} />
+      <Card.Cover source={{ uri: imageUrl }} style={styles.cardCover} />
       <Card.Content>
-        <Title
-          style={[
-            { fontSize: 16, fontWeight: "bold" },
-            { fontFamily: colors.fontFamily },
-          ]}
-        >
+        <Title style={[styles.title, { color: colors.primary }]}>
           {name.toUpperCase()}
         </Title>
-        <TouchableOpacity
-          onPress={handleOpenLink}
-          style={styles.linkContainerCenter}
-        >
-          <Text
-            style={[
-              { fontSize: 18 },
-              { color: colors.secondary, fontFamily: colors.fontFamily },
-            ]}
-          >
+        <TouchableOpacity onPress={handleOpenLink} style={styles.linkContainer}>
+          <Text style={[styles.linkText, { color: colors.secondary }]}>
             Click here to download app
           </Text>
         </TouchableOpacity>
       </Card.Content>
       <Card.Actions>
         <TouchableOpacity
-          style={[styles.linkContainer, { backgroundColor: colors.button.red }]}
+          style={[styles.actionButton, { backgroundColor: colors.button.red }]}
           onPress={() => onClick()}
         >
-          <Paragraph
-            style={[
-              { fontSize: 12, color: "white" },
-              { fontFamily: colors.fontFamily },
-            ]}
-          >
+          <Paragraph style={styles.actionButtonText}>
             Remove me as tester
           </Paragraph>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.actionButton,
+            { backgroundColor: colors.button.darkBlue },
+          ]}
+          onPress={() => onSendMessage()}
+        >
+          <Paragraph style={styles.actionButtonText}>Send Feedback</Paragraph>
         </TouchableOpacity>
       </Card.Actions>
     </Card>
@@ -70,14 +66,34 @@ const styles = StyleSheet.create({
   card: {
     margin: 10,
     flex: 1 / 2,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  cardCover: {
+    height: 100,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
   linkContainer: {
     alignItems: "flex-start",
-    borderRadius: 5,
-    padding: 2,
+    marginTop: 10,
   },
-  linkContainerCenter: {
+  linkText: {
+    fontSize: 18,
+  },
+  actionButton: {
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    margin: 5,
+    paddingVertical: 5,
+  },
+  actionButtonText: {
+    fontSize: 12,
+    color: "white",
   },
 });
 
