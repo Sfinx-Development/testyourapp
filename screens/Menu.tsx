@@ -321,7 +321,10 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                   textAlign: "center",
                 }}
               >
-                {incomingFeedback.length}
+                {
+                  incomingFeedback.filter((message) => message.isRead == false)
+                    .length
+                }
               </Badge>
             ) : null}
           </View>
