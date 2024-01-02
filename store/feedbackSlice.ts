@@ -102,6 +102,7 @@ const feedbackSlice = createSlice({
           (message) => message.id == action.payload
         );
         if (index) {
+          console.log("INDEX: ", index);
           const newState = state.incomingFeedback.slice(index, 1);
           state.incomingFeedback = newState;
         }

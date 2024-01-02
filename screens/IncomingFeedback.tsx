@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -9,6 +9,10 @@ import {
 import FeedbackMessagesCard from "../components/FeedbackMessagesCard";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
+import {
+  deleteFeedbackMessageAsync,
+  getFeedbackMessagesAsync,
+} from "../store/feedbackSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { FeedbackMessage } from "../types";
 
@@ -24,15 +28,26 @@ export default function IncomingFeedback({ navigation }: NavigationProps) {
     (state) => state.feedbackSlice.incomingFeedback
   );
 
+  useEffect(() => {
+    if (activeAccount) {
+      dispatch(getFeedbackMessagesAsync(activeAccount?.id));
+    }
+  }, [incomingFeedback]);
+
+  const handleDeleteFeedbackMessage = (messageId: string) => {
+    dispatch(deleteFeedbackMessageAsync(messageId));
+  };
+
   const renderAppCard = ({ item }: { item: FeedbackMessage }) => (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("FeedbackMessage", { id: item.id });
+        // dispatch(markMessageAsReadAsync(item.id))
       }}
     >
       <FeedbackMessagesCard
         message={item}
-        onClick={() => console.log("click")}
+        onClick={() => handleDeleteFeedbackMessage(item.id)}
       />
     </TouchableOpacity>
   );
@@ -46,6 +61,7 @@ export default function IncomingFeedback({ navigation }: NavigationProps) {
           keyExtractor={(item, index) => index.toString()}
           numColumns={1}
           contentContainerStyle={styles.flatListContainer}
+          extraData={incomingFeedback}
         />
       ) : (
         <Text
