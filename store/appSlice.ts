@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   addAppToDb,
   addTesterToAppToDb,
@@ -9,6 +9,7 @@ import {
   getAmountOfTestersDb,
   getAppByIdFromDb,
   getAppsImTestingFromDb,
+  getAppsImTestingUnconfirmedFromDb,
   getMyAppsFromDb,
   getUnconfirmedTesters,
 } from "../api/app";
@@ -18,14 +19,16 @@ interface AppState {
   app: App | null;
   availableApps: App[];
   appsImTesting: App[];
-  uncofirmedTesters: {
-    testerToAppId: string;
-    appId: string;
-    appName: string;
-    username: string;
-    playStoreMail: string;
-    appStoreMail: string;
-  }[];
+  appsImTestingUnconfirmed: App[];
+  uncofirmedTesters:
+    | {
+        testerToAppId: string;
+        appId: string;
+        appName: string;
+        username: string;
+        playStoreMail: string;
+        appStoreMail: string;
+      }[];
   myApps: App[];
   error: string | null;
 }
@@ -35,9 +38,12 @@ export const initialState: AppState = {
   availableApps: [],
   appsImTesting: [],
   uncofirmedTesters: [],
+  appsImTestingUnconfirmed: [],
   myApps: [],
   error: null,
 };
+
+export const resetAppState = createAction("app/resetAppState");
 
 export const addAppAsync = createAsyncThunk<App, App, { rejectValue: string }>(
   "app/addApp",
@@ -104,6 +110,23 @@ export const getUnconfirmedTestersAsync = createAsyncThunk<
       return testers;
     } else {
       return thunkAPI.rejectWithValue("failed to add app");
+    }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
+export const getAppsImTestingUnconfirmedAsync = createAsyncThunk<
+  App[],
+  string,
+  { rejectValue: string }
+>("app/getAppsImTestingUnconfirmed", async (accountId, thunkAPI) => {
+  try {
+    const appsImTesting = await getAppsImTestingUnconfirmedFromDb(accountId);
+    if (appsImTesting) {
+      return appsImTesting;
+    } else {
+      return thunkAPI.rejectWithValue("failed to get apps im testing");
     }
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.message);
@@ -224,27 +247,14 @@ export const getMyAppsAsync = createAsyncThunk<
   }
 });
 
-// export const deleteAppAsync = createAsyncThunk<
-//   User,
-//   UserCreate,
-//   { rejectValue: string }
-// >("user/addUser", async (user, thunkAPI) => {
-//   try {
-//     const addedUser = await addUserToDB(user);
-//     if (addedUser) {
-//       return addedUser;
-//     } else {
-//       return thunkAPI.rejectWithValue("failed to add user");
-//     }
-//   } catch (error: any) {
-//     return thunkAPI.rejectWithValue(error.message);
-//   }
-// });
-
 const appSlice = createSlice({
   name: "app",
   initialState,
-  reducers: {},
+  reducers: {
+    resetAppState: (state) => {
+      return initialState;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addAppAsync.fulfilled, (state, action) => {
@@ -295,11 +305,13 @@ const appSlice = createSlice({
       })
       .addCase(confirmTesterToAppAsync.fulfilled, (state, action) => {
         console.log("CONFIRM FULFILLED");
-        const confirmedTesterIndex = state.uncofirmedTesters.findIndex(
-          (test) => test.testerToAppId == action.payload.id
-        );
-        if (confirmedTesterIndex !== -1) {
-          state.uncofirmedTesters.splice(confirmedTesterIndex, 1);
+        if (state.uncofirmedTesters) {
+          const confirmedTesterIndex = state.uncofirmedTesters.findIndex(
+            (test) => test.testerToAppId == action.payload.id
+          );
+          if (confirmedTesterIndex !== -1) {
+            state.uncofirmedTesters.splice(confirmedTesterIndex, 1);
+          }
         }
         state.error = null;
       })
@@ -319,6 +331,13 @@ const appSlice = createSlice({
         }
       })
       .addCase(deleteAppAsync.rejected, (state, action) => {
+        state.error = "Try again later.";
+      })
+      .addCase(getAppsImTestingUnconfirmedAsync.fulfilled, (state, action) => {
+        state.appsImTestingUnconfirmed = action.payload;
+        state.error = null;
+      })
+      .addCase(getAppsImTestingUnconfirmedAsync.rejected, (state, action) => {
         state.error = "Try again later.";
       });
   },

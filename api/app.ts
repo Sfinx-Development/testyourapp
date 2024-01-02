@@ -75,6 +75,7 @@ export const getAllAppsFromDb = async () => {
   }
 };
 
+
 export const getAppDeveloper = async (appId: string) => {
   const appsCollectionRef = collection(db, "apps");
 
@@ -91,6 +92,37 @@ export const getAppDeveloper = async (appId: string) => {
     }
   } catch (error) {
     console.error("Error fetching app developer:", error);
+        throw error;
+  }
+};
+
+
+export const getAppsImTestingUnconfirmedFromDb = async (accountId: string) => {
+  const testerToAppsCollectionRef = collection(db, "testerToApps");
+
+  try {
+    const q = query(
+      testerToAppsCollectionRef,
+      where("accountId", "==", accountId),
+      where("confirmed", "==", false)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    const apps: App[] = [];
+
+    for (const doc of querySnapshot.docs) {
+      const testerToAppData = doc.data() as TesterToApp;
+
+      const app = await getAppByIdFromDb(testerToAppData.appId);
+
+      if (app) {
+        apps.push(app);
+      }
+    }
+
+    return apps;
+  } catch (error) {
     throw error;
   }
 };
@@ -306,13 +338,18 @@ export const getTesterInfo = async (testerToAppData: TesterToApp, app: App) => {
 };
 
 export const addTesterToAppToDb = async (testerToApp: TesterToApp) => {
-  const appCollectionRef = collection(db, "testerToApps");
-
   try {
+    const appCollectionRef = collection(db, "testerToApps");
+
+    const collectionQuery = query(appCollectionRef);
+    const collectionQuerySnapshot = await getDocs(collectionQuery);
+
+    if (collectionQuerySnapshot.empty) {
+      await addDoc(appCollectionRef, {});
+    }
+
     const docRef = await addDoc(appCollectionRef, {});
-
     testerToApp.id = docRef.id;
-
     await updateDoc(docRef, testerToApp as Partial<TesterToApp>);
 
     const testerToAppDoc = await getDoc(docRef);

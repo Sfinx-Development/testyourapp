@@ -1,4 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  PayloadAction,
+  createAction,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import {
   addUserToDB,
   deleteUserFromDb,
@@ -20,6 +25,8 @@ export const initialState: UserState = {
   user: undefined,
   error: null,
 };
+
+export const resetUserState = createAction("user/resetUserState");
 
 export const addUserAsync = createAsyncThunk<
   User,
@@ -81,12 +88,30 @@ export const handleForgotPasswordAsync = createAsyncThunk<
   }
 });
 
+export const resetUser = createAsyncThunk<User, User, { rejectValue: string }>(
+  "user/resetUseer",
+  async (user, thunkAPI) => {
+    try {
+      if (user) {
+        return user;
+      } else {
+        return thunkAPI.rejectWithValue("");
+      }
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     logOutUser: (state) => {
       state.user = undefined;
+    },
+    resetUserState: (state) => {
+      return initialState;
     },
     setActiveUser: (state, action: PayloadAction<User | undefined>) => {
       if (action.payload) {
@@ -115,7 +140,8 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(addUserAsync.rejected, (state, action) => {
-        state.error = "Det verkar som att du redan har ett konto här.";
+        state.user = undefined;
+        state.error = "Looks like this email is already registered.";
       })
       .addCase(deleteUserAsync.fulfilled, (state, action) => {
         state.error = null;
@@ -131,6 +157,12 @@ const userSlice = createSlice({
       .addCase(handleForgotPasswordAsync.rejected, (state, action) => {
         state.error =
           "Check your email. If you haven't got a mail, please try again later.";
+      })
+      .addCase(resetUser.fulfilled, (state, action) => {
+        state.user = undefined;
+      })
+      .addCase(resetUser.rejected, (state, action) => {
+        state.error = "Restart app.";
       });
   },
 });

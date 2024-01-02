@@ -1,4 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  PayloadAction,
+  createAction,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import {
   addAccountToDB,
   editAccountToDB,
@@ -17,6 +22,8 @@ export const initialState: AccountState = {
   activeAccount: null,
   error: null,
 };
+
+export const resetAccountState = createAction("account/resetAccountState");
 
 export const addAccountAsync = createAsyncThunk(
   "accounts/addAccount",
@@ -78,16 +85,22 @@ const accountSlice = createSlice({
         state.account = action.payload;
       }
     },
+    resetAccountState: (state) => {
+      return initialState;
+    },
     editProfile: (state, action) => {
       const updatedAccount = action.payload;
       state.account = updatedAccount;
+    },
+    resetAccount: (state) => {
+      state.activeAccount = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(addAccountAsync.fulfilled, (state, action) => {
         if (action.payload) {
-          state.account = action.payload;
+          state.account = null;
         }
       })
       .addCase(editAccountAsync.fulfilled, (state, action) => {
@@ -110,21 +123,5 @@ const accountSlice = createSlice({
   },
 });
 
-// export const deactivateProfileAsync = createAsyncThunk(
-//   "profiles/deactivateProfile",
-//   async (profileId: string, thunkAPI) => {
-//     try {
-//       const response = await deactivateProfileInDB(profileId);
-//       if (response.success) {
-//         return true;
-//       } else {
-//         return thunkAPI.rejectWithValue(response.error);
-//       }
-//     } catch (error: any) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-export const { editProfile } = accountSlice.actions;
+export const { editProfile, resetAccount } = accountSlice.actions;
 export const accountReducer = accountSlice.reducer;

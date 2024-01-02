@@ -30,8 +30,19 @@ export default function AreYouSureModule(props: Props) {
     <Modal transparent={true} visible={isModalVisible} animationType="slide">
       <View style={styles.modalContainer}>
         <Card style={{ alignContent: "center" }}>
-          <BlurView intensity={40} style={styles.blurContainer}>
-            <Text style={[styles.text, { color: colors.secondary, fontFamily:colors.fontFamily }]}>
+          <BlurView
+            intensity={80}
+            style={[styles.blurContainer, { backgroundColor: colors.primary }]}
+          >
+            <Text
+              style={[
+                styles.text,
+                {
+                  color: colors.button.lightBlue,
+                  fontFamily: colors.fontFamily,
+                },
+              ]}
+            >
               {props.errorMessage}
             </Text>
             <View style={{ flexDirection: "row" }}>
@@ -44,7 +55,11 @@ export default function AreYouSureModule(props: Props) {
                   props.appId ? props.onDelete(props.appId) : props.onDelete()
                 }
               >
-                <Text style={[styles.button, {fontFamily:colors.fontFamily}]}>{props.buttonMessage1}</Text>
+                <Text
+                  style={[styles.button, { fontFamily: colors.fontFamily }]}
+                >
+                  {props.buttonMessage1}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -54,7 +69,11 @@ export default function AreYouSureModule(props: Props) {
                 ]}
                 onPress={closeModal}
               >
-                <Text style={[styles.button, {fontFamily:colors.fontFamily}]}>{props.buttonMessage2}</Text>
+                <Text
+                  style={[styles.button, { fontFamily: colors.fontFamily }]}
+                >
+                  {props.buttonMessage2}
+                </Text>
               </TouchableOpacity>
             </View>
           </BlurView>
@@ -70,7 +89,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 10,
   },
-  button: { color: "white", fontSize: 20 },
+  button: { fontSize: 20 },
   blurContainer: {
     flex: 1,
     padding: 20,

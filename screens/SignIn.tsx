@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
+import { getAccountByUidAsync } from "../store/accountSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { logInUserAsync } from "../store/userSlice";
 
@@ -32,6 +33,9 @@ export default function SignIn({ navigation }: NavigationProps) {
         console.log("INLOGGAD! : ", loggedInUser?.email);
       }
     });
+    if (loggedInUser) {
+      dispatch(getAccountByUidAsync(loggedInUser?.uid));
+    }
   }
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>

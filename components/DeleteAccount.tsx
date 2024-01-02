@@ -36,11 +36,14 @@ export default function DeleteAccountModule(props: Props) {
     <Modal transparent={true} visible={isModalVisible} animationType="slide">
       <View style={styles.modalContainer}>
         <Card style={{ alignContent: "center" }}>
-          <BlurView intensity={40} style={styles.blurContainer}>
+          <BlurView intensity={100} style={styles.blurContainer}>
             <Text
               style={[
                 styles.text,
-                { color: colors.secondary, fontFamily: colors.fontFamily },
+                {
+                  color: colors.button.lightBlue,
+                  fontFamily: colors.fontFamily,
+                },
               ]}
             >
               Enter your email and password to permanently delete your account
@@ -52,7 +55,7 @@ export default function DeleteAccountModule(props: Props) {
               keyboardType="email-address"
               autoCapitalize="none"
               onChangeText={(text) => setEmail(text)}
-              placeholderTextColor={colors.button.darkBlue}
+              placeholderTextColor={colors.secondary}
             />
 
             <TextInput
@@ -60,6 +63,7 @@ export default function DeleteAccountModule(props: Props) {
               style={[styles.input, { fontFamily: colors.fontFamily }]}
               placeholder="Password"
               secureTextEntry
+              placeholderTextColor={colors.secondary}
             />
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity

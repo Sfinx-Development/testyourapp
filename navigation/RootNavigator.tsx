@@ -5,14 +5,17 @@ import {
 } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
+import { getAccountByUid } from "../api/account";
 import { auth } from "../api/config";
 import { useTheme } from "../contexts/themeContext";
 import AllApps from "../screens/AllApps";
 import AppsImTesting from "../screens/AppsImTesting";
 import CreateAccount from "../screens/CreateAccount";
+
 import FeedbackMessage from "../screens/FeedbackMessage";
 import ForgotPassword from "../screens/ForgotPassword";
 import IncomingFeedback from "../screens/IncomingFeedback";
+
 import IncomingTesters from "../screens/IncomingTesters";
 import Menu from "../screens/Menu";
 import MyApps from "../screens/MyApps";
@@ -22,7 +25,11 @@ import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
+
 import SendFeeback from "../screens/SendFeedback";
+
+import { getAccountByUidAsync } from "../store/accountSlice";
+
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -48,6 +55,9 @@ export default function RootNavigator() {
   const [isUserFetched, setUserFetched] = useState(false);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.userSlice.user);
+  const activeAccount = useAppSelector(
+    (state) => state.accountSlice.activeAccount
+  );
   const { colors } = useTheme();
 
   useEffect(() => {
@@ -58,6 +68,9 @@ export default function RootNavigator() {
           email: response.email,
         };
         dispatch(setActiveUser(fetchedUser));
+        if (fetchedUser) {
+          dispatch(getAccountByUidAsync(fetchedUser.uid));
+        }
       } else {
         dispatch(setActiveUser(undefined));
       }
@@ -65,6 +78,7 @@ export default function RootNavigator() {
     });
     return unsubscribe;
   }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -74,7 +88,7 @@ export default function RootNavigator() {
             component={SplashScreen}
             options={{ headerShown: false }}
           />
-        ) : user ? (
+        ) : user && activeAccount ? (
           <>
             <Stack.Screen
               name="Menu"

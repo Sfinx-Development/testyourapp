@@ -13,15 +13,24 @@ import AreYouSureModule from "../components/AreYouSure";
 import DeleteAccountModule from "../components/DeleteAccount";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import { getAccountByUidAsync } from "../store/accountSlice";
+import {
+  getAccountByUidAsync,
+  resetAccount,
+  resetAccountState,
+} from "../store/accountSlice";
 import {
   getAppsImTestingAsync,
   getMyAppsAsync,
   getUnconfirmedTestersAsync,
+  resetAppState,
 } from "../store/appSlice";
 import { getFeedbackMessagesAsync } from "../store/feedbackSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import { deleteUserAsync, logOutUser } from "../store/userSlice";
+import {
+  deleteUserAsync,
+  logOutUser,
+  resetUserState,
+} from "../store/userSlice";
 import { UserCreate } from "../types";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
@@ -47,12 +56,17 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
-      dispatch(logOutUser());
+      if (activeAccount) {
+        dispatch(logOutUser());
+
+        dispatch(resetAccountState());
+        dispatch(resetAppState());
+      }
     });
   };
 
   useEffect(() => {
-    if (user) {
+    if (user && activeAccount == null) {
       dispatch(getAccountByUidAsync(user.uid));
       console.log("THEME: ", theme);
     }
@@ -83,6 +97,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
   const handleConfirmedDelete = ({ email, password }: UserCreate) => {
     if (user) {
+      if (activeAccount) {
+        dispatch(resetAccount());
+      }
       dispatch(deleteUserAsync({ email, password }));
     }
   };
@@ -97,14 +114,6 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <View style={[styles.header, { backgroundColor: colors.primary }]}>
-        {/* <Text
-          style={[
-            styles.headerText,
-            { color: colors.secondary, fontFamily: colors.fontFamily },
-          ]}
-        >
-          Test Your App
-        </Text> */}
         <TouchableOpacity onPress={handleSignOut}>
           <Text
             style={[
@@ -216,6 +225,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         >
           <View
             style={{
+              flex: 1,
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
@@ -386,7 +396,7 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 10,
   },
-  logoutText: { fontSize: 16 },
+  logoutText: { fontSize: 18 },
   content: {
     padding: 20,
     top: 20,
