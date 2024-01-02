@@ -8,9 +8,9 @@
     "userInterfaceStyle": "light",
     "plugins": [],
     "splash": {
-      "image": "./assets/phone.png",
-      "resizeMode": "center",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/title.png",
+      "resizeMode": "contain",
+      "backgroundColor": "black"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -29,6 +29,5 @@
     "web": {
       "favicon": "./assets/phoneicon.png"
     }
-
   }
 }
