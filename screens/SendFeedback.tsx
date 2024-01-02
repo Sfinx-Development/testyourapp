@@ -49,6 +49,7 @@ export default function SendFeeback({ navigation, route }: NavigationProps) {
         dateSent: getFormattedDate(),
         appId: id,
         senderId: activeAccount.id,
+        isRead: false,
       };
       dispatch(sendFeedbackAsync(newMessage)).then(() => {
         navigation.navigate("Menu");

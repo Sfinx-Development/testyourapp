@@ -17,9 +17,13 @@ const MessageCard: React.FC<MessageCardProps> = ({ message }) => {
         <Title style={[styles.title, { color: colors.primary }]}>
           {message.appName.toUpperCase()}
         </Title>
-        <Paragraph style={{ color: colors.button.lightBlue }}>{message.dateSent}</Paragraph>
-        <Paragraph style={{ color:  colors.button.lightBlue }}>{message.message}</Paragraph>
-        <Paragraph style={{ color:  colors.button.lightBlue}}>
+        <Paragraph style={{ color: colors.button.lightBlue }}>
+          {message.dateSent}
+        </Paragraph>
+        <Paragraph style={{ color: colors.button.lightBlue }}>
+          {message.message}
+        </Paragraph>
+        <Paragraph style={{ color: colors.button.lightBlue }}>
           Feedback from {message.senderMail}
         </Paragraph>
       </Card.Content>

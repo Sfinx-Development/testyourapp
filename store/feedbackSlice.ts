@@ -4,6 +4,7 @@ import {
   addFeedbackMessageToDb,
   deleteFeedbackMessageFromDb,
   getFeedbackMessagesByDeveloperId,
+  markFeedbackMessageAsRead,
 } from "../api/feedbackMessage";
 
 interface AppState {
@@ -76,6 +77,25 @@ export const deleteFeedbackMessageAsync = createAsyncThunk<
   }
 });
 
+export const markFeedbackMessageAsReadAsync = createAsyncThunk<
+  string,
+  string,
+  { rejectValue: string }
+>("feedback/markFeedbackMessageAsRead", async (feedbackMessageId, thunkAPI) => {
+  try {
+    const updatedMessageId = await markFeedbackMessageAsRead(feedbackMessageId);
+    if (updatedMessageId) {
+      return updatedMessageId;
+    } else {
+      return thunkAPI.rejectWithValue(
+        "Something went wrong when updating the message as read."
+      );
+    }
+  } catch (error: any) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
+
 const feedbackSlice = createSlice({
   name: "feedback",
   initialState,
@@ -102,11 +122,24 @@ const feedbackSlice = createSlice({
           (message) => message.id == action.payload
         );
         if (index) {
+          console.log("INDEX: ", index);
           const newState = state.incomingFeedback.slice(index, 1);
           state.incomingFeedback = newState;
         }
       })
       .addCase(deleteFeedbackMessageAsync.rejected, (state, action) => {
+        state.error = "Try again later.";
+      })
+      .addCase(markFeedbackMessageAsReadAsync.fulfilled, (state, action) => {
+        state.error = null;
+        const updatedMessage = state.incomingFeedback.find(
+          (message) => message.id == action.payload
+        );
+        if (updatedMessage) {
+          updatedMessage.isRead = true;
+        }
+      })
+      .addCase(markFeedbackMessageAsReadAsync.rejected, (state, action) => {
         state.error = "Try again later.";
       });
   },

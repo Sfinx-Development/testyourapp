@@ -45,4 +45,5 @@ export interface FeedbackMessage {
   dateSent: string;
   appId: string;
   senderId: string;
+  isRead:boolean;
 }
