@@ -6,7 +6,7 @@ import {
 } from "@expo/vector-icons";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
 import AreYouSureModule from "../components/AreYouSure";
@@ -19,10 +19,10 @@ import {
   getMyAppsAsync,
   getUnconfirmedTestersAsync,
 } from "../store/appSlice";
+import { getFeedbackMessagesAsync } from "../store/feedbackSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { deleteUserAsync, logOutUser } from "../store/userSlice";
 import { UserCreate } from "../types";
-import { getFeedbackMessagesAsync } from "../store/feedbackSlice";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
 
@@ -157,7 +157,6 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           >
             Welcome, {activeAccount?.username}!
           </Text>
-          {/* <Image source={require("../assets/phone.png")} style={styles.image} /> */}
         </View>
         <TouchableOpacity
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
@@ -215,32 +214,38 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("IncomingTesters")}
         >
-          <MaterialCommunityIcons
-            name="head-question-outline"
-            size={24}
-            color="black"
-            style={styles.icon}
-          />
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              width: "100%",
             }}
           >
-            <Text
-              style={[
-                styles.optionText,
-                { color: colors.secondary, fontFamily: colors.fontFamily },
-              ]}
-            >
-              Incoming testers
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="head-question-outline"
+                size={24}
+                color="black"
+                style={styles.icon}
+              />
+              <Text
+                style={[
+                  styles.optionText,
+                  { color: colors.secondary, fontFamily: colors.fontFamily },
+                ]}
+              >
+                Incoming testers
+              </Text>
+            </View>
+
             {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
               <Badge
+                size={25}
                 style={{
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.button.red,
                   color: colors.secondary,
+                  textAlign: "center",
                 }}
               >
                 {unconfirmedTesters.length}
@@ -271,32 +276,37 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("IncomingFeedback")}
         >
-          <MaterialCommunityIcons
-            name="message-text-outline"
-            size={24}
-            color="black"
-            style={styles.icon}
-          />
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              width: "100%",
             }}
           >
-            <Text
-              style={[
-                styles.optionText,
-                { color: colors.secondary, fontFamily: colors.fontFamily },
-              ]}
-            >
-              Incoming Feedback
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="message-text-outline"
+                size={24}
+                color="black"
+                style={styles.icon}
+              />
+              <Text
+                style={[
+                  styles.optionText,
+                  { color: colors.secondary, fontFamily: colors.fontFamily },
+                ]}
+              >
+                Incoming Feedback
+              </Text>
+            </View>
             {incomingFeedback && incomingFeedback.length > 0 ? (
               <Badge
+                size={25}
                 style={{
-                  backgroundColor: colors.primary,
+                  backgroundColor: colors.button.red,
                   color: colors.secondary,
+                  textAlign: "center",
                 }}
               >
                 {incomingFeedback.length}

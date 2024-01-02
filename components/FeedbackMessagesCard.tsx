@@ -5,15 +5,14 @@ import { App, FeedbackMessage, TesterToApp } from "../types";
 import { useTheme } from "../contexts/themeContext";
 
 interface FeedbackMessagesCardProps {
-message:FeedbackMessage;
+  message: FeedbackMessage;
   onClick: (id: string) => void;
 }
 
 const FeedbackMessagesCard: React.FC<FeedbackMessagesCardProps> = ({
-    message,
+  message,
   onClick,
 }) => {
-
   const { colors } = useTheme();
   return (
     <Card style={[styles.card, { backgroundColor: colors.button.lightBlue }]}>
@@ -29,13 +28,11 @@ const FeedbackMessagesCard: React.FC<FeedbackMessagesCardProps> = ({
         <Paragraph>Feedback from {message.senderMail}</Paragraph>
       </Card.Content>
       <Card.Actions>
-        <TouchableOpacity style={styles.linkContainer}>
-          <Paragraph
-            style={[styles.link, { fontFamily: colors.fontFamily }]}
-            onPress={() => onClick(message.id)}
-          >
-            Delete message
-          </Paragraph>
+        <TouchableOpacity
+          style={[styles.actionButton, { backgroundColor: colors.button.red }]}
+          onPress={() => onClick(message.id)}
+        >
+          <Paragraph style={styles.actionButtonText}>Delete message</Paragraph>
         </TouchableOpacity>
       </Card.Actions>
     </Card>
@@ -53,6 +50,18 @@ const styles = StyleSheet.create({
   link: {
     color: "blue",
     fontSize: 16,
+  },
+  actionButton: {
+    width: "50%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    margin: 5,
+    paddingVertical: 5,
+  },
+  actionButtonText: {
+    fontSize: 12,
+    color: "white",
   },
 });
 

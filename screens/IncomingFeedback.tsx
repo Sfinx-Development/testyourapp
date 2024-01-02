@@ -44,7 +44,7 @@ export default function IncomingFeedback({ navigation }: NavigationProps) {
           data={incomingFeedback}
           renderItem={renderAppCard}
           keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
+          numColumns={1}
           contentContainerStyle={styles.flatListContainer}
         />
       ) : (
@@ -70,9 +70,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingTop: 50,
+    flexDirection: "column",
   },
   flatListContainer: {
-    justifyContent: "space-between",
+    flexDirection: "column",
   },
   header: {
     padding: 20,
