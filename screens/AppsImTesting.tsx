@@ -31,6 +31,9 @@ export default function AppsImTesting({ navigation }: NavigationProps) {
   const renderAppCard = ({ item }: { item: App }) => (
     <AppImTestingCard
       app={item}
+      onSendMessage={() => {
+        navigation.navigate("SendFeedback", { id: item.id });
+      }}
       onClick={() => {
         if (activeAccount) {
           dispatch(

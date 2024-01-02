@@ -11,7 +11,11 @@ import { useTheme } from "../contexts/themeContext";
 import AllApps from "../screens/AllApps";
 import AppsImTesting from "../screens/AppsImTesting";
 import CreateAccount from "../screens/CreateAccount";
+
+import FeedbackMessage from "../screens/FeedbackMessage";
 import ForgotPassword from "../screens/ForgotPassword";
+import IncomingFeedback from "../screens/IncomingFeedback";
+
 import IncomingTesters from "../screens/IncomingTesters";
 import Menu from "../screens/Menu";
 import MyApps from "../screens/MyApps";
@@ -21,7 +25,11 @@ import UploadApp from "../screens/UploadApp";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { setActiveUser } from "../store/userSlice";
 import { User } from "../types";
+
+import SendFeeback from "../screens/SendFeedback";
+
 import { getAccountByUidAsync } from "../store/accountSlice";
+
 
 export type RootStackParamList = {
   SignIn: undefined;
@@ -34,6 +42,9 @@ export type RootStackParamList = {
   IncomingTesters: undefined;
   AppsImTesting: undefined;
   ForgotPassword: undefined;
+  IncomingFeedback: undefined;
+  FeedbackMessage: { id: string };
+  SendFeedback: { id: string };
 };
 
 export type RootNavigationScreenProps<T extends keyof RootStackParamList> =
@@ -118,6 +129,17 @@ export default function RootNavigator() {
               }}
             />
             <Stack.Screen
+              name="AppsImTesting"
+              component={AppsImTesting}
+              options={{
+                title: "Apps I'm Testing",
+                headerTintColor: colors.button.lightBlue,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
+            />
+            <Stack.Screen
               name="IncomingTesters"
               component={IncomingTesters}
               options={{
@@ -129,10 +151,32 @@ export default function RootNavigator() {
               }}
             />
             <Stack.Screen
-              name="AppsImTesting"
-              component={AppsImTesting}
+              name="IncomingFeedback"
+              component={IncomingFeedback}
               options={{
-                title: "Apps I'm Testing",
+                title: "Incoming Feedback",
+                headerTintColor: colors.button.lightBlue,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
+            />
+            <Stack.Screen
+              name="FeedbackMessage"
+              component={FeedbackMessage}
+              options={{
+                title: "Message",
+                headerTintColor: colors.button.lightBlue,
+                headerTitleStyle: { fontWeight: "600" },
+                headerTitleAlign: "center",
+                headerStyle: { backgroundColor: colors.primary },
+              }}
+            />
+            <Stack.Screen
+              name="SendFeedback"
+              component={SendFeeback}
+              options={{
+                title: "Send Feedback",
                 headerTintColor: colors.button.lightBlue,
                 headerTitleStyle: { fontWeight: "600" },
                 headerTitleAlign: "center",

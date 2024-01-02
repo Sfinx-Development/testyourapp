@@ -24,6 +24,7 @@ import {
   getUnconfirmedTestersAsync,
   resetAppState,
 } from "../store/appSlice";
+import { getFeedbackMessagesAsync } from "../store/feedbackSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import {
   deleteUserAsync,
@@ -46,6 +47,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   const myApps = useAppSelector((state) => state.appSlice.myApps);
   const unconfirmedTesters = useAppSelector(
     (state) => state.appSlice.uncofirmedTesters
+  );
+  const incomingFeedback = useAppSelector(
+    (state) => state.feedbackSlice.incomingFeedback
   );
   const [errorPopup, setErrorPopup] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -84,6 +88,12 @@ export default function HomeScreen({ navigation }: NavigationProps) {
       }
     }
   }, [myApps]);
+
+  useEffect(() => {
+    if (activeAccount) {
+      dispatch(getFeedbackMessagesAsync(activeAccount?.id));
+    }
+  }, [activeAccount]);
 
   const handleConfirmedDelete = ({ email, password }: UserCreate) => {
     if (user) {
@@ -156,8 +166,6 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           >
             Welcome, {activeAccount?.username}!
           </Text>
-
-          {/* <Image source={require("../assets/phone.png")} style={styles.image} /> */}
         </View>
         <TouchableOpacity
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
@@ -215,31 +223,35 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
           onPress={() => navigation.navigate("IncomingTesters")}
         >
-          <MaterialCommunityIcons
-            name="head-question-outline"
-            size={24}
-            color="black"
-            style={styles.icon}
-          />
           <View
             style={{
               flex: 1,
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              width: "100%",
             }}
           >
-            <Text
-              style={[
-                styles.optionText,
-                { color: colors.secondary, fontFamily: colors.fontFamily },
-              ]}
-            >
-              Incoming testers
-            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="head-question-outline"
+                size={24}
+                color="black"
+                style={styles.icon}
+              />
+              <Text
+                style={[
+                  styles.optionText,
+                  { color: colors.secondary, fontFamily: colors.fontFamily },
+                ]}
+              >
+                Incoming testers
+              </Text>
+            </View>
+
             {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
               <Badge
-                size={30}
+                size={25}
                 style={{
                   backgroundColor: colors.button.red,
                   color: colors.secondary,
@@ -269,6 +281,48 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           >
             Apps I'm testing
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
+          onPress={() => navigation.navigate("IncomingFeedback")}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <MaterialCommunityIcons
+                name="message-text-outline"
+                size={24}
+                color="black"
+                style={styles.icon}
+              />
+              <Text
+                style={[
+                  styles.optionText,
+                  { color: colors.secondary, fontFamily: colors.fontFamily },
+                ]}
+              >
+                Incoming Feedback
+              </Text>
+            </View>
+            {incomingFeedback && incomingFeedback.length > 0 ? (
+              <Badge
+                size={25}
+                style={{
+                  backgroundColor: colors.button.red,
+                  color: colors.secondary,
+                  textAlign: "center",
+                }}
+              >
+                {incomingFeedback.length}
+              </Badge>
+            ) : null}
+          </View>
         </TouchableOpacity>
         <View
           style={{

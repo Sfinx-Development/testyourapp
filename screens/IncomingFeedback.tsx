@@ -1,61 +1,50 @@
-import { useRoute } from "@react-navigation/native";
-import React, { useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import TesterConfirmCard from "../components/TesterConfirmCard";
+import React from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import FeedbackMessagesCard from "../components/FeedbackMessagesCard";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import { confirmTesterToAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
+import { FeedbackMessage } from "../types";
 
-type NavigationProps = RootNavigationScreenProps<"IncomingTesters">;
+type NavigationProps = RootNavigationScreenProps<"IncomingFeedback">;
 
-export default function IncomingTesters({ navigation }: NavigationProps) {
+export default function IncomingFeedback({ navigation }: NavigationProps) {
   const { colors } = useTheme();
   const dispatch = useAppDispatch();
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
   );
-  const myApps = useAppSelector((state) => state.appSlice.myApps);
-
-  const unconfirmedTesters = useAppSelector(
-    (state) => state.appSlice.uncofirmedTesters
+  const incomingFeedback = useAppSelector(
+    (state) => state.feedbackSlice.incomingFeedback
   );
 
-  const handleConfirmTesterToApp = (testerToAppId: string) => {
-    if (activeAccount) {
-      dispatch(confirmTesterToAppAsync(testerToAppId));
-    }
-  };
-
-  useEffect(() => {
-    console.log("UNCONFIRMED TESTERS: ", unconfirmedTesters);
-  }, [unconfirmedTesters]);
-
-  const renderAppCard = ({ item }: { item: any }) => (
+  const renderAppCard = ({ item }: { item: FeedbackMessage }) => (
     <TouchableOpacity
       onPress={() => {
         navigation.navigate("FeedbackMessage", { id: item.id });
       }}
     >
-      <TesterConfirmCard
-        appName={item.appName}
-        testerUsername={item.username}
-        testerMail={item.playStoreMail}
-        testerId={item.testerId}
-        onClick={() => handleConfirmTesterToApp(item.testerToAppId)}
+      <FeedbackMessagesCard
+        message={item}
+        onClick={() => console.log("click")}
       />
     </TouchableOpacity>
   );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
-      {unconfirmedTesters.length > 0 ? (
+      {incomingFeedback.length > 0 ? (
         <FlatList
-          data={unconfirmedTesters}
+          data={incomingFeedback}
           renderItem={renderAppCard}
           keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
+          numColumns={1}
           contentContainerStyle={styles.flatListContainer}
         />
       ) : (
@@ -69,7 +58,7 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
             { color: colors.secondary, fontFamily: colors.fontFamily },
           ]}
         >
-          No incoming testers
+          No incoming messages
         </Text>
       )}
     </View>
@@ -81,9 +70,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     paddingTop: 50,
+    flexDirection: "column",
   },
   flatListContainer: {
-    justifyContent: "space-between",
+    flexDirection: "column",
   },
   header: {
     padding: 20,
