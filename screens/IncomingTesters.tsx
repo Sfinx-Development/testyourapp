@@ -1,7 +1,12 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import TesterConfirmCard from "../components/TesterConfirmCard";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
@@ -33,19 +38,13 @@ export default function IncomingTesters({ navigation }: NavigationProps) {
   }, [unconfirmedTesters]);
 
   const renderAppCard = ({ item }: { item: any }) => (
-    <TouchableOpacity
-      onPress={() => {
-        navigation.navigate("FeedbackMessage", { id: item.id });
-      }}
-    >
-      <TesterConfirmCard
-        appName={item.appName}
-        testerUsername={item.username}
-        testerMail={item.playStoreMail}
-        testerId={item.testerId}
-        onClick={() => handleConfirmTesterToApp(item.testerToAppId)}
-      />
-    </TouchableOpacity>
+    <TesterConfirmCard
+      appName={item.appName}
+      testerUsername={item.username}
+      testerMail={item.playStoreMail}
+      testerId={item.testerId}
+      onClick={() => handleConfirmTesterToApp(item.testerToAppId)}
+    />
   );
 
   return (
