@@ -1,10 +1,10 @@
-import { useRoute } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import MessageCard from "../components/MessageCard";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
-import { useAppSelector } from "../store/store";
+import { markFeedbackMessageAsReadAsync } from "../store/feedbackSlice";
+import { useAppDispatch, useAppSelector } from "../store/store";
 
 type NavigationProps = RootNavigationScreenProps<"FeedbackMessage">;
 
@@ -18,6 +18,13 @@ export default function FeedbackMessage({
     (state) => state.feedbackSlice.incomingFeedback
   );
   const messageToPresent = incomingFeedback.find((message) => message.id == id);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (messageToPresent) {
+      dispatch(markFeedbackMessageAsReadAsync(messageToPresent.id));
+    }
+  }, [messageToPresent]);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>

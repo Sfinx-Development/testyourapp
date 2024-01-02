@@ -310,7 +310,9 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                 Incoming Feedback
               </Text>
             </View>
-            {incomingFeedback && incomingFeedback.length > 0 ? (
+            {incomingFeedback &&
+            incomingFeedback.length > 0 &&
+            incomingFeedback.some((message) => message.isRead == false) ? (
               <Badge
                 size={25}
                 style={{

@@ -86,3 +86,25 @@ export const deleteFeedbackMessageFromDb = async (
     throw error;
   }
 };
+
+export const markFeedbackMessageAsRead = async (feedbackMessageId: string) => {
+  const feedbackDocRef = collection(db, "feedbackMessages");
+
+  const q = query(feedbackDocRef, where("id", "==", feedbackMessageId));
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+
+      await updateDoc(doc.ref, { isRead: true });
+
+      return feedbackMessageId;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
