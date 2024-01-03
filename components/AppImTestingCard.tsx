@@ -44,7 +44,9 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({
           style={[styles.actionButton, { backgroundColor: colors.button.red }]}
           onPress={() => onClick()}
         >
-          <Paragraph style={styles.actionButtonText}>
+          <Paragraph
+            style={[styles.actionButtonText, { color: colors.secondary }]}
+          >
             Remove me as tester
           </Paragraph>
         </TouchableOpacity>
@@ -55,7 +57,11 @@ const AppImTestingCard: React.FC<AppTestingCardProps> = ({
           ]}
           onPress={() => onSendMessage()}
         >
-          <Paragraph style={styles.actionButtonText}>Send Feedback</Paragraph>
+          <Paragraph
+            style={[styles.actionButtonText, { color: colors.secondary }]}
+          >
+            Send Feedback
+          </Paragraph>
         </TouchableOpacity>
       </Card.Actions>
     </Card>
@@ -82,9 +88,11 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 18,
+    alignItems: "center",
   },
   actionButton: {
-    flex: 1,
+    height: 60,
+    width: 70,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 5,
@@ -94,6 +102,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     fontSize: 12,
     color: "white",
+    alignItems: "center",
   },
 });
 

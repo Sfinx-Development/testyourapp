@@ -7,6 +7,7 @@ import {
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
 import AreYouSureModule from "../components/AreYouSure";
 import DeleteAccountModule from "../components/DeleteAccount";
@@ -106,12 +107,17 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     setErrorPopup(true);
   };
 
-  const renderOption = (icon: React.ReactNode, text: string, onPress: any) => {
+  const renderOption = (
+    icon: React.ReactNode,
+    text: string,
+    badgeCount: number,
+    onPress: any
+  ) => {
     return (
       <TouchableOpacity
         style={[
           styles.optionCard,
-          { backgroundColor: colors.button.lightBlue },
+          { backgroundColor: colors.button.lightBlue, position: "relative" },
         ]}
         onPress={onPress}
       >
@@ -124,6 +130,21 @@ export default function HomeScreen({ navigation }: NavigationProps) {
         >
           {text}
         </Text>
+        {badgeCount > 0 && (
+          <Badge
+            size={25}
+            style={{
+              backgroundColor: colors.button.red,
+              color: colors.secondary,
+              textAlign: "center",
+              position: "absolute",
+              top: 2,
+              right: 2,
+            }}
+          >
+            {badgeCount}
+          </Badge>
+        )}
       </TouchableOpacity>
     );
   };
@@ -185,6 +206,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                 style={{ justifyContent: "center", alignItems: "center" }}
               />,
               "Incoming Testers",
+              unconfirmedTesters?.length ?? 0,
               () => navigation.navigate("IncomingTesters")
             )}
             {renderOption(
@@ -194,6 +216,8 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                 color={colors.secondary}
               />,
               "Incoming Feedback",
+              incomingFeedback.filter((message) => message.isRead === false)
+                .length,
               () => navigation.navigate("IncomingFeedback")
             )}
           </View>
@@ -201,11 +225,13 @@ export default function HomeScreen({ navigation }: NavigationProps) {
             {renderOption(
               <AntDesign name="search1" size={36} color={colors.secondary} />,
               "Available Apps",
+              0,
               () => navigation.navigate("AllApps")
             )}
             {renderOption(
               <AntDesign name="mobile1" size={36} color={colors.secondary} />,
               "My Apps",
+              0,
               () => navigation.navigate("MyApps")
             )}
           </View>
@@ -213,6 +239,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
             {renderOption(
               <Feather name="upload" size={36} color={colors.secondary} />,
               "Upload App",
+              0,
               () => navigation.navigate("UploadApp")
             )}
             {renderOption(
@@ -222,6 +249,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                 color={colors.secondary}
               />,
               "Apps I'm Testing",
+              0,
               () => navigation.navigate("AppsImTesting")
             )}
           </View>
@@ -280,7 +308,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
-    marginBottom: 20,
+    marginVertical: 20,
   },
   content: {
     flex: 1,

@@ -20,12 +20,14 @@ const FeedbackMessagesCard: React.FC<FeedbackMessagesCardProps> = ({
         <Title
           style={[
             { fontSize: 16, fontWeight: "bold" },
-            { fontFamily: colors.fontFamily },
+            { fontFamily: colors.fontFamily, color: colors.secondary },
           ]}
         >
           {message.appName.toUpperCase()}
         </Title>
-        <Paragraph>Feedback from {message.senderMail}</Paragraph>
+        <Paragraph style={{ color: colors.secondary }}>
+          Feedback from {message.senderMail}
+        </Paragraph>
       </Card.Content>
       <Card.Actions>
         <TouchableOpacity
