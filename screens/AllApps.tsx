@@ -93,7 +93,11 @@ export default function HomeScreen({ navigation }: NavigationProps) {
             testerToApp: newTesterToApp,
             account: activeAccount,
           })
-        );
+        ).then(() => {
+          if (activeAccount) {
+            dispatch(getAppsImTestingAsync(activeAccount?.id));
+          }
+        });
       }
     }
   };

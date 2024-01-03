@@ -8,7 +8,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useTheme } from "../contexts/themeContext";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { addAppAsync } from "../store/appSlice";
@@ -28,6 +27,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
   const [error, setErrorMsg] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [testersMin, setTestersMin] = useState<number>(1);
+  const [testersMinError, setTestersMinError] = useState(false);
 
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
@@ -44,22 +44,27 @@ export default function UploadApp({ navigation }: NavigationProps) {
       setErrorMsg(true);
       return;
     }
-    if (activeAccount) {
-      console.log("TESTERS MIN: ", testersMin);
-      const appToSave: App = {
-        id: "",
-        name: name,
-        description: description,
-        linkToTest: linkToTest,
-        imageUrl: imageUrl,
-        operatingSystem: operatingSystem,
-        accountId: activeAccount?.id,
-        testersMin: testersMin,
-        testersRegistered: 0,
-      };
-      dispatch(addAppAsync(appToSave)).then(() => {
-        navigation.navigate("Menu");
-      });
+    if (testersMin > 0) {
+      if (activeAccount) {
+        console.log("TESTERS MIN: ", testersMin);
+        const appToSave: App = {
+          id: "",
+          name: name,
+          description: description,
+          linkToTest: linkToTest,
+          imageUrl: imageUrl,
+          operatingSystem: operatingSystem,
+          accountId: activeAccount?.id,
+          testersMin: testersMin,
+          testersRegistered: 0,
+        };
+        dispatch(addAppAsync(appToSave)).then(() => {
+          navigation.navigate("Menu");
+        });
+      }
+    } else {
+      setTestersMinError(true);
+      return;
     }
   };
 
@@ -136,7 +141,11 @@ export default function UploadApp({ navigation }: NavigationProps) {
           autoCapitalize="none"
           onChangeText={(text) => setLinkToTest(text)}
         />
-
+        {testersMinError ? (
+          <Text style={styles.warningText}>
+            Amount of testers must be greater than 0.
+          </Text>
+        ) : null}
         <TextInput
           style={[
             styles.input,
