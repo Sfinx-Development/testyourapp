@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, Text } from "react-native";
 import AppImTestingCard from "../components/AppImTestingCard";
 import ErrorModule from "../components/ErrorModule";
 import { RootNavigationScreenProps } from "../navigation/RootNavigator";
@@ -56,13 +56,28 @@ export default function AppsImTesting({ navigation }: NavigationProps) {
           onClose={() => setErrorPopup(false)}
         />
       ) : null}
-      <FlatList
-        data={appsImTesting}
-        renderItem={renderAppCard}
-        keyExtractor={(item) => item.name}
-        numColumns={2}
-        contentContainerStyle={styles.flatListContainer}
-      />
+      {appsImTesting && appsImTesting.length > 0 ? (
+        <FlatList
+          data={appsImTesting}
+          renderItem={renderAppCard}
+          keyExtractor={(item) => item.name}
+          numColumns={2}
+          contentContainerStyle={styles.flatListContainer}
+        />
+      ) : (
+        <Text
+          style={[
+            {
+              fontSize: 20,
+              top: 100,
+              textAlign: "center",
+            },
+            { color: colors.button.darkBlue, fontFamily: colors.fontFamily },
+          ]}
+        >
+          You are not a tester yet
+        </Text>
+      )}
     </View>
   );
 }

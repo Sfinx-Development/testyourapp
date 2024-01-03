@@ -71,7 +71,7 @@ export default function IncomingFeedback({ navigation }: NavigationProps) {
               top: 100,
               textAlign: "center",
             },
-            { color: colors.secondary, fontFamily: colors.fontFamily },
+            { color: colors.button.darkBlue, fontFamily: colors.fontFamily },
           ]}
         >
           No incoming messages

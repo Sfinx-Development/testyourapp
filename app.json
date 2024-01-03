@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "plugins": [],
     "splash": {
-      "image": "./assets/phoneicon.png",
+      "image": "./assets/text.png",
       "resizeMode": "center",
       "backgroundColor": "#000000"
     },
@@ -24,7 +24,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.radagastno1.testyourapp",
-      "versionCode": 15
+      "versionCode": 16
     },
     "web": {
       "favicon": "./assets/phoneicon.png"

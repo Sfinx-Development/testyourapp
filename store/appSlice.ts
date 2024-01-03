@@ -192,7 +192,6 @@ export const addTesterToAppAsync = createAsyncThunk<
       if (app.accountId == account.id) {
         throw new Error("This is your app.");
       } else {
-        console.log("Hittade appen");
         if (
           (app.operatingSystem.toLowerCase() === "android" &&
             account.playStoreMail) ||
@@ -213,7 +212,6 @@ export const addTesterToAppAsync = createAsyncThunk<
         }
       }
     } else {
-      console.log("hittar kanske inte appen");
       throw new Error("App not found");
     }
   } catch (error: any) {
@@ -300,7 +298,7 @@ const appSlice = createSlice({
         state.error = null;
       })
       .addCase(addTesterToAppAsync.rejected, (state, action) => {
-        state.error = "Have you registered email for this current OS store?";
+        state.error = action.error.message || "Something went wrong";
         console.log("STATE ERROR: ", state.error);
       })
       .addCase(confirmTesterToAppAsync.fulfilled, (state, action) => {

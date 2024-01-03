@@ -7,7 +7,6 @@ import {
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Badge } from "react-native-paper";
 import { auth } from "../api/config";
 import AreYouSureModule from "../components/AreYouSure";
 import DeleteAccountModule from "../components/DeleteAccount";
@@ -26,11 +25,7 @@ import {
 } from "../store/appSlice";
 import { getFeedbackMessagesAsync } from "../store/feedbackSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
-import {
-  deleteUserAsync,
-  logOutUser,
-  resetUserState,
-} from "../store/userSlice";
+import { deleteUserAsync, logOutUser } from "../store/userSlice";
 import { UserCreate } from "../types";
 
 type NavigationProps = RootNavigationScreenProps<"Menu">;
@@ -111,6 +106,28 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     setErrorPopup(true);
   };
 
+  const renderOption = (icon: React.ReactNode, text: string, onPress: any) => {
+    return (
+      <TouchableOpacity
+        style={[
+          styles.optionCard,
+          { backgroundColor: colors.button.lightBlue },
+        ]}
+        onPress={onPress}
+      >
+        {icon}
+        <Text
+          style={[
+            styles.optionText,
+            { color: colors.secondary, fontFamily: colors.fontFamily },
+          ]}
+        >
+          {text}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.primary }]}>
       <View style={[styles.header, { backgroundColor: colors.primary }]}>
@@ -147,200 +164,73 @@ export default function HomeScreen({ navigation }: NavigationProps) {
             }}
           />
         ) : null}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 40,
-          }}
-        >
+        <View style={styles.profileHeader}>
           <Text
             style={[
               styles.title,
-              {
-                color: colors.button.lightBlue,
-                fontFamily: colors.fontFamily,
-              },
+              { color: colors.button.lightBlue, fontFamily: colors.fontFamily },
             ]}
           >
             Welcome, {activeAccount?.username}!
           </Text>
         </View>
-        <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
-          onPress={() => navigation.navigate("AllApps")}
-        >
-          <AntDesign
-            name="search1"
-            size={24}
-            color="black"
-            style={styles.icon}
-          />
-          <Text
-            style={[
-              styles.optionText,
-              { color: colors.secondary, fontFamily: colors.fontFamily },
-            ]}
-          >
-            Available apps
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
-          onPress={() => navigation.navigate("UploadApp")}
-        >
-          <Feather name="upload" size={24} color="black" style={styles.icon} />
-          <Text
-            style={[
-              styles.optionText,
-              { color: colors.secondary, fontFamily: colors.fontFamily },
-            ]}
-          >
-            Upload app
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
-          onPress={() => navigation.navigate("MyApps")}
-        >
-          <AntDesign
-            name="mobile1"
-            size={24}
-            color="black"
-            style={styles.icon}
-          />
-          <Text
-            style={[
-              styles.optionText,
-              { color: colors.secondary, fontFamily: colors.fontFamily },
-            ]}
-          >
-            My apps
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
-          onPress={() => navigation.navigate("IncomingTesters")}
-        >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+
+        <View style={styles.optionsContainer}>
+          <View style={styles.optionRow}>
+            {renderOption(
               <MaterialCommunityIcons
                 name="head-question-outline"
-                size={24}
-                color="black"
-                style={styles.icon}
-              />
-              <Text
-                style={[
-                  styles.optionText,
-                  { color: colors.secondary, fontFamily: colors.fontFamily },
-                ]}
-              >
-                Incoming testers
-              </Text>
-            </View>
-
-            {unconfirmedTesters && unconfirmedTesters.length > 0 ? (
-              <Badge
-                size={25}
-                style={{
-                  backgroundColor: colors.button.red,
-                  color: colors.secondary,
-                  textAlign: "center",
-                }}
-              >
-                {unconfirmedTesters.length}
-              </Badge>
-            ) : null}
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
-          onPress={() => navigation.navigate("AppsImTesting")}
-        >
-          <MaterialIcons
-            name="approval"
-            size={24}
-            color="black"
-            style={styles.icon}
-          />
-          <Text
-            style={[
-              styles.optionText,
-              { color: colors.secondary, fontFamily: colors.fontFamily },
-            ]}
-          >
-            Apps I'm testing
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.option, { backgroundColor: colors.button.lightBlue }]}
-          onPress={() => navigation.navigate("IncomingFeedback")}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                size={36}
+                color={colors.secondary}
+                style={{ justifyContent: "center", alignItems: "center" }}
+              />,
+              "Incoming Testers",
+              () => navigation.navigate("IncomingTesters")
+            )}
+            {renderOption(
               <MaterialCommunityIcons
                 name="message-text-outline"
-                size={24}
-                color="black"
-                style={styles.icon}
-              />
-              <Text
-                style={[
-                  styles.optionText,
-                  { color: colors.secondary, fontFamily: colors.fontFamily },
-                ]}
-              >
-                Incoming Feedback
-              </Text>
-            </View>
-            {incomingFeedback &&
-            incomingFeedback.length > 0 &&
-            incomingFeedback.some((message) => message.isRead == false) ? (
-              <Badge
-                size={25}
-                style={{
-                  backgroundColor: colors.button.red,
-                  color: colors.secondary,
-                  textAlign: "center",
-                }}
-              >
-                {
-                  incomingFeedback.filter((message) => message.isRead == false)
-                    .length
-                }
-              </Badge>
-            ) : null}
+                size={36}
+                color={colors.secondary}
+              />,
+              "Incoming Feedback",
+              () => navigation.navigate("IncomingFeedback")
+            )}
           </View>
-        </TouchableOpacity>
-        <View
-          style={{
-            height: "auto",
-            justifyContent: "flex-end",
-            alignItems: "flex-end",
-            marginTop: 10,
-            flexDirection: "row",
-          }}
-        >
+          <View style={styles.optionRow}>
+            {renderOption(
+              <AntDesign name="search1" size={36} color={colors.secondary} />,
+              "Available Apps",
+              () => navigation.navigate("AllApps")
+            )}
+            {renderOption(
+              <AntDesign name="mobile1" size={36} color={colors.secondary} />,
+              "My Apps",
+              () => navigation.navigate("MyApps")
+            )}
+          </View>
+          <View style={styles.optionRow}>
+            {renderOption(
+              <Feather name="upload" size={36} color={colors.secondary} />,
+              "Upload App",
+              () => navigation.navigate("UploadApp")
+            )}
+            {renderOption(
+              <MaterialIcons
+                name="approval"
+                size={36}
+                color={colors.secondary}
+              />,
+              "Apps I'm Testing",
+              () => navigation.navigate("AppsImTesting")
+            )}
+          </View>
+        </View>
+
+        <View style={styles.bottomButtons}>
           <TouchableOpacity
             style={[
-              styles.deleteOption,
+              styles.themeToggle,
               {
                 backgroundColor:
                   theme == "dark"
@@ -348,7 +238,7 @@ export default function HomeScreen({ navigation }: NavigationProps) {
                     : colors.button.lightBlue,
               },
             ]}
-            onPress={() => toggleTheme()}
+            onPress={toggleTheme}
           >
             <Text
               style={[
@@ -361,10 +251,10 @@ export default function HomeScreen({ navigation }: NavigationProps) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[
-              styles.deleteOption,
-              { backgroundColor: colors.button.red, marginLeft: 5 },
+              styles.deleteAccount,
+              { backgroundColor: colors.button.red },
             ]}
-            onPress={() => handleDeleteAccount()}
+            onPress={handleDeleteAccount}
           >
             <Text
               style={[
@@ -384,53 +274,77 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
   },
   header: {
-    padding: 20,
-    top: 20,
-    borderBottomWidth: 0,
     flexDirection: "row",
     justifyContent: "flex-end",
     alignItems: "center",
+    marginBottom: 20,
   },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginLeft: 10,
-  },
-  icon: {
-    marginRight: 10,
-  },
-  logoutText: { fontSize: 18 },
   content: {
-    padding: 20,
-    top: 20,
+    flex: 1,
+  },
+  profileHeader: {
+    alignItems: "center",
+    marginBottom: 40,
   },
   title: {
     fontSize: 26,
     fontWeight: "600",
-    marginBottom: 20,
   },
-  option: {
-    marginBottom: 20,
-    padding: 15,
-    borderRadius: 8,
+  optionsContainer: {
+    marginTop: 20,
+  },
+  optionRow: {
     flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
   },
-  deleteOption: {
-    marginBottom: 15,
-    padding: 15,
+  optionCard: {
+    height: 120,
+    width: 150,
+    padding: 10,
     borderRadius: 8,
-    width: "50%",
-    fontWeight: "600",
+    marginHorizontal: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  iconContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   optionText: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
+    color: "white",
+    marginTop: 10,
   },
-  image: {
-    width: 60,
-    height: 80,
-    marginRight: 10,
+  bottomButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 20,
+  },
+  themeToggle: {
+    flex: 1,
+    padding: 15,
+    borderRadius: 8,
+    marginRight: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  deleteAccount: {
+    flex: 1,
+    padding: 15,
+    borderRadius: 8,
+    marginLeft: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logoutText: {
+    fontSize: 18,
   },
 });
