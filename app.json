@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/phoneicon.png",
       "resizeMode": "center",
-      "backgroundColor": "black"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -24,11 +24,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.radagastno1.testyourapp",
-      "versionCode": 14,
-      "gradleCommand": ":app:assembleRelease",
-      "env": {
-        "GRADLE_OPTS": "-Xmx4608m"
-      }
+      "versionCode": 15
     },
     "web": {
       "favicon": "./assets/phoneicon.png"
