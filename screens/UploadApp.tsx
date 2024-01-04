@@ -14,6 +14,8 @@ import { RootNavigationScreenProps } from "../navigation/RootNavigator";
 import { addAppAsync } from "../store/appSlice";
 import { useAppDispatch, useAppSelector } from "../store/store";
 import { App } from "../types";
+import * as ImagePicker from 'expo-image-picker';
+import ImagePickerComponent from "../components/ImagePickerComponent";
 
 type NavigationProps = RootNavigationScreenProps<"UploadApp">;
 export default function UploadApp({ navigation }: NavigationProps) {
@@ -28,6 +30,10 @@ export default function UploadApp({ navigation }: NavigationProps) {
   const [error, setErrorMsg] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [testersMin, setTestersMin] = useState<number>(1);
+
+  const handleImageSelected = (uri: string) => {
+    setImageUrl(uri);
+  };
 
   const activeAccount = useAppSelector(
     (state) => state.accountSlice.activeAccount
@@ -63,6 +69,24 @@ export default function UploadApp({ navigation }: NavigationProps) {
     }
   };
 
+  const handleImagePicker = async () => {
+    const options: ImagePicker.ImagePickerOptions = {
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    quality: 1,
+      // maxHeight: 200,
+      // maxWidth: 200,
+    };
+  
+    const result = await ImagePicker.launchImageLibraryAsync(options);
+  
+    if (!result.canceled) {
+      setImageUrl(result.assets[0].uri);
+    } else {
+      console.log('Error picking image or user cancelled');
+    }
+  };
+
+  
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -114,7 +138,7 @@ export default function UploadApp({ navigation }: NavigationProps) {
           onChangeText={(text) => setOperatingSystem(text)}
           editable={false}
         />
-
+        <Text>Choose one alternative photo option below</Text>
         <TextInput
           style={[
             styles.input,
@@ -124,7 +148,9 @@ export default function UploadApp({ navigation }: NavigationProps) {
           placeholder="Image url"
           autoCapitalize="none"
           onChangeText={(text) => setImageUrl(text)}
+          
         />
+          <ImagePickerComponent onImageSelected={handleImageSelected} />
 
         <TextInput
           style={[
